@@ -29,7 +29,7 @@ export default class FPCamera extends cc.ScriptComponent {
     if (this.input.keypress('e')) vec3.set(this.temp, this.temp.x, this.temp.y + 1, this.temp.z);
     if (this.input.keypress('q')) vec3.set(this.temp, this.temp.x, this.temp.y - 1, this.temp.z);
     if (vec3.equals(this.temp, this.pos)) return;
-    if (this.counter++ % 30 == 0) this.footsteps[Math.floor(randomRange(0, this.footsteps.length-0.5))].play();
+    if (this.counter++ % 30 == 0 && this.footsteps.length) this.footsteps[Math.floor(randomRange(0, this.footsteps.length-0.5))].play();
     if (this.cd && this.cd.check(this.temp)) vec3.copy(this.pos, this.temp);
   }
 
@@ -46,6 +46,7 @@ export default class FPCamera extends cc.ScriptComponent {
     this.input._lock = true;
     this.footsteps = this._entity.getCompsInChildren('AudioSource');
 
+    // engine-TODO: don't unlock after button up as an option
 // monkey patching...
     this.input._uninstallGlobalEvents = (function() {
       if (!this._globalEventInstalled) {

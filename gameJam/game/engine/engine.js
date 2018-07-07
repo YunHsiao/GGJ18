@@ -24967,7 +24967,7 @@ var effectJsons = [
   },
   {
     name: 'unlit',
-    techniques: [{"stages":["opaque"],"params":[{"name":"color","type":9,"value":[1,1,1,1]},{"name":"mainTiling","type":5,"value":[1,1]},{"name":"mainOffset","type":5,"value":[0,0]},{"name":"mainTexture","type":13,"value":null}],"passes":[{"program":"unlit","cullMode":0,"depthTest":true,"depthWrite":true}],"layer":0}],
+    techniques: [{"stages":["opaque"],"params":[{"name":"color","type":9,"value":[1,1,1,1]},{"name":"mainTiling","type":5,"value":[1,1]},{"name":"mainOffset","type":5,"value":[0,0]},{"name":"mainTexture","type":13,"value":null}],"passes":[{"program":"unlit","cullMode":1029,"depthTest":true,"depthWrite":true}],"layer":0}],
     properties: {},
     defines: [{"name":"USE_TEXTURE","value":false},{"name":"USE_COLOR","value":false},{"name":"USE_SKINNING","value":false}],
     dependencies: undefined

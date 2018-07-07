@@ -26,11 +26,12 @@ export default class Monster extends cc.ScriptComponent {
     this.dir = vec3.zero();
     this.up = vec3.new(0, 1, 0);
     this.keyPoints = [];
-    this.keyPoints.push(vec3.new(0, 9, 124));
+    this.keyPoints.push(vec3.new(0, 8.6, 122));
     this.keyPoints.push(vec3.new(-60, 30, 145));
     this.keyPoints.push(vec3.new(-72, 30, 122));
     this.keyPoints.push(vec3.new(-60, 30, 145));
     this.moveIdx = 0;
+    this.speed = 0.1;
   }
 
   tick() {
@@ -49,9 +50,9 @@ export default class Monster extends cc.ScriptComponent {
     }
     // move
     vec3.sub(this.dir, this.keyPoints[this.moveIdx], this._entity.lpos);
-    vec3.scale(this.dir, vec3.normalize(this.dir, this.dir), 0.5);
+    vec3.scale(this.dir, vec3.normalize(this.dir, this.dir), this.speed);
     vec3.add(this._entity.lpos, this._entity.lpos, this.dir);
-    if (this.lessThan(this._entity.lpos, this.keyPoints[this.moveIdx]))
+    if (this.lessThan(this._entity.lpos, this.keyPoints[this.moveIdx], this.speed))
       this.moveIdx = (this.moveIdx + 1) % this.keyPoints.length;
     // rotate
     vec3.sub(this.dir, this.player.lpos, this._entity.lpos);
@@ -62,8 +63,8 @@ export default class Monster extends cc.ScriptComponent {
     }
   }
 
-  lessThan(a, b) {
-    return Math.abs(a.x - b.x) < 0.1 && Math.abs(a.y - b.y) < 0.1 && Math.abs(a.z - b.z) < 0.1;
+  lessThan(a, b, c) {
+    return Math.abs(a.x - b.x) < c && Math.abs(a.y - b.y) < c && Math.abs(a.z - b.z) < c;
   }
 }
 

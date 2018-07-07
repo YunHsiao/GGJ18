@@ -41,3 +41,4 @@ gameJam_u3d/[Oo]bj/
 gameJam_u3d/[Bb]uild/
 gameJam_u3d/[Bb]uilds/
 helps
+*.js.map
