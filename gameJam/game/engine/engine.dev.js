@@ -345,10 +345,6 @@ function glTextureFmt(fmt) {
   return result;
 }
 
-// ====================
-// exports
-// ====================
-
 var VertexFormat = function VertexFormat(infos) {
   var this$1 = this;
 
@@ -699,10 +695,6 @@ Program.prototype.destroy = function destroy () {
 };
 
 Object.defineProperties( Program.prototype, prototypeAccessors$2 );
-
-// ====================
-// internal
-// ====================
 
 function _createShader(gl, type, src) {
   var shader = gl.createShader(type);
@@ -3273,9 +3265,6 @@ Effect.prototype.extractDependencies = function extractDependencies (out) {
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-/**
- * @param {object} json
- */
 
 
 /**
@@ -3561,10 +3550,6 @@ function inverseLerp(from, to, value) {
  *    http://graphics.stanford.edu/~seander/bithacks.html
  */
 
-// Number of bits in an integer
-/**
- * @ignore
- */
 var INT_BITS = 32;
 /**
  * @ignore
@@ -3882,11 +3867,6 @@ var bits_ = Object.freeze({
 	nextCombination: nextCombination
 });
 
-/**
- * Mathematical 2-dimensional vector.
- *
- * x, y is alias of the first, second component of vector, respectively.
- */
 var vec2 = function vec2(x, y)
 {
   /**
@@ -4587,11 +4567,6 @@ vec2._forEach = (function ()
   };
 })();
 
-/**
- * Mathematical 3-dimensional vector.
- *
- * x, y, z is alias of the first, second, third component of vector, respectively.
- */
 var vec3 = function vec3(x, y, z)
 {
   /**
@@ -5525,11 +5500,6 @@ return function (a, b)
 };
 })();
 
-/**
- * Mathematical 4-dimensional vector.
- *
- * x, y, z, w is alias of the first, second, third, fourth component of vector, respectively.
- */
 var vec4 = function vec4(x, y, z, w)
 {
   /**
@@ -6278,32 +6248,6 @@ vec4._forEach = (function()
   };
 })();
 
-/**
- * Mathematical 3x3 matrix.
- *
- * NOTE: we use column-major matrix for all matrix calculation.
- *
- * This may lead to some confusion when referencing OpenGL documentation,
- * however, which represents out all matricies in column-major format.
- * This means that while in code a matrix may be typed out as:
- *
- * [1, 0, 0, 0,
- *  0, 1, 0, 0,
- *  0, 0, 1, 0,
- *  x, y, z, 0]
- *
- * The same matrix in the [OpenGL documentation](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml)
- * is written as:
- *
- *  1 0 0 x
- *  0 1 0 y
- *  0 0 1 z
- *  0 0 0 0
- *
- * Please rest assured, however, that they are the same thing!
- * This is not unique to glMatrix, either, as OpenGL developers have long been confused by the
- * apparent lack of consistency between the memory layout and the documentation.
- */
 var mat3 = function mat3(
 m00, m01, m02, m03,
 m04, m05, m06, m07,
@@ -7157,12 +7101,6 @@ mat3._fromViewUp = (function ()
   };
 })();
 
-/**
- * Mathematical quaternion.
- *
- * A quaternion is a hypercomplex number represented by w + xi + yj + zk, where
- * x, y, z and w are real numbers(called here its components), and i, j, and k are the fundamental quaternion units.
- */
 var quat = function quat(x, y, z, w)
 {
   /**
@@ -8065,9 +8003,6 @@ quat._fromViewUp = (function ()
   };
 })();
 
-/**
- * Mathematical 2x2 matrix.
- */
 var mat2 = function mat2(m00, m01, m02, m03)
 {
 /**
@@ -8529,22 +8464,6 @@ out.m03 = a.m03 + (b.m03 * scale);
 return out;
 };
 
-/**
- * Mathematical 2x3 matrix.
- *
- * A mat23 contains six elements defined as:
- * <pre>
- * [a, c, tx,
- *  b, d, ty]
- * </pre>
- * This is a short form for the 3x3 matrix:
- * <pre>
- * [a, c, tx,
- *  b, d, ty,
- *  0, 0, 1]
- * </pre>
- * The last row is ignored so the array is shorter and operations are faster.
- */
 var mat23 = function mat23(m00, m01, m02, m03, m04, m05)
 {
 /**
@@ -9098,32 +9017,6 @@ return (
 );
 };
 
-/**
- * Mathematical 4x4 matrix.
- *
- * NOTE: we use column-major matrix for all matrix calculation.
- *
- * This may lead to some confusion when referencing OpenGL documentation,
- * however, which represents out all matricies in column-major format.
- * This means that while in code a matrix may be typed out as:
- *
- * [1, 0, 0, 0,
- *  0, 1, 0, 0,
- *  0, 0, 1, 0,
- *  x, y, z, 0]
- *
- * The same matrix in the [OpenGL documentation](https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml)
- * is written as:
- *
- *  1 0 0 x
- *  0 1 0 y
- *  0 0 1 z
- *  0 0 0 0
- *
- * Please rest assured, however, that they are the same thing!
- * This is not unique to glMatrix, either, as OpenGL developers have long been confused by the
- * apparent lack of consistency between the memory layout and the documentation.
- */
 var mat4 = function mat4(
 m00, m01, m02, m03,
 m04, m05, m06, m07,
@@ -10877,9 +10770,6 @@ return (
 );
 };
 
-/**
- * Represents a color with red(r), green(g), blue(b) component of that color.
- */
 var color3 = function color3(r, g, b)
 {
 /**
@@ -11175,10 +11065,6 @@ color3.hex = function hex (a)
 return (a.r * 255) << 16 | (a.g * 255) << 8 | (a.b * 255);
 };
 
-/**
- * Represents a color with red(r), green(g), blue(b) component of that color and
- * and an extra alpha(a) component indicating how opaque this color is.
- */
 var color4 = function color4(r, g, b, a)
 {
 /**
@@ -11494,10 +11380,6 @@ color4.hex = function hex (a)
 return ((a.r * 255) << 24 | (a.g * 255) << 16 | (a.b * 255) << 8 | a.a * 255) >>> 0;
 };
 
-// NOTE: there is no syntax for: export {* as bits} from './lib/bits';
-/**
- * Export module bits.
- */
 var bits = bits_;
 
 
@@ -11534,12 +11416,6 @@ var math = Object.freeze({
 	inverseLerp: inverseLerp
 });
 
-/**
- * the distance of the point to plane
- *
- * @param {vec3} point
- * @param {plane} plane
- */
 function point_plane(point, plane) {
   return vec3.dot(plane.n, point) - plane.d;
 }
@@ -11566,14 +11442,6 @@ var distance = {
   pt_point_plane: pt_point_plane,
 };
 
-/**
- * ray-plane intersect
- *
- * @param {ray} ray
- * @param {plane} plane
- * @param {vec3} outPt the intersect point if provide
- * @return {boolean}
- */
 var ray_plane = (function () {
   var pt = vec3.zero();
 
@@ -14225,9 +14093,6 @@ Camera.prototype.worldToScreen = function worldToScreen (out, worldPos, width, h
 };
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-/**
- * A representation of a model
- */
 var Model = function Model() {
   this._type = 'default';
   this._poolID = -1;
@@ -15432,8 +15297,6 @@ Pool.prototype.free = function free (obj) {
   this._frees[this._idx] = obj;
 };
 
-// NOTE: you must have `_prev` and `_next` field in the object returns by `fn`
-
 var LinkedArray = function LinkedArray(fn, size) {
   this._fn = fn;
   this._count = 0;
@@ -16357,12 +16220,6 @@ Node.prototype._getWorldPosAndRot = function _getWorldPosAndRot (opos, orot) {
 
 Object.defineProperties( Node.prototype, prototypeAccessors$10 );
 
-/**
- * @method walk
- * @param {Node} node
- * @param {function(node: Node, parent: Node, level: number): boolean} fn
- * @param {number} level
- */
 function walk(node, fn, level) {
   if ( level === void 0 ) level = 0;
 
@@ -16567,9 +16424,6 @@ var utils = {
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-/**
- * A representation of the scene
- */
 var Scene = function Scene() {
   this._lights = new FixedArray(16);
   this._models = new FixedArray(16);
@@ -17216,7 +17070,7 @@ var shaderTemplates = [
   {
     name: 'unlit',
     vert: '\nattribute vec3 a_position;\nuniform mat4 model;\nuniform mat4 viewProj;\n#if USE_TEXTURE\n  attribute vec2 a_uv0;\n  uniform vec2 mainTiling;\n  uniform vec2 mainOffset;\n  varying vec2 uv0;\n#endif\n#if USE_SKINNING\n  \nattribute vec4 a_weights;\nattribute vec4 a_joints;\nuniform sampler2D u_jointsTexture;\nuniform float u_jointsTextureSize;\nmat4 getBoneMatrix(const in float i) {\n  float size = u_jointsTextureSize;\n  float j = i * 4.0;\n  float x = mod(j, size);\n  float y = floor(j / size);\n  float dx = 1.0 / size;\n  float dy = 1.0 / size;\n  y = dy * (y + 0.5);\n  vec4 v1 = texture2D(u_jointsTexture, vec2(dx * (x + 0.5), y));\n  vec4 v2 = texture2D(u_jointsTexture, vec2(dx * (x + 1.5), y));\n  vec4 v3 = texture2D(u_jointsTexture, vec2(dx * (x + 2.5), y));\n  vec4 v4 = texture2D(u_jointsTexture, vec2(dx * (x + 3.5), y));\n  return mat4(v1, v2, v3, v4);\n}\nmat4 skinMatrix() {\n  return\n    getBoneMatrix(a_joints.x) * a_weights.x +\n    getBoneMatrix(a_joints.y) * a_weights.y +\n    getBoneMatrix(a_joints.z) * a_weights.z +\n    getBoneMatrix(a_joints.w) * a_weights.w\n    ;\n}\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if USE_SKINNING\n    pos = skinMatrix() * pos;\n  #endif\n  pos = viewProj * model * pos;\n  #if USE_TEXTURE\n    uv0 = a_uv0 * mainTiling + mainOffset;\n  #endif\n  gl_Position = pos;\n}',
-    frag: '\n#if USE_TEXTURE\n  uniform sampler2D mainTexture;\n  varying vec2 uv0;\n#endif\n#if USE_COLOR\n  uniform vec4 color;\n#endif\nvoid main () {\n  vec4 o = vec4(1, 1, 1, 1);\n  #if USE_TEXTURE\n  if (uv0.x < 0.05 || uv0.x > 0.95)\n    o = vec4(0);\n  #endif\n  #if USE_COLOR\n    o *= color;\n  #endif\n  gl_FragColor = o;\n}',
+    frag: '\n#if USE_TEXTURE\n  uniform sampler2D mainTexture;\n  varying vec2 uv0;\n#endif\n#if USE_COLOR\n  uniform vec4 color;\n#endif\nvoid main () {\n  vec4 o = vec4(0);\n  #if USE_TEXTURE\n  if (any(lessThan(vec4(uv0, 0.95, 0.95), vec4(0.05, 0.05, uv0))))\n    o = vec4(1);\n  #endif\n  #if USE_COLOR\n    o *= color;\n  #endif\n  gl_FragColor = o;\n}',
     defines: [
       { name: 'USE_TEXTURE', },
       { name: 'USE_COLOR', },
@@ -18215,8 +18069,6 @@ DynamicIAPool.prototype.requestIData = function requestIData (count) {
 Object.defineProperties( DynamicIAPool.prototype, prototypeAccessors$13 );
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
-// import GaussianBlur from './gaussian-blur';
 
 var _camPos = vec3.zero();
 var _camFwd = vec3.zero();
@@ -19714,8 +19566,6 @@ Event.prototype.stop = function stop () {
   this._stopped = true;
 };
 
-// forked from: https://github.com/primus/eventemitter3
-
 var has = Object.prototype.hasOwnProperty;
 
 /**
@@ -20209,7 +20059,6 @@ Object.defineProperties( Component.prototype, prototypeAccessors$15 );
  *  }
  */
 
-// const _setParent = Node.prototype.setParent;
 var Entity = function Entity(name) {
   this.__initNode();
   this.__initEventEmitter();
@@ -22013,16 +21862,6 @@ var async = {
   parallel: parallel
 };
 
-// UNUSED code
-// function _mainUuid(uuid) {
-//   let idx = uuid.indexOf('@');
-//   if (idx === -1) {
-//     return uuid;
-//   }
-//   return uuid.substring(idx+1);
-// }
-
-// NOTE: the json is prefab's json
 function _applyModifications(json, modifications) {
   for (var i = 0; i < modifications.length; i++) {
     var mod = modifications[i];
@@ -23257,15 +23096,6 @@ function cylinder (radiusTop, radiusBottom, height, opts) {
   }
 }
 
-/**
- * @param {Number} radius
- * @param {Number} height
- * @param {Object} opts
- * @param {Number} opts.radialSegments
- * @param {Number} opts.heightSegments
- * @param {Boolean} opts.capped
- * @param {Number} opts.arc
- */
 function cone (radius, height, opts) {
   if ( radius === void 0 ) radius = 0.5;
   if ( height === void 0 ) height = 1;
@@ -23384,11 +23214,6 @@ function quad () {
   };
 }
 
-/**
- * @param {Number} radius
- * @param {Object} opts
- * @param {Number} opts.segments
- */
 function sphere$2 (radius, opts) {
   if ( radius === void 0 ) radius = 1;
   if ( opts === void 0 ) opts = {};
@@ -23449,14 +23274,6 @@ function sphere$2 (radius, opts) {
   };
 }
 
-/**
- * @param {Number} radius
- * @param {Number} tube
- * @param {Object} opts
- * @param {Number} opts.radialSegments
- * @param {Number} opts.tubularSegments
- * @param {Number} opts.arc
- */
 function torus (radius, tube, opts) {
   if ( radius === void 0 ) radius = 0.5;
   if ( tube === void 0 ) tube = 0.2;
@@ -26874,11 +26691,6 @@ function prefabLoader (app, urls, callback) {
   });
 }
 
-// TODO:
-// import gltfUtils from '../loaders/utils/gltf-utils';
-// import ModelComponent from '../framework/model-component';
-// import SkinningModelComponent from '../framework/skinning-model-component';
-
 var Gltf = (function (Asset$$1) {
   function Gltf() {
     Asset$$1.call(this);
@@ -26976,11 +26788,6 @@ function animationLoader (app, urls, callback) {
   });
 }
 
-/**
- * Enums indicating the load mode of an audio clip
- * @property {number} WEB_AUDIO load through Web Audio API interface
- * @property {number} DOM_AUDIO load through an audio DOM element
- */
 var LoadMode = {
   WEB_AUDIO: 0,
   DOM_AUDIO: 1,
@@ -27843,13 +27650,6 @@ BoundingBox.prototype.addQuad = function(x0, y0, x1, y1, x, y) {
 
 // Geometric objects
 
-/**
- * A bézier path containing a set of path commands similar to a SVG path.
- * Paths can be drawn on a context using `draw`.
- * @exports opentype.Path
- * @class
- * @constructor
- */
 function Path() {
     this.commands = [];
     this.fill = 'black';
@@ -29149,14 +28949,6 @@ sizeOf.LITERAL = function(v) {
 
 // Table metadata
 
-/**
- * @exports opentype.Table
- * @class
- * @param {string} tableName
- * @param {Array} fields
- * @param {Object} options
- * @constructor
- */
 function Table(tableName, fields, options) {
     var this$1 = this;
 
@@ -29347,7 +29139,6 @@ var table = {
 
 // Parsing utility functions
 
-// Retrieve an unsigned byte from the DataView.
 function getByte(dataView, offset) {
     return dataView.getUint8(offset);
 }
@@ -30339,7 +30130,6 @@ var draw = { line: line$2 };
 // The `glyf` table describes the glyphs in TrueType outline format.
 // http://www.microsoft.com/typography/otspec/glyf.htm
 
-// Parse the coordinate data for a glyph.
 function parseGlyphCoordinate(p, flag, previousValue, shortVectorBitMask, sameBitMask) {
     var v;
     if ((flag & shortVectorBitMask) > 0) {
@@ -31019,7 +30809,6 @@ Glyph.prototype.drawMetrics = function(ctx, x, y, fontSize) {
 
 // The GlyphSet object
 
-// Define a property on the glyph that depends on the path being loaded.
 function defineDependentProperty(glyph, externalName, internalName) {
     Object.defineProperty(glyph, externalName, {
         get: function() {
@@ -31150,7 +30939,6 @@ var glyphset = { GlyphSet: GlyphSet, glyphLoader: glyphLoader, ttfGlyphLoader: t
 // http://download.microsoft.com/download/8/0/1/801a191c-029d-4af3-9642-555f6fe514ee/cff.pdf
 // http://download.microsoft.com/download/8/0/1/801a191c-029d-4af3-9642-555f6fe514ee/type2.pdf
 
-// Custom equals function that can also check lists.
 function equals$1(a, b) {
     if (a === b) {
         return true;
@@ -32408,7 +32196,6 @@ var cff = { parse: parseCFFTable, make: makeCFFTable };
 // The `head` table contains global information about the font.
 // https://www.microsoft.com/typography/OTSPEC/head.htm
 
-// Parse the header `head` table
 function parseHeadTable(data, start) {
     var head = {};
     var p = new parse$1.Parser(data, start);
@@ -32468,7 +32255,6 @@ var head = { parse: parseHeadTable, make: makeHeadTable };
 // The `hhea` table contains information for horizontal layout.
 // https://www.microsoft.com/typography/OTSPEC/hhea.htm
 
-// Parse the horizontal header `hhea` table
 function parseHheaTable(data, start) {
     var hhea = {};
     var p = new parse$1.Parser(data, start);
@@ -32516,8 +32302,6 @@ var hhea = { parse: parseHheaTable, make: makeHheaTable };
 // The `hmtx` table contains the horizontal metrics for all glyphs.
 // https://www.microsoft.com/typography/OTSPEC/hmtx.htm
 
-// Parse the `hmtx` table, which contains the horizontal metrics for all glyphs.
-// This function augments the glyph array, adding the advanceWidth and leftSideBearing to each glyph.
 function parseHmtxTable(data, start, numMetrics, numGlyphs, glyphs) {
     var advanceWidth;
     var leftSideBearing;
@@ -32609,7 +32393,6 @@ var ltag = { make: makeLtagTable, parse: parseLtagTable };
 // We need it just to get the number of glyphs in the font.
 // https://www.microsoft.com/typography/OTSPEC/maxp.htm
 
-// Parse the maximum profile `maxp` table.
 function parseMaxpTable(data, start) {
     var maxp = {};
     var p = new parse$1.Parser(data, start);
@@ -32646,7 +32429,6 @@ var maxp = { parse: parseMaxpTable, make: makeMaxpTable };
 // The `name` naming table.
 // https://www.microsoft.com/typography/OTSPEC/name.htm
 
-// NameIDs for the name table.
 var nameTableNames = [
     'copyright',              // 0
     'fontFamily',             // 1
@@ -33722,7 +33504,6 @@ var os2 = { parse: parseOS2Table, make: makeOS2Table, unicodeRanges: unicodeRang
 // The `post` table stores additional PostScript information, such as glyph names.
 // https://www.microsoft.com/typography/OTSPEC/post.htm
 
-// Parse the PostScript `post` table
 function parsePostTable(data, start) {
     var post = {};
     var p = new parse$1.Parser(data, start);
@@ -34039,8 +33820,6 @@ var gsub = { parse: parseGsubTable, make: makeGsubTable };
 // The `GPOS` table contains kerning pairs, among other things.
 // https://www.microsoft.com/typography/OTSPEC/gpos.htm
 
-// Parse the metadata `meta` table.
-// https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6meta.html
 function parseMetaTable(data, start) {
     var p = new parse$1.Parser(data, start);
     var tableVersion = p.parseULong();
@@ -34692,13 +34471,6 @@ Layout.prototype = {
 // The Substitution object provides utility methods to manipulate
 // the GSUB substitution table.
 
-/**
- * @exports opentype.Substitution
- * @class
- * @extends opentype.Layout
- * @param {opentype.Font}
- * @constructor
- */
 function Substitution(font) {
     Layout.call(this, font, 'gsub');
 }
@@ -38059,42 +37831,6 @@ vim: set ts=4 sw=4 expandtab:
 
 // The Font object
 
-/**
- * @typedef FontOptions
- * @type Object
- * @property {Boolean} empty - whether to create a new empty font
- * @property {string} familyName
- * @property {string} styleName
- * @property {string=} fullName
- * @property {string=} postScriptName
- * @property {string=} designer
- * @property {string=} designerURL
- * @property {string=} manufacturer
- * @property {string=} manufacturerURL
- * @property {string=} license
- * @property {string=} licenseURL
- * @property {string=} version
- * @property {string=} description
- * @property {string=} copyright
- * @property {string=} trademark
- * @property {Number} unitsPerEm
- * @property {Number} ascender
- * @property {Number} descender
- * @property {Number} createdTimestamp
- * @property {string=} weightClass
- * @property {string=} widthClass
- * @property {string=} fsSelection
- */
-
-/**
- * A Font represents a loaded OpenType font file.
- * It contains a set of glyphs and methods to draw text on a drawing context,
- * or to get a path representing the text.
- * @exports opentype.Font
- * @class
- * @param {FontOptions}
- * @constructor
- */
 function Font$2(options) {
     options = options || {};
 
@@ -38742,8 +38478,6 @@ var fvar = { make: makeFvarTable, parse: parseFvarTable };
 // The `GPOS` table contains kerning pairs, among other things.
 // https://www.microsoft.com/typography/OTSPEC/gpos.htm
 
-// Parse ScriptList and FeatureList tables of GPOS, GSUB, GDEF, BASE, JSTF tables.
-// These lists are unused by now, this function is just the basis for a real parsing.
 function parseTaggedListTable(data, start) {
     var p = new parse$1.Parser(data, start);
     var n = p.parseUShort();
@@ -39044,12 +38778,6 @@ var kern = { parse: parseKernTable };
 // The `loca` table stores the offsets to the locations of the glyphs in the font.
 // https://www.microsoft.com/typography/OTSPEC/loca.htm
 
-// Parse the `loca` table. This table stores the offsets to the locations of the glyphs in the font,
-// relative to the beginning of the glyphData table.
-// The number of glyphs stored in the `loca` table is specified in the `maxp` table (under numGlyphs)
-// The loca table has two versions: a short version where offsets are stored as uShorts, and a long
-// version where offsets are stored as uLongs. The `head` table specifies which version to use
-// (under indexToLocFormat).
 function parseLocaTable(data, start, numGlyphs, shortVersion) {
     var p = new parse$1.Parser(data, start);
     var parseFn = shortVersion ? p.parseUShort : p.parseULong;
@@ -39078,13 +38806,6 @@ var loca = { parse: parseLocaTable };
 
 /* global DataView, Uint8Array, XMLHttpRequest  */
 
-// Table Directory Entries //////////////////////////////////////////////
-/**
- * Parses OpenType table entries.
- * @param  {DataView}
- * @param  {Number}
- * @return {Object[]}
- */
 function parseOpenTypeTableEntries(data, numTables) {
     var tableEntries = [];
     var p = 12;
@@ -39357,19 +39078,16 @@ function parseBuffer(buffer) {
 }
 
 /**
- * Create a new ShelfPack bin allocator.
- *
- * Uses the Shelf Best Height Fit algorithm from
- * http://clb.demon.fi/files/RectangleBinPack.pdf
- *
- * @class  ShelfPack
- * @param  {number}  [w=64]  Initial width of the sprite
- * @param  {number}  [h=64]  Initial width of the sprite
- * @param  {Object}  [options]
- * @param  {boolean} [options.autoResize=false]  If `true`, the sprite will automatically grow
- * @example
- * var sprite = new ShelfPack(64, 64, { autoResize: false });
+ * Asynchronously load the font from a URL or a filesystem. When done, call the callback
+ * with two arguments `(err, font)`. The `err` will be null on success,
+ * the `font` is a Font object.
+ * We use the node.js callback convention so that
+ * opentype.js can integrate with frameworks like async.js.
+ * @alias opentype.load
+ * @param  {string} url - The URL of the font to load.
+ * @param  {Function} callback - The callback.
  */
+
 function ShelfPack$1(w, h, options) {
     options = options || {};
     this.w = w || 64;
@@ -41040,7 +40758,6 @@ AnimationComponent.schema = {
   },
 };
 
-// TODO
 var CC_WECHATGAME = false;
 var CC_QQPLAY = false;
 var touchBinded = false;
@@ -49229,10 +48946,6 @@ var AnimationSystem = (function (System) {
   return AnimationSystem;
 }(System));
 
-/**
- * The audio system, handling audio-relevant low-level initiations,
- * resource management and other global tasks
- */
 var AudioSystem = (function (System) {
   function AudioSystem() {
     System.call(this);
@@ -50535,13 +50248,6 @@ var ParticleSystemManager = (function (System) {
   return ParticleSystemManager;
 }(System));
 
-// TODO: chunks and templates should move to renderer
-// loader
-// import effectLoader from './loaders/effect-loader';
-
-// builtin components & systems
-// other classes
-// register builtin asset loader
 registry.registerLoader('mesh', meshLoader);
 registry.registerLoader('material', materialLoader);
 registry.registerLoader('texture', textureLoader);
@@ -50799,11 +50505,6 @@ var path = {
   },
 };
 
-// misc
-// components
-// ui-widget components
-// assets
-// deps
 var index = {
   // registry
   registerLoader: registry.registerLoader,
