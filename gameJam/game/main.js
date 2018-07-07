@@ -22,6 +22,7 @@ game.run();
 let assetMng = game.assets;
 assetMng.registerLevel('main', `${assetsDir}/main.json`);
 assetMng.registerLevel('game', `${assetsDir}/game.json`);
+assetMng.registerLevel('logo', `${assetsDir}/logo.json`);
 
 // todo move this to game
 resl({
@@ -46,6 +47,6 @@ resl({
       game.assets.registerAsset(uuid, info);
     }
 
-    game.loadScene('main');
+    game.loadScene('logo');
   }
 });

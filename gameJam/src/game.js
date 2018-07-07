@@ -3,6 +3,9 @@ import RotateBox from './rotateBox';
 import AddBoxPrefab from './addBoxPrefab';
 import FPCamera from './FPCamera';
 import CollisionDetector from './player/CollisionDetector';
+import Portal from './Portal';
+import Logo from './Logo';
+
 const { resl } = cc;
 // 'EnterGame' should match to script Comp name
 let _componentRegitstry = {
@@ -10,7 +13,9 @@ let _componentRegitstry = {
   'game.RotateBox': RotateBox,
   'game.AddBoxPrefab': AddBoxPrefab,
   'game.FPCamera': FPCamera,
-  'player.CollisionDetector':CollisionDetector
+  'player.CollisionDetector':CollisionDetector,
+  'game.Portal': Portal,
+  'game.Logo': Logo,
 };
 
 let _gameInstance = null;
