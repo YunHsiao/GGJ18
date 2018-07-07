@@ -1,0 +1,43 @@
+# mac-osx files
+.DS_store
+profile
+
+# visual-studio files
+*.ncb *.sln
+*.suo
+*.vcproj.*.user
+*.pdb
+*.idb
+*.csproj
+*.csproj.user
+.vs
+
+# visual-studio code
+.vscode/
+
+# exvim files
+*.err
+*.exvim
+.exvim.*/
+
+# webstorm
+.idea
+
+# log files
+*.log
+
+# unity files
+*.pidb.meta
+*.pdb.meta
+*.unitypackage
+
+# project files
+gameJam/node_modules
+gameJam/game/assets
+gameJam/game/engine
+gameJam_u3d/[Ll]ibrary/
+gameJam_u3d/[Tt]emp/
+gameJam_u3d/[Oo]bj/
+gameJam_u3d/[Bb]uild/
+gameJam_u3d/[Bb]uilds/
+helps
