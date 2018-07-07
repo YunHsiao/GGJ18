@@ -17015,7 +17015,7 @@ var ParticleBatchModel = (function (Model$$1) {
   };
 
   ParticleBatchModel.prototype.destroy = function destroy () {
-    this._vdataF32.length = 0;
+    this._vdataF32 = null;
     this._ia._vertexBuffer.destroy();
     this._ia._indexBuffer.destroy();
   };
@@ -17215,7 +17215,7 @@ var shaderTemplates = [
   {
     name: 'unlit',
     vert: '\nattribute vec3 a_position;\nuniform mat4 model;\nuniform mat4 viewProj;\n#if USE_TEXTURE\n  attribute vec2 a_uv0;\n  uniform vec2 mainTiling;\n  uniform vec2 mainOffset;\n  varying vec2 uv0;\n#endif\n#if USE_SKINNING\n  \nattribute vec4 a_weights;\nattribute vec4 a_joints;\nuniform sampler2D u_jointsTexture;\nuniform float u_jointsTextureSize;\nmat4 getBoneMatrix(const in float i) {\n  float size = u_jointsTextureSize;\n  float j = i * 4.0;\n  float x = mod(j, size);\n  float y = floor(j / size);\n  float dx = 1.0 / size;\n  float dy = 1.0 / size;\n  y = dy * (y + 0.5);\n  vec4 v1 = texture2D(u_jointsTexture, vec2(dx * (x + 0.5), y));\n  vec4 v2 = texture2D(u_jointsTexture, vec2(dx * (x + 1.5), y));\n  vec4 v3 = texture2D(u_jointsTexture, vec2(dx * (x + 2.5), y));\n  vec4 v4 = texture2D(u_jointsTexture, vec2(dx * (x + 3.5), y));\n  return mat4(v1, v2, v3, v4);\n}\nmat4 skinMatrix() {\n  return\n    getBoneMatrix(a_joints.x) * a_weights.x +\n    getBoneMatrix(a_joints.y) * a_weights.y +\n    getBoneMatrix(a_joints.z) * a_weights.z +\n    getBoneMatrix(a_joints.w) * a_weights.w\n    ;\n}\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if USE_SKINNING\n    pos = skinMatrix() * pos;\n  #endif\n  pos = viewProj * model * pos;\n  #if USE_TEXTURE\n    uv0 = a_uv0 * mainTiling + mainOffset;\n  #endif\n  gl_Position = pos;\n}',
-    frag: '\n#if USE_TEXTURE\n  uniform sampler2D mainTexture;\n  varying vec2 uv0;\n#endif\n#if USE_COLOR\n  uniform vec4 color;\n#endif\nvoid main () {\n  vec4 o = vec4(1, 1, 1, 1);\n  #if USE_TEXTURE\n    o *= texture2D(mainTexture, uv0);\n  #endif\n  #if USE_COLOR\n    o *= color;\n  #endif\n  gl_FragColor = o;\n}',
+    frag: '\n#if USE_TEXTURE\n  uniform sampler2D mainTexture;\n  varying vec2 uv0;\n#endif\n#if USE_COLOR\n  uniform vec4 color;\n#endif\nvoid main () {\n  vec4 o = vec4(1, 1, 1, 1);\n  #if USE_TEXTURE\n  if (uv0.x < 0.05 || uv0.x > 0.95)\n    o = vec4(0);\n  #endif\n  #if USE_COLOR\n    o *= color;\n  #endif\n  gl_FragColor = o;\n}',
     defines: [
       { name: 'USE_TEXTURE', },
       { name: 'USE_COLOR', },
@@ -25072,67 +25072,67 @@ function initBuiltins (device) {
   // builtin-cube
   var cubeMesh = new Mesh();
   cubeMesh._subMeshes = new Array(1);
-  cubeMesh._subMeshes[0] = renderer.createIA(
-    device,
-    box$2(1, 1, 1, {
-      widthSegments: 1,
-      heightSegments: 1,
-      lengthSegments: 1,
-    })
-  );
+  var cubeDesc = box$2(1, 1, 1, {
+    widthSegments: 1,
+    heightSegments: 1,
+    lengthSegments: 1,
+  });
+  cubeMesh._subMeshes[0] = renderer.createIA(device, cubeDesc);
   cubeMesh._uuid = 'builtin-cube';
   cubeMesh._loaded = true;
+  cubeMesh._minPos = vec3.clone(cubeDesc.minPos);
+  cubeMesh._maxPos = vec3.clone(cubeDesc.maxPos);
 
   // builtin-sphere
   var sphereMesh = new Mesh();
   sphereMesh._subMeshes = new Array(1);
-  sphereMesh._subMeshes[0] = renderer.createIA(
-    device,
-    sphere$2(0.5, {
-      segments: 64,
-    })
-  );
+  var sphereDesc = sphere$2(0.5, {
+    segments: 64,
+  });
+  sphereMesh._subMeshes[0] = renderer.createIA(device, sphereDesc);
   sphereMesh._uuid = 'builtin-sphere';
   sphereMesh._loaded = true;
+  sphereMesh._minPos = vec3.clone(sphereDesc.minPos);
+  sphereMesh._maxPos = vec3.clone(sphereDesc.maxPos);
 
   // builtin-cylinder
   var cylinderMesh = new Mesh();
   cylinderMesh._subMeshes = new Array(1);
-  cylinderMesh._subMeshes[0] = renderer.createIA(
-    device,
-    cylinder(0.5, 0.5, 2, {
-      radialSegments: 20,
-      capped: true,
-    })
-  );
+  var cylinderDesc = cylinder(0.5, 0.5, 2, {
+    radialSegments: 20,
+    capped: true,
+  });
+  cylinderMesh._subMeshes[0] = renderer.createIA(device, cylinderDesc);
   cylinderMesh._uuid = 'builtin-cylinder';
   cylinderMesh._loaded = true;
+  cylinderMesh._minPos = vec3.clone(cylinderDesc.minPos);
+  cylinderMesh._maxPos = vec3.clone(cylinderDesc.maxPos);
 
   // builtin-plane
   var planeMesh = new Mesh();
   planeMesh._subMeshes = new Array(1);
-  planeMesh._subMeshes[0] = renderer.createIA(
-    device,
-    plane$2(10, 10, {
-      uSegments: 10,
-      vSegments: 10,
-    })
-  );
+  var planeDesc = plane$2(10, 10, {
+    uSegments: 10,
+    vSegments: 10,
+  });
+  planeMesh._subMeshes[0] = renderer.createIA(device, planeDesc);
   planeMesh._uuid = 'builtin-plane';
   planeMesh._loaded = true;
+  planeMesh._minPos = vec3.clone(planeDesc.minPos);
+  planeMesh._maxPos = vec3.clone(planeDesc.maxPos);
 
   // builtin-capsule
   var capsuleMesh = new Mesh();
   capsuleMesh._subMeshes = new Array(1);
-  capsuleMesh._subMeshes[0] = renderer.createIA(
-    device,
-    capsule(0.5, 0.5, 2, {
-      heightSegments: 30,
-      sides: 20,
-    })
-  );
+  var capsuleDesc = capsule(0.5, 0.5, 2, {
+    heightSegments: 30,
+    sides: 20,
+  });
+  capsuleMesh._subMeshes[0] = renderer.createIA(device, capsuleDesc);
   capsuleMesh._uuid = 'builtin-capsule';
   capsuleMesh._loaded = true;
+  capsuleMesh._minPos = vec3.clone(capsuleDesc.minPos);
+  capsuleMesh._maxPos = vec3.clone(capsuleDesc.maxPos);
 
   // ============================
   // builtin effects
