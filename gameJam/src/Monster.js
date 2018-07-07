@@ -1,4 +1,4 @@
-const { mat4 } = cc.math;
+const { mat4, vec3 } = cc.math;
 const { box, intersect } = cc.geometry;
 
 export default class Monster extends cc.ScriptComponent {
@@ -13,8 +13,9 @@ export default class Monster extends cc.ScriptComponent {
 
   tick() {
     if (this.ended) return;
-    this.model._node.getWorldMatrix(this.m4);
+    this.model._node.getWorldRT(this.m4);
     box.setTransform(this.model._boundingBox, this.m4, this.model._bbModelSpace);
+    vec3.mul(this.model._boundingBox.size, this.model._bbModelSpace.size, this.model._node.lscale);
     if (intersect.box_point(this.model._boundingBox, this.player.lpos)) {
       cc.game.loadScene('limbo');
       this.ended = true;
