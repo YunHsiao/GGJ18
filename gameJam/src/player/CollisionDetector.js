@@ -10,32 +10,33 @@ export default class CollisionDetector extends cc.ScriptComponent {
   }
 
   start() {
-    let meshes = this._entity.getComps('Model')[0]._mesh;
-    let min = cc.math.vec3.new(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
-    let max = cc.math.vec3.new(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
-    if (meshes._minPos.x < min.x) {
-      min.x = meshes._minPos.x;
-    }
-    if (meshes._minPos.y < min.y) {
-      min.y = meshes._minPos.y;
-    }
-    if (meshes._minPos.z < min.z) {
-      min.z = meshes._minPos.z;
-    }
-    if (meshes._maxPos.x > max.x) {
-      max.x = meshes._maxPos.x;
-    }
-    if (meshes._maxPos.y > max.y) {
-      max.y = meshes._maxPos.y;
-    }
-    if (meshes._maxPos.z > max.z) {
-      max.z = meshes._maxPos.z;
-    }
-    let center = cc.math.vec3.zero();
-    cc.math.vec3.add(center, min, max);
-    cc.math.vec3.scale(center, center, 0.5);
+    // let meshes = this._entity.getComps('Model')[0]._mesh;
+    // let min = cc.math.vec3.new(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
+    // let max = cc.math.vec3.new(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
+    // if (meshes._minPos.x < min.x) {
+    //   min.x = meshes._minPos.x;
+    // }
+    // if (meshes._minPos.y < min.y) {
+    //   min.y = meshes._minPos.y;
+    // }
+    // if (meshes._minPos.z < min.z) {
+    //   min.z = meshes._minPos.z;
+    // }
+    // if (meshes._maxPos.x > max.x) {
+    //   max.x = meshes._maxPos.x;
+    // }
+    // if (meshes._maxPos.y > max.y) {
+    //   max.y = meshes._maxPos.y;
+    // }
+    // if (meshes._maxPos.z > max.z) {
+    //   max.z = meshes._maxPos.z;
+    // }
+    // let center = cc.math.vec3.zero();
+    // cc.math.vec3.add(center, min, max);
+    // cc.math.vec3.scale(center, center, 0.5);
+    this._entity.getWorldPos(this.wPos);
     // this.sphereCollider=cc.geometry.sphere.new(center.x,center.y,center.z,cc.math.vec3.distance(center,max));
-    this.sphereCollider = cc.geometry.sphere.new(center.x, center.y, center.z, (max.y - min.y) / 2);
+    this.sphereCollider = cc.geometry.sphere.new(this.wPos.x, this.wPos.y, this.wPos.z, 5);
     cc.math.vec3.copy(this.footSphere.c, this.sphereCollider.c);
     this.footSphere.r = 0.05;
   }
