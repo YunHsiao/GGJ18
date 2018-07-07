@@ -2,13 +2,18 @@ import EnterGame from './enterGame';
 import RotateBox from './rotateBox';
 import AddBoxPrefab from './addBoxPrefab';
 import FPCamera from './FPCamera';
+import Portal from './Portal';
+import Logo from './Logo';
+
 const { resl } = cc;
 // 'EnterGame' should match to script Comp name
 let _componentRegitstry = {
   'game.EnterGame': EnterGame,
   'game.RotateBox': RotateBox,
   'game.AddBoxPrefab': AddBoxPrefab,
-  'game.FPCamera': FPCamera
+  'game.FPCamera': FPCamera,
+  'game.Portal': Portal,
+  'game.Logo': Logo,
 };
 
 let _gameInstance = null;

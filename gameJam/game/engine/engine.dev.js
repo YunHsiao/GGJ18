@@ -11442,6 +11442,14 @@ var distance = {
   pt_point_plane: pt_point_plane,
 };
 
+/**
+ * ray-plane intersect
+ *
+ * @param {ray} ray
+ * @param {plane} plane
+ * @param {vec3} outPt the intersect point if provide
+ * @return {boolean}
+ */
 var ray_plane = (function () {
   var pt = vec3.zero();
 
@@ -11807,7 +11815,7 @@ var box_point = (function () {
   var tmp = vec3.zero(), v = vec3.zero();
   var lessThan = function(a, b) { return a.x < b.x && a.y < b.y && a.z < b.z; };
   return function(box, point) {
-    vec3.transformMat4(tmp, point, box.orientation);
+    vec3.transformMat3(tmp, point, box.orientation);
     return lessThan(tmp, vec3.add(v, box.center, box.size)) &&
       lessThan(vec3.sub(v, box.center, box.size), tmp);
   };
