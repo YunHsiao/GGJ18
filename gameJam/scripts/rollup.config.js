@@ -20,7 +20,7 @@ let moduleName = 'gameJam';
 fsJetpack.dir(dest, { empty: true });
 
 module.exports = {
-  entry: './src/game.js',
+  entry: './src/Game.js',
   targets: [
     { dest: `${dest}/${file}.dev.js`, format: 'iife' },
     { dest: `${dest}/${file}.js`, format: 'cjs' },

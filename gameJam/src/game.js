@@ -5,6 +5,8 @@ import FPCamera from './FPCamera';
 import CollisionDetector from './player/CollisionDetector';
 import Portal from './Portal';
 import Logo from './Logo';
+import Monster from './Monster';
+import Limbo from './Limbo';
 
 const { resl } = cc;
 // 'EnterGame' should match to script Comp name
@@ -16,6 +18,8 @@ let _componentRegitstry = {
   'player.CollisionDetector':CollisionDetector,
   'game.Portal': Portal,
   'game.Logo': Logo,
+  'game.Monster': Monster,
+  'game.Limbo': Limbo,
 };
 
 let _gameInstance = null;

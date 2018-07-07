@@ -23,6 +23,7 @@ let assetMng = game.assets;
 assetMng.registerLevel('main', `${assetsDir}/main.json`);
 assetMng.registerLevel('game', `${assetsDir}/game.json`);
 assetMng.registerLevel('logo', `${assetsDir}/logo.json`);
+assetMng.registerLevel('limbo', `${assetsDir}/limbo.json`);
 
 // todo move this to game
 resl({

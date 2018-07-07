@@ -11,6 +11,7 @@ export default class FPCamera extends cc.ScriptComponent {
     this.forward = vec3.new(0, 0, 1);
     this.right = vec3.new(1, 0, 0);
     this.euler = vec3.new(0, 0, 0);
+    this.temp = vec3.zero();
   }
 
   tick() {
@@ -18,22 +19,24 @@ export default class FPCamera extends cc.ScriptComponent {
     quat.fromEuler(this.rot, this.euler.x, this.euler.y, this.euler.z);
     vec3.transformQuat(this.forward, this.id_forward, this.rot);
     vec3.transformQuat(this.right, this.id_right, this.rot);
-    if (this.input.keypress('w')) vec3.set(this.pos, this.pos.x - this.forward.x, this.pos.y, this.pos.z - this.forward.z);
-    if (this.input.keypress('s')) vec3.set(this.pos, this.pos.x + this.forward.x, this.pos.y, this.pos.z + this.forward.z);
-    if (this.input.keypress('d')) vec3.set(this.pos, this.pos.x + this.right.x, this.pos.y, this.pos.z + this.right.z);
-    if (this.input.keypress('a')) vec3.set(this.pos, this.pos.x - this.right.x, this.pos.y, this.pos.z - this.right.z);
-    if (this.input.keypress('e')) vec3.set(this.pos, this.pos.x, this.pos.y + 1, this.pos.z);
-    if (this.input.keypress('q')) vec3.set(this.pos, this.pos.x, this.pos.y - 1, this.pos.z);
+    vec3.copy(this.temp, this.pos);
+    if (this.input.keypress('w')) vec3.set(this.temp, this.temp.x - this.forward.x, this.temp.y, this.temp.z - this.forward.z);
+    if (this.input.keypress('s')) vec3.set(this.temp, this.temp.x + this.forward.x, this.temp.y, this.temp.z + this.forward.z);
+    if (this.input.keypress('d')) vec3.set(this.temp, this.temp.x + this.right.x, this.temp.y, this.temp.z + this.right.z);
+    if (this.input.keypress('a')) vec3.set(this.temp, this.temp.x - this.right.x, this.temp.y, this.temp.z - this.right.z);
+    if (this.input.keypress('e')) vec3.set(this.temp, this.temp.x, this.temp.y + 1, this.temp.z);
+    if (this.input.keypress('q')) vec3.set(this.temp, this.temp.x, this.temp.y - 1, this.temp.z);
+    if (this.cd && this.cd.check(this.temp)) vec3.copy(this.pos, this.temp);
   }
 
   start() {
     this.pos = this._entity.lpos;
     this.rot = this._entity.lrot;
+    this.cd = this._entity.getComp('player.CollisionDetector');
     this.input = this._app._input;
     this.input._lock = true;
 
 // monkey patching...
-
     this.input._uninstallGlobalEvents = (function() {
       if (!this._globalEventInstalled) {
         return;
@@ -61,7 +64,6 @@ export default class FPCamera extends cc.ScriptComponent {
       this._globalEventInstalled = false;
     }).bind(this.input);
   }
-
   postTick() {
     this.input._element.requestPointerLock();
   }
