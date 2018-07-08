@@ -1,12 +1,19 @@
 export default class CollisionDetector extends cc.ScriptComponent {
   constructor() {
     super();
-    this.testSphere = cc.geometry.sphere.create();
-    this.footSphere = cc.geometry.sphere.create();
+    // this.testSphere = cc.geometry.sphere.create();
+    // this.footSphere = cc.geometry.sphere.create();
     this.wPos = cc.math.vec3.zero();
-    this.upstair = false;
-    this.preStepPos = cc.math.vec3.zero();
-    this.lastStair = null;
+    // this.upstair = false;
+    // this.preStepPos = cc.math.vec3.zero();
+    // this.lastStair = null;
+    this.collisionPoint = cc.math.vec3.zero();
+    this.checkFloorRay = cc.geometry.ray.create();
+    this.checkWallRay1 = cc.geometry.ray.create();
+    this.checkWallRay2 = cc.geometry.ray.create();
+    this.checkWallRay3 = cc.geometry.ray.create();
+    this.checkWallRay4 = cc.geometry.ray.create();
+    this.disable = false;
   }
 
   start() {
@@ -34,14 +41,14 @@ export default class CollisionDetector extends cc.ScriptComponent {
     // let center = cc.math.vec3.zero();
     // cc.math.vec3.add(center, min, max);
     // cc.math.vec3.scale(center, center, 0.5);
-    this._entity.getWorldPos(this.wPos);
+    // this._entity.getWorldPos(this.wPos);
     // this.sphereCollider=cc.geometry.sphere.new(center.x,center.y,center.z,cc.math.vec3.distance(center,max));
-    this.sphereCollider = cc.geometry.sphere.new(this.wPos.x, this.wPos.y, this.wPos.z, 5);
-    cc.math.vec3.copy(this.footSphere.c, this.sphereCollider.c);
-    this.footSphere.r = 0.05;
+    // this.sphereCollider = cc.geometry.sphere.new(this.wPos.x, this.wPos.y, this.wPos.z, 5);
+    // cc.math.vec3.copy(this.footSphere.c, this.sphereCollider.c);
+    // this.footSphere.r = 0.05;
   }
 
-  check(dir) {
+  check(pos) {
     // cc.math.vec3.set(this.footSphere.c, this.sphereCollider.c.x, this.sphereCollider.c.y - this.sphereCollider.r, this.sphereCollider.c.z);
     // cc.geometry.sphere.set(this.testSphere, this.sphereCollider.c.x, this.sphereCollider.c.y, this.sphereCollider.c.z, this.sphereCollider.r);
     // cc.math.vec3.add(this.testSphere.c, this.testSphere.c, dir);
@@ -109,6 +116,121 @@ export default class CollisionDetector extends cc.ScriptComponent {
     //   this.testSphere.c.y = this.lastStair.center.y + this.sphereCollider.r - this.lastStair.size.y;
     // }
     // this._entity.setWorldPos(this.testSphere.c);
-    return true;
+    if (this.disable)
+      return true;
+    cc.geometry.ray.set(this.checkFloorRay, pos.x, pos.y, pos.z, 0, -1, 0);
+    cc.geometry.ray.set(this.checkWallRay1, pos.x, pos.y, pos.z, 1, 0, 0);
+    cc.geometry.ray.set(this.checkWallRay2, pos.x, pos.y, pos.z, -1, 0, 0);
+    cc.geometry.ray.set(this.checkWallRay3, pos.x, pos.y, pos.z, 0, 0, 1);
+    cc.geometry.ray.set(this.checkWallRay4, pos.x, pos.y, pos.z, 0, 0, -1);
+    let models = this._app.activeLevel.getCompsInChildren('Model');
+    let ret = true;
+    let posX = Number.MAX_VALUE;
+    let negX = -Number.MAX_VALUE;
+    let y = -Number.MAX_VALUE;
+    let posZ = Number.MAX_VALUE;
+    let negZ = -Number.MAX_VALUE;
+    // console.log('-----------------------');
+    models.forEach(element => {
+      element._models.forEach(m => {
+        if (m._boundingBox == null)
+          return;
+        if (!this.needCheck(m._boundingBox, pos))
+          return;
+        if (m._boundingBox.size.y < this._wallHeight / 2) {
+          // if(m._node.name==='zhongji02_migong666_Plane866')
+          //   console.log('');
+          if (cc.geometry.intersect.ray_box(this.checkFloorRay, m._boundingBox, this.collisionPoint)) {
+            if (y < this.collisionPoint.y) {
+              y = this.collisionPoint.y;
+              // console.log('x:'+this.checkFloorRay.o.x+' z:'+this.checkFloorRay.o.z+' y:'+y+' object:'+m._node.name);
+            }
+          }
+        }
+        else {
+          if (cc.geometry.intersect.ray_box(this.checkWallRay1, m._boundingBox, this.collisionPoint)) {
+            if (posX > this.collisionPoint.x) {
+              posX = this.collisionPoint.x;
+            }
+          }
+          if (cc.geometry.intersect.ray_box(this.checkWallRay2, m._boundingBox, this.collisionPoint)) {
+            if (negX < this.collisionPoint.x) {
+              negX = this.collisionPoint.x;
+            }
+          }
+          if (cc.geometry.intersect.ray_box(this.checkWallRay3, m._boundingBox, this.collisionPoint)) {
+            if (posZ > this.collisionPoint.z) {
+              posZ = this.collisionPoint.z;
+            }
+          }
+          if (cc.geometry.intersect.ray_box(this.checkWallRay4, m._boundingBox, this.collisionPoint)) {
+            if (negZ < this.collisionPoint.z) {
+              negZ = this.collisionPoint.z;
+            }
+          }
+        }
+      });
+    });
+    if (posX < Number.MAX_VALUE && Math.abs(this._width - (posX - pos.x)) < this._epsilon) {
+      pos.x = pos.x - (this._width+this._epsilon);
+      // ret = false;
+    }
+    if (negX > -Number.MAX_VALUE && Math.abs(this._width - (pos.x - negX)) < this._epsilon) {
+      pos.x = pos.x + (this._width+this._epsilon);
+      // ret = false;
+    }
+    if (y > -Number.MAX_VALUE && Math.abs(pos.y - y - this._height) > this._epsilon) {
+      pos.y = y + this._height;
+      ret = true;
+    }
+    if (posZ < Number.MAX_VALUE && Math.abs(this._width - (posZ - pos.z)) < this._epsilon) {
+      pos.z = pos.z - (this._width+this._epsilon);
+      // ret = false;
+    }
+    if (negZ > -Number.MAX_VALUE && Math.abs(this._width - (pos.z - negZ)) < this._epsilon) {
+      pos.z = pos.z + (this._width+this._epsilon);
+      // ret = false;
+    }
+    return ret;
+  }
+
+
+  needCheck(box, pos) {
+    if (Math.abs(box.center.x - pos.x) <= this._width + box.size.x + this._epsilon) {
+      return true;
+    }
+    if (pos.y > box.center.y) {
+      return true;
+    }
+    if (Math.abs(box.center.z - pos.z) <= this._width + box.size.z + this._epsilon) {
+      return true;
+    }
+    return false;
+  }
+
+  tick() {
+    if (this._app._input.keyup('f')) {
+      this.disable = !this.disable;
+    }
+  }
+}
+
+
+CollisionDetector.schema = {
+  height: {
+    type: 'number',
+    default: 4
+  },
+  width: {
+    type: 'number',
+    default: 1
+  },
+  wallHeight: {
+    type: 'number',
+    default: 5
+  },
+  epsilon: {
+    type: 'number',
+    default: 0.1
   }
 }
