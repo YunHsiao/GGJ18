@@ -25,12 +25,13 @@ export default class Portal extends cc.ScriptComponent {
         this._app.scene._models.data[i]._effect.setProperty('color', this.color_after_life);
       this.player.getComp('game.FPCamera').speed = this.mst.speed;
       this.ended = true;
+      this._entity.getComp('AudioSource').play();
       cc.game.over = true;
       setTimeout((function(){
         this.mst.disappear();
         vec3.set(this.monster.lpos, this._entity.lpos.x + this.mst.pursuitDist - 1, 
           this._entity.lpos.y, this._entity.lpos.z);
-      }).bind(this), 5000);
+      }).bind(this), 10000);
     }
   }
 }
