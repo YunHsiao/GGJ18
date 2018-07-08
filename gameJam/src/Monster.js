@@ -48,6 +48,7 @@ export default class Monster extends cc.ScriptComponent {
         this.audios[i].play();
       }
       this.ended = true;
+      setTimeout((function(){ this.audio.stop(); }).bind(this), 5000);
       this.player.getComp('game.FPCamera').game_over();
     }
     // move
@@ -73,6 +74,11 @@ export default class Monster extends cc.ScriptComponent {
 
   lessThan(a, b, c) {
     return Math.abs(a.x - b.x) < c && Math.abs(a.y - b.y) < c && Math.abs(a.z - b.z) < c;
+  }
+
+  disappear() {
+    for (let i = 0; i < this.children.length; i++)
+      this.children[i].onDisable();
   }
 }
 

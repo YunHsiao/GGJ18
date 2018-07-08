@@ -9,10 +9,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 112340513, guid: 811160af650504197948013397f44a03, type: 3}
-  m_Name: game.Portal
+  m_Name: game.Hidden
   m_EditorClassIdentifier: 
-  properties:
-  - name: player
-    type: 4
-  - name: monster
-    type: 4
+  properties: []

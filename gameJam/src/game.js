@@ -7,6 +7,7 @@ import Portal from './Portal';
 import Logo from './Logo';
 import Monster from './Monster';
 import Limbo from './Limbo';
+import Hidden from './Hidden';
 
 const { resl } = cc;
 // 'EnterGame' should match to script Comp name
@@ -20,6 +21,7 @@ let _componentRegitstry = {
   'game.Logo': Logo,
   'game.Monster': Monster,
   'game.Limbo': Limbo,
+  'game.Hidden': Hidden,
 };
 
 let _gameInstance = null;
