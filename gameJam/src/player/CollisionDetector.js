@@ -13,7 +13,7 @@ export default class CollisionDetector extends cc.ScriptComponent {
     this.checkWallRay2 = cc.geometry.ray.create();
     this.checkWallRay3 = cc.geometry.ray.create();
     this.checkWallRay4 = cc.geometry.ray.create();
-    this.disable = false;
+    this.disable = true;
   }
 
   start() {
