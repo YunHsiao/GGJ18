@@ -16,6 +16,7 @@ export default class Monster extends cc.ScriptComponent {
       this.rot.push(randomRange(-Math.PI / 180, Math.PI / 180));
       let m = new cc.Material();
       // exporter-TODO: transparent shader
+      // engine-FIX: gl.REPEAT not working? @see unlit.frag
       m.effect = this._app.assets.get('builtin-effect-phong-transparent');
       m.setProperty('diffuse_texture', this.children[i].material.effectInst.getProperty('diffuse_texture'));
       m.define('USE_DIFFUSE_TEXTURE', true);
@@ -44,8 +45,12 @@ export default class Monster extends cc.ScriptComponent {
     vec3.mul(this.model._boundingBox.size, this.model._bbModelSpace.size, this.model._node.lscale);
     if (intersect.box_point(this.model._boundingBox, this.player.lpos)) {
       cc.game.loadScene('limbo');
-      for (let i = 0; i < this.audios.length; i++) {
-        this.audios[i].play();
+      if (cc.game.over) {
+          this.over.getComp('AudioSource').play();
+      } else {
+        for (let i = 0; i < this.audios.length; i++) {
+          this.audios[i].play();
+        } 
       }
       this.ended = true;
       setTimeout((function(){ this.audio.stop(); }).bind(this), 5000);
@@ -84,6 +89,10 @@ export default class Monster extends cc.ScriptComponent {
 
 Monster.schema = {
   player: {
+    type: 'entity',
+    default: null
+  },
+  over: {
     type: 'entity',
     default: null
   }

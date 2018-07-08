@@ -14,3 +14,5 @@ MonoBehaviour:
   properties:
   - name: player
     type: 4
+  - name: over
+    type: 4
