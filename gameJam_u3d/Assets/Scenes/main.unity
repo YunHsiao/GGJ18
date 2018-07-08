@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1375,7 +1375,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   desc: {fileID: 11400000, guid: 0349999901a924231ad1ebd5d8592dbe, type: 2}
-  properties: []
+  properties:
+  - name: height
+    value:
+      boolField: 0
+      intField: 0
+      floatField: 4
+      stringField: 
+      objectField: {fileID: 0}
+  - name: width
+    value:
+      boolField: 0
+      intField: 0
+      floatField: 2
+      stringField: 
+      objectField: {fileID: 0}
+  - name: wallHeight
+    value:
+      boolField: 0
+      intField: 0
+      floatField: 18
+      stringField: 
+      objectField: {fileID: 0}
+  - name: epsilon
+    value:
+      boolField: 0
+      intField: 0
+      floatField: 1
+      stringField: 
+      objectField: {fileID: 0}
 --- !u!82 &1058683793
 AudioSource:
   m_ObjectHideFlags: 0
