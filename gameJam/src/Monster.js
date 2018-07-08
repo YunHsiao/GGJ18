@@ -1,4 +1,4 @@
-const { mat4, quat, vec3, randomRange } = cc.math;
+const { mat4, quat, vec3, color4, randomRange } = cc.math;
 const { box, intersect } = cc.geometry;
 
 export default class Monster extends cc.ScriptComponent {
@@ -23,6 +23,7 @@ export default class Monster extends cc.ScriptComponent {
       this.children[i].material = m;
     }
     this.audios = this._entity.getCompsInChildren('AudioSource');
+    this.audio = this._entity.getComp('AudioSource');
     this.dir = vec3.zero();
     this.up = vec3.new(0, 1, 0);
     this.keyPoints = [];
@@ -31,7 +32,8 @@ export default class Monster extends cc.ScriptComponent {
     this.keyPoints.push(vec3.new(-72, 30, 122));
     this.keyPoints.push(vec3.new(-60, 30, 145));
     this.moveIdx = 0;
-    this.speed = 0.1;
+    this.speed = 0.2;
+    this.pursuitDist = 100;
   }
 
   tick() {
@@ -49,13 +51,19 @@ export default class Monster extends cc.ScriptComponent {
       this.player.getComp('game.FPCamera').game_over();
     }
     // move
-    vec3.sub(this.dir, this.keyPoints[this.moveIdx], this._entity.lpos);
+    vec3.sub(this.dir, this.player.lpos, this._entity.lpos);
+    if (vec3.mag(this.dir) > this.pursuitDist) {
+      vec3.sub(this.dir, this.keyPoints[this.moveIdx], this._entity.lpos);
+      if (this.audio.state == 1) this.audio.stop();
+    } else {
+      if (this.audio.state != 1) this.audio.play();
+      this.audio.volume = 1 - vec3.mag(this.dir) / this.pursuitDist;
+    }
     vec3.scale(this.dir, vec3.normalize(this.dir, this.dir), this.speed);
     vec3.add(this._entity.lpos, this._entity.lpos, this.dir);
     if (this.lessThan(this._entity.lpos, this.keyPoints[this.moveIdx], this.speed))
       this.moveIdx = (this.moveIdx + 1) % this.keyPoints.length;
     // rotate
-    vec3.sub(this.dir, this.player.lpos, this._entity.lpos);
     vec3.normalize(this.dir, this.dir);
     quat.fromViewUp(this._entity.lrot, this.dir, this.up);
     for (let i = 0; i < this.children.length; i++) {
