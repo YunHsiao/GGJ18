@@ -44,16 +44,20 @@ export default class Monster extends cc.ScriptComponent {
     vec3.add(this.model._boundingBox.center, this.model._bbModelSpace.center, this.model._node.lpos);
     vec3.mul(this.model._boundingBox.size, this.model._bbModelSpace.size, this.model._node.lscale);
     if (intersect.box_point(this.model._boundingBox, this.player.lpos)) {
-      cc.game.loadScene('limbo');
       if (cc.game.over) {
-          this.over.getComp('AudioSource').play();
+        this.over.getComp('AudioSource').play();
+        setTimeout((function(){
+          cc.game.loadScene('limbo');
+          this.audio.stop();
+        }).bind(this), 1500);
       } else {
+        cc.game.loadScene('limbo');
         for (let i = 0; i < this.audios.length; i++) {
           this.audios[i].play();
         } 
+        setTimeout((function(){ this.audio.stop(); }).bind(this), 5000);
       }
       this.ended = true;
-      setTimeout((function(){ this.audio.stop(); }).bind(this), 5000);
       this.player.getComp('game.FPCamera').game_over();
     }
     // move
