@@ -28,12 +28,20 @@ export default class Monster extends cc.ScriptComponent {
     this.dir = vec3.zero();
     this.up = vec3.new(0, 1, 0);
     this.keyPoints = [];
-    this.keyPoints.push(vec3.new(0, 8.6, 122));
-    this.keyPoints.push(vec3.new(-60, 30, 145));
-    this.keyPoints.push(vec3.new(-72, 30, 122));
-    this.keyPoints.push(vec3.new(-60, 30, 145));
+    this.keyPoints.push(vec3.new(0, 10, 144));
+    this.keyPoints.push(vec3.new(0, 10, 79));
+    this.keyPoints.push(vec3.new(-176, 10, 58));
+    this.keyPoints.push(vec3.new(-182, 10, 202));
+    this.keyPoints.push(vec3.new(-99, 10, 200));
+    this.keyPoints.push(vec3.new(-99, -10, 145));
+    this.keyPoints.push(vec3.new(-99, -10, 40));
+    this.keyPoints.push(vec3.new(-220, -10, 34));
+    this.keyPoints.push(vec3.new(-220, -10, 100));
+    this.keyPoints.push(vec3.new(-157, -10, 100));
+    this.keyPoints.push(vec3.new(-103, 10, 100));
+    this.keyPoints.push(vec3.new(0, 10, 50));
     this.moveIdx = 0;
-    this.speed = 0.2;
+    this.speed = 0.3;
     this.pursuitDist = 100;
   }
 

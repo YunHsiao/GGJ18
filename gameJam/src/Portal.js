@@ -11,6 +11,7 @@ export default class Portal extends cc.ScriptComponent {
     this.model = this._entity.getComp('Model')._models[0];
     this.mst = this.monster.getComp('game.Monster');
     this.color_after_life = color4.new(0.882, 0, 0, 1);
+    this.count = 0;
   }
 
   tick() {
@@ -29,9 +30,9 @@ export default class Portal extends cc.ScriptComponent {
       cc.game.over = true;
       setTimeout((function(){
         this.mst.disappear();
-        vec3.set(this.monster.lpos, this._entity.lpos.x + this.mst.pursuitDist - 1, 
-          this._entity.lpos.y, this._entity.lpos.z);
-      }).bind(this), 10000);
+        vec3.set(this.monster.lpos, this.player.lpos.x, 
+          this.player.lpos.y + this.mst.pursuitDist - 1, this.player.lpos.z);
+      }).bind(this), 5000);
     }
   }
 }

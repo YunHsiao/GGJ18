@@ -18,6 +18,17 @@ ModelImporter:
     100024: pPlane7
     100026: pPlane8
     100028: pPlane9
+    100030: initialShadingGroup_pPlane1
+    100032: initialShadingGroup_pPlane14
+    100034: initialShadingGroup_pPlane15
+    100036: initialShadingGroup_pPlane3
+    100038: initialShadingGroup_pPlane4
+    100040: initialShadingGroup_pPlane5
+    100042: initialShadingGroup_pPlane6
+    100044: initialShadingGroup_pPlane7
+    100046: initialShadingGroup_pPlane8
+    100048: initialShadingGroup_pPlane9
+    100050: pPlane15
     400000: //RootNode
     400002: pPlane1
     400004: pPlane10
@@ -33,6 +44,17 @@ ModelImporter:
     400024: pPlane7
     400026: pPlane8
     400028: pPlane9
+    400030: initialShadingGroup_pPlane1
+    400032: initialShadingGroup_pPlane14
+    400034: initialShadingGroup_pPlane15
+    400036: initialShadingGroup_pPlane3
+    400038: initialShadingGroup_pPlane4
+    400040: initialShadingGroup_pPlane5
+    400042: initialShadingGroup_pPlane6
+    400044: initialShadingGroup_pPlane7
+    400046: initialShadingGroup_pPlane8
+    400048: initialShadingGroup_pPlane9
+    400050: pPlane15
     2100000: pPlane1Mat
     2100002: pPlane10Mat
     2100004: pPlane11Mat
@@ -47,6 +69,17 @@ ModelImporter:
     2100022: pPlane7Mat
     2100024: pPlane8Mat
     2100026: pPlane9Mat
+    2100028: initialShadingGroup_pPlane1Mat
+    2100030: initialShadingGroup_pPlane14Mat
+    2100032: initialShadingGroup_pPlane15Mat
+    2100034: initialShadingGroup_pPlane3Mat
+    2100036: initialShadingGroup_pPlane4Mat
+    2100038: initialShadingGroup_pPlane5Mat
+    2100040: initialShadingGroup_pPlane6Mat
+    2100042: initialShadingGroup_pPlane7Mat
+    2100044: initialShadingGroup_pPlane8Mat
+    2100046: initialShadingGroup_pPlane9Mat
+    2100048: pPlane15Mat
     2300000: pPlane1
     2300002: pPlane10
     2300004: pPlane11
@@ -61,6 +94,17 @@ ModelImporter:
     2300022: pPlane7
     2300024: pPlane8
     2300026: pPlane9
+    2300028: initialShadingGroup_pPlane1
+    2300030: initialShadingGroup_pPlane14
+    2300032: initialShadingGroup_pPlane15
+    2300034: initialShadingGroup_pPlane3
+    2300036: initialShadingGroup_pPlane4
+    2300038: initialShadingGroup_pPlane5
+    2300040: initialShadingGroup_pPlane6
+    2300042: initialShadingGroup_pPlane7
+    2300044: initialShadingGroup_pPlane8
+    2300046: initialShadingGroup_pPlane9
+    2300048: pPlane15
     3300000: pPlane1
     3300002: pPlane10
     3300004: pPlane11
@@ -75,6 +119,17 @@ ModelImporter:
     3300022: pPlane7
     3300024: pPlane8
     3300026: pPlane9
+    3300028: initialShadingGroup_pPlane1
+    3300030: initialShadingGroup_pPlane14
+    3300032: initialShadingGroup_pPlane15
+    3300034: initialShadingGroup_pPlane3
+    3300036: initialShadingGroup_pPlane4
+    3300038: initialShadingGroup_pPlane5
+    3300040: initialShadingGroup_pPlane6
+    3300042: initialShadingGroup_pPlane7
+    3300044: initialShadingGroup_pPlane8
+    3300046: initialShadingGroup_pPlane9
+    3300048: pPlane15
     4300000: pPlane1
     4300002: pPlane10
     4300004: pPlane11
@@ -89,6 +144,17 @@ ModelImporter:
     4300022: pPlane7
     4300024: pPlane8
     4300026: pPlane9
+    4300028: initialShadingGroup_pPlane1
+    4300030: initialShadingGroup_pPlane14
+    4300032: initialShadingGroup_pPlane15
+    4300034: initialShadingGroup_pPlane3
+    4300036: initialShadingGroup_pPlane4
+    4300038: initialShadingGroup_pPlane5
+    4300040: initialShadingGroup_pPlane6
+    4300042: initialShadingGroup_pPlane7
+    4300044: initialShadingGroup_pPlane8
+    4300046: initialShadingGroup_pPlane9
+    4300048: pPlane15
   externalObjects: {}
   materials:
     importMaterials: 1
