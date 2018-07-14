@@ -1,4 +1,4 @@
-const { color4 } = cc.math;
+const { cc } = window;
 
 export default class Limbo extends cc.ScriptComponent {
   constructor() {

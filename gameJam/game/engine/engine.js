@@ -842,14 +842,15 @@ var Texture2D = (function (Texture$$1) {
     gl.bindTexture(gl.TEXTURE_2D, this._glID);
     if (options.images !== undefined && options.images.length > 0) {
       this._setMipmap(options.images, options.flipY, options.premultiplyAlpha);
+      if (options.images.length > 1) { this._hasMipmap = true; }
     }
-
-    this._setTexInfo();
-
     if (genMipmap) {
       gl.hint(gl.GENERATE_MIPMAP_HINT, gl.NICEST);
       gl.generateMipmap(gl.TEXTURE_2D);
+      this._hasMipmap = true;
     }
+
+    this._setTexInfo();
     this._device._restoreTexture(0);
   };
 
@@ -1182,14 +1183,16 @@ var TextureCube = (function (Texture$$1) {
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, this._glID);
     if (options.images !== undefined && options.images.length > 0) {
       this._setMipmap(options.images, options.flipY, options.premultiplyAlpha);
+      if (options.images.length > 1) { this._hasMipmap = true; }
+    }
+    if (genMipmap) {
+      gl.hint(gl.GENERATE_MIPMAP_HINT, gl.NICEST);
+      gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+      this._hasMipmap = true;
     }
 
     this._setTexInfo();
 
-    if (genMipmap) {
-      gl.hint(gl.GENERATE_MIPMAP_HINT, gl.NICEST);
-      gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    }
     this._device._restoreTexture(0);
   };
 
@@ -3866,13 +3869,13 @@ var bits_ = Object.freeze({
 	nextCombination: nextCombination
 });
 
-var vec2 = function vec2(x, y)
-{
+var vec2 = function vec2(x, y) {
   /**
    * The x component.
    * @type {number}
    * */
   this.x = x;
+
   /**
    * The y component.
    * @type {number}
@@ -3887,8 +3890,7 @@ var vec2 = function vec2(x, y)
  * @param {number} y - Value assigned to y component.
  * @return {vec2} The newly created vector.
  */
-vec2.new = function new$1 (x, y)
-{
+vec2.new = function new$1 (x, y) {
   return new vec2(x, y);
 };
 
@@ -3897,8 +3899,7 @@ vec2.new = function new$1 (x, y)
  *
  * @return {vec2} The newly created vector.
  */
-vec2.zero = function zero ()
-{
+vec2.zero = function zero () {
   return new vec2(0, 0);
 };
 
@@ -3908,8 +3909,7 @@ vec2.zero = function zero ()
  * @param {vec2} a - Vector to clone.
  * @returns {vec2} The newly created vector.
  */
-vec2.clone = function clone (a)
-{
+vec2.clone = function clone (a) {
   return new vec2(a.x, a.y);
 };
 
@@ -3920,8 +3920,7 @@ vec2.clone = function clone (a)
  * @param {vec2} a - The specified vector.
  * @returns {vec2} out.
  */
-vec2.copy = function copy (out, a)
-{
+vec2.copy = function copy (out, a) {
   out.x = a.x;
   out.y = a.y;
   return out;
@@ -3935,8 +3934,7 @@ vec2.copy = function copy (out, a)
  * @param {Number} y - Value set to y component.
  * @returns {vec2} out.
  */
-vec2.set = function set (out, x, y)
-{
+vec2.set = function set (out, x, y) {
   out.x = x;
   out.y = y;
   return out;
@@ -3952,8 +3950,7 @@ vec2.set = function set (out, x, y)
  * @param {vec2} b - The second operand.
  * @returns {vec2} out.
  */
-vec2.add = function add (out, a, b)
-{
+vec2.add = function add (out, a, b) {
   out.x = a.x + b.x;
   out.y = a.y + b.y;
   return out;
@@ -3969,8 +3966,7 @@ vec2.add = function add (out, a, b)
  * @param {vec2} b - The second operand.
  * @returns {vec2} out.
  */
-vec2.subtract = function subtract (out, a, b)
-{
+vec2.subtract = function subtract (out, a, b) {
   out.x = a.x - b.x;
   out.y = a.y - b.y;
   return out;
@@ -3979,8 +3975,7 @@ vec2.subtract = function subtract (out, a, b)
 /**
  *Alias of {@link vec2.subtract}.
  */
-vec2.sub = function sub (out, a, b)
-{
+vec2.sub = function sub (out, a, b) {
   return vec2.subtract(out, a, b);
 };
 
@@ -3994,8 +3989,7 @@ vec2.sub = function sub (out, a, b)
  * @param {vec2} b - The second operand.
  * @returns {vec2} out.
  */
-vec2.multiply = function multiply (out, a, b)
-{
+vec2.multiply = function multiply (out, a, b) {
   out.x = a.x * b.x;
   out.y = a.y * b.y;
   return out;
@@ -4004,8 +3998,7 @@ vec2.multiply = function multiply (out, a, b)
 /**
  *Alias of {@link vec2.multiply}.
  */
-vec2.mul = function mul (out, a, b)
-{
+vec2.mul = function mul (out, a, b) {
   return vec2.multiply(out, a, b);
 };
 
@@ -4019,8 +4012,7 @@ vec2.mul = function mul (out, a, b)
  * @param {vec2} b - The second operand.
  * @returns {vec2} out.
  */
-vec2.divide = function divide (out, a, b)
-{
+vec2.divide = function divide (out, a, b) {
   out.x = a.x / b.x;
   out.y = a.y / b.y;
   return out;
@@ -4029,8 +4021,7 @@ vec2.divide = function divide (out, a, b)
 /**
  *Alias of {@link vec2.divide}.
  */
-vec2.div = function div (out, a, b)
-{
+vec2.div = function div (out, a, b) {
   return vec2.divide(out, a, b);
 };
 
@@ -4043,8 +4034,7 @@ vec2.div = function div (out, a, b)
  * @param {vec2} a - Vector to perform operation.
  * @returns {vec2} out.
  */
-vec2.ceil = function ceil (out, a)
-{
+vec2.ceil = function ceil (out, a) {
   out.x = Math.ceil(a.x);
   out.y = Math.ceil(a.y);
   return out;
@@ -4059,8 +4049,7 @@ vec2.ceil = function ceil (out, a)
  * @param {vec2} a - Vector to perform operation.
  * @returns {vec2} out.
  */
-vec2.floor = function floor (out, a)
-{
+vec2.floor = function floor (out, a) {
   out.x = Math.floor(a.x);
   out.y = Math.floor(a.y);
   return out;
@@ -4076,8 +4065,7 @@ vec2.floor = function floor (out, a)
  * @param {vec2} b - The second operand.
  * @returns {vec2} out.
  */
-vec2.min = function min (out, a, b)
-{
+vec2.min = function min (out, a, b) {
   out.x = Math.min(a.x, b.x);
   out.y = Math.min(a.y, b.y);
   return out;
@@ -4093,8 +4081,7 @@ vec2.min = function min (out, a, b)
  * @param {vec2} b - The second operand.
  * @returns {vec2} out.
  */
-vec2.max = function max (out, a, b)
-{
+vec2.max = function max (out, a, b) {
   out.x = Math.max(a.x, b.x);
   out.y = Math.max(a.y, b.y);
   return out;
@@ -4109,8 +4096,7 @@ vec2.max = function max (out, a, b)
  * @param {vec2} a - Vector to perform operation.
  * @returns {vec2} out.
  */
-vec2.round = function round (out, a)
-{
+vec2.round = function round (out, a) {
   out.x = Math.round(a.x);
   out.y = Math.round(a.y);
   return out;
@@ -4124,8 +4110,7 @@ vec2.round = function round (out, a)
  * @param {number} b - The scale number.
  * @returns {vec2} out.
  * */
-vec2.scale = function scale (out, a, b)
-{
+vec2.scale = function scale (out, a, b) {
   out.x = a.x * b;
   out.y = a.y * b;
   return out;
@@ -4140,8 +4125,7 @@ vec2.scale = function scale (out, a, b)
  * @param {number} scale - The scale number before adding.
  * @returns {vec2} out.
  */
-vec2.scaleAndAdd = function scaleAndAdd (out, a, b, scale)
-{
+vec2.scaleAndAdd = function scaleAndAdd (out, a, b, scale) {
   out.x = a.x + (b.x * scale);
   out.y = a.y + (b.y * scale);
   return out;
@@ -4154,8 +4138,7 @@ vec2.scaleAndAdd = function scaleAndAdd (out, a, b, scale)
  * @param {vec2} b - The second operand.
  * @returns {number} Distance between a and b.
  */
-vec2.distance = function distance (a, b)
-{
+vec2.distance = function distance (a, b) {
   var x = b.x - a.x,
     y = b.y - a.y;
   return Math.sqrt(x * x + y * y);
@@ -4164,8 +4147,7 @@ vec2.distance = function distance (a, b)
 /**
  *Alias of {@link vec2.distance}.
  */
-vec2.dist = function dist (a, b)
-{
+vec2.dist = function dist (a, b) {
   return vec2.distance(a, b);
 };
 
@@ -4176,8 +4158,7 @@ vec2.dist = function dist (a, b)
  * @param {vec2} b - The second operand.
  * @returns {number} Squared distance between a and b.
  */
-vec2.squaredDistance = function squaredDistance (a, b)
-{
+vec2.squaredDistance = function squaredDistance (a, b) {
   var x = b.x - a.x,
     y = b.y - a.y;
   return x * x + y * y;
@@ -4186,8 +4167,7 @@ vec2.squaredDistance = function squaredDistance (a, b)
 /**
  *Alias of {@link vec2.squaredDistance}.
  */
-vec2.sqrDist = function sqrDist (a, b)
-{
+vec2.sqrDist = function sqrDist (a, b) {
   return vec2.squaredDistance(a, b);
 };
 
@@ -4197,8 +4177,7 @@ vec2.sqrDist = function sqrDist (a, b)
  * @param {vec2} a - The vector.
  * @returns {Number} Length of the vector.
  */
-vec2.magnitude = function magnitude (a)
-{
+vec2.magnitude = function magnitude (a) {
   var x = a.x,
     y = a.y;
   return Math.sqrt(x * x + y * y);
@@ -4207,8 +4186,7 @@ vec2.magnitude = function magnitude (a)
 /**
  *Alias of {@link vec2.magnitude}.
  */
-vec2.mag = function mag (a)
-{
+vec2.mag = function mag (a) {
   return vec2.magnitude(a);
 };
 
@@ -4218,8 +4196,7 @@ vec2.mag = function mag (a)
  * @param {vec2} a - The vector.
  * @returns {Number} Squared length of the vector.
  */
-vec2.squaredMagnitude = function squaredMagnitude (a)
-{
+vec2.squaredMagnitude = function squaredMagnitude (a) {
   var x = a.x,
     y = a.y;
   return x * x + y * y;
@@ -4228,8 +4205,7 @@ vec2.squaredMagnitude = function squaredMagnitude (a)
 /**
  *Alias of {@link vec2.squaredMagnitude}
  */
-vec2.sqrMag = function sqrMag (a)
-{
+vec2.sqrMag = function sqrMag (a) {
   return vec2.squaredMagnitude(a);
 };
 
@@ -4240,8 +4216,7 @@ vec2.sqrMag = function sqrMag (a)
  * @param {vec2} a - Vector to negate.
  * @returns {vec2} out.
  */
-vec2.negate = function negate (out, a)
-{
+vec2.negate = function negate (out, a) {
   out.x = -a.x;
   out.y = -a.y;
   return out;
@@ -4254,8 +4229,7 @@ vec2.negate = function negate (out, a)
  * @param {vec2} a - Vector to invert.
  * @returns {vec2} out.
  */
-vec2.inverse = function inverse (out, a)
-{
+vec2.inverse = function inverse (out, a) {
   out.x = 1.0 / a.x;
   out.y = 1.0 / a.y;
   return out;
@@ -4268,24 +4242,19 @@ vec2.inverse = function inverse (out, a)
  * @param {vec2} a - Vector to invert.
  * @returns {vec2} out.
  */
-vec2.inverseSafe = function inverseSafe (out, a)
-{
+vec2.inverseSafe = function inverseSafe (out, a) {
   var x = a.x,
     y = a.y;
 
-  if (Math.abs(x) < EPSILON)
-  {
+  if (Math.abs(x) < EPSILON) {
     out.x = 0;
-  } else
-  {
+  } else {
     out.x = 1.0 / x;
   }
 
-  if (Math.abs(y) < EPSILON)
-  {
+  if (Math.abs(y) < EPSILON) {
     out.y = 0;
-  } else
-  {
+  } else {
     out.y = 1.0 / a.y;
   }
 
@@ -4299,13 +4268,11 @@ vec2.inverseSafe = function inverseSafe (out, a)
  * @param {vec2} a - Vector to normalize.
  * @returns {vec2} out.
  */
-vec2.normalize = function normalize (out, a)
-{
+vec2.normalize = function normalize (out, a) {
   var x = a.x,
     y = a.y;
   var len = x * x + y * y;
-  if (len > 0)
-  {
+  if (len > 0) {
     //TODO: evaluate use of glm_invsqrt here?
     len = 1 / Math.sqrt(len);
     out.x = a.x * len;
@@ -4321,8 +4288,7 @@ vec2.normalize = function normalize (out, a)
  * @param {vec2} b - The second operand.
  * @returns {Number} Dot product of a and b.
  */
-vec2.dot = function dot (a, b)
-{
+vec2.dot = function dot (a, b) {
   return a.x * b.x + a.y * b.y;
 };
 
@@ -4335,8 +4301,7 @@ vec2.dot = function dot (a, b)
  * @param {vec2} b - The second operand.
  * @returns {vec3} out.
  */
-vec2.cross = function cross (out, a, b)
-{
+vec2.cross = function cross (out, a, b) {
   var z = a.x * b.y - a.y * b.x;
   out.x = out.y = 0;
   out.z = z;
@@ -4352,8 +4317,7 @@ vec2.cross = function cross (out, a, b)
  * @param {Number} t - The interpolation coefficient.
  * @returns {vec2} out.
  */
-vec2.lerp = function lerp$$1 (out, a, b, t)
-{
+vec2.lerp = function lerp$$1 (out, a, b, t) {
   var ax = a.x,
     ay = a.y;
   out.x = ax + t * (b.x - ax);
@@ -4368,8 +4332,7 @@ vec2.lerp = function lerp$$1 (out, a, b, t)
  * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned.
  * @returns {vec2} out.
  */
-vec2.random = function random$1 (out, scale)
-{
+vec2.random = function random$1 (out, scale) {
   scale = scale || 1.0;
   var r = random() * 2.0 * Math.PI;
   out.x = Math.cos(r) * scale;
@@ -4385,8 +4348,7 @@ vec2.random = function random$1 (out, scale)
  * @param {mat2} m - The matrix.
  * @returns {vec2} out.
  */
-vec2.transformMat2 = function transformMat2 (out, a, m)
-{
+vec2.transformMat2 = function transformMat2 (out, a, m) {
   var x = a.x,
     y = a.y;
   out.x = m.m00 * x + m.m02 * y;
@@ -4402,8 +4364,7 @@ vec2.transformMat2 = function transformMat2 (out, a, m)
  * @param {mat23} m - The matrix.
  * @returns {vec2} out.
  */
-vec2.transformMat23 = function transformMat23 (out, a, m)
-{
+vec2.transformMat23 = function transformMat23 (out, a, m) {
   var x = a.x,
     y = a.y;
   out.x = m.m00 * x + m.m02 * y + m.m04;
@@ -4419,8 +4380,7 @@ vec2.transformMat23 = function transformMat23 (out, a, m)
  * @param {mat3} m - The matrix.
  * @returns {vec2} out.
  */
-vec2.transformMat3 = function transformMat3 (out, a, m)
-{
+vec2.transformMat3 = function transformMat3 (out, a, m) {
   var x = a.x,
     y = a.y;
   out.x = m.m00 * x + m.m03 * y + m.m06;
@@ -4438,8 +4398,7 @@ vec2.transformMat3 = function transformMat3 (out, a, m)
  * @param {mat4} m - The matrix.
  * @returns {vec2} out.
  */
-vec2.transformMat4 = function transformMat4 (out, a, m)
-{
+vec2.transformMat4 = function transformMat4 (out, a, m) {
   var x = a.x,
     y = a.y;
   out.x = m.m00 * x + m.m04 * y + m.m12;
@@ -4458,8 +4417,7 @@ vec2.transformMat4 = function transformMat4 (out, a, m)
  * @param {Object} [arg] additional argument to pass to fn.
  * @returns {Array} a.
  */
-vec2.forEach = function forEach (a, stride, offset, count, fn, arg)
-{
+vec2.forEach = function forEach (a, stride, offset, count, fn, arg) {
   return vec2._forEach(a, stride, offset, count, fn, arg);
 };
 
@@ -4469,8 +4427,7 @@ vec2.forEach = function forEach (a, stride, offset, count, fn, arg)
  * @param {vec2} a - The vector.
  * @returns {String} - String representation of this vector.
  */
-vec2.str = function str (a)
-{
+vec2.str = function str (a) {
   return ("vec2(" + (a.x) + ", " + (a.y) + ")");
 };
 
@@ -4481,8 +4438,7 @@ vec2.str = function str (a)
  * @param {vec2} v - The vector.
  * @returns {Array} out.
  */
-vec2.array = function array (out, v)
-{
+vec2.array = function array (out, v) {
   out[0] = v.x;
   out[1] = v.y;
 
@@ -4496,8 +4452,7 @@ vec2.array = function array (out, v)
  * @param {vec2} b - The second vector.
  * @returns {Boolean} True if the vectors are equal, false otherwise.
  */
-vec2.exactEquals = function exactEquals (a, b)
-{
+vec2.exactEquals = function exactEquals (a, b) {
   return a.x === b.x && a.y === b.y;
 };
 
@@ -4508,8 +4463,7 @@ vec2.exactEquals = function exactEquals (a, b)
  * @param {vec2} b The second vector.
  * @returns {Boolean} True if the vectors are approximately equal, false otherwise.
  */
-vec2.equals = function equals$$1 (a, b)
-{
+vec2.equals = function equals$$1 (a, b) {
   var a0 = a.x, a1 = a.y;
   var b0 = b.x, b1 = b.y;
   return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
@@ -4528,33 +4482,26 @@ vec2.equals = function equals$$1 (a, b)
  * @returns {Array} a.
  * @ignore
  */
-vec2._forEach = (function ()
-{
+vec2._forEach = (function () {
   var vec = vec2.zero();
 
-  return function (a, stride, offset, count, fn, arg)
-  {
+  return function (a, stride, offset, count, fn, arg) {
     var i, l;
-    if (!stride)
-    {
+    if (!stride) {
       stride = 2;
     }
 
-    if (!offset)
-    {
+    if (!offset) {
       offset = 0;
     }
 
-    if (count)
-    {
+    if (count) {
       l = Math.min((count * stride) + offset, a.length);
-    } else
-    {
+    } else {
       l = a.length;
     }
 
-    for (i = offset; i < l; i += stride)
-    {
+    for (i = offset; i < l; i += stride) {
       vec.x = a[i];
       vec.y = a[i + 1];
       fn(vec, vec, arg);
@@ -4566,18 +4513,19 @@ vec2._forEach = (function ()
   };
 })();
 
-var vec3 = function vec3(x, y, z)
-{
+var vec3 = function vec3(x, y, z) {
   /**
    * The x component.
    * @type {number}
    * */
   this.x = x;
+
   /**
    * The y component.
    * @type {number}
    * */
   this.y = y;
+
   /**
    * The z component.
    * @type {number}
@@ -4593,8 +4541,7 @@ var vec3 = function vec3(x, y, z)
  * @param {number} z - Value assigned to z component.
  * @return {vec3} The newly created vector.
  */
-vec3.new = function new$1 (x, y, z)
-{
+vec3.new = function new$1 (x, y, z) {
   return new vec3(x, y, z);
 };
 
@@ -4603,8 +4550,7 @@ vec3.new = function new$1 (x, y, z)
  *
  * @return {vec3} The newly created vector.
  */
-vec3.zero = function zero ()
-{
+vec3.zero = function zero () {
   return vec3.new(0, 0, 0);
 };
 
@@ -4614,8 +4560,7 @@ vec3.zero = function zero ()
  * @param {vec3} a - Vector to clone.
  * @returns {vec3} The newly created vector.
  */
-vec3.clone = function clone (a)
-{
+vec3.clone = function clone (a) {
   return new vec3(a.x, a.y, a.z);
 };
 
@@ -4626,8 +4571,7 @@ vec3.clone = function clone (a)
  * @param {vec3} a - The specified vector.
  * @returns {vec3} out.
  */
-vec3.copy = function copy (out, a)
-{
+vec3.copy = function copy (out, a) {
   out.x = a.x;
   out.y = a.y;
   out.z = a.z;
@@ -4643,8 +4587,7 @@ vec3.copy = function copy (out, a)
  * @param {Number} z - Value set to z component.
  * @returns {vec3} out.
  */
-vec3.set = function set (out, x, y, z)
-{
+vec3.set = function set (out, x, y, z) {
   out.x = x;
   out.y = y;
   out.z = z;
@@ -4661,8 +4604,7 @@ vec3.set = function set (out, x, y, z)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.add = function add (out, a, b)
-{
+vec3.add = function add (out, a, b) {
   out.x = a.x + b.x;
   out.y = a.y + b.y;
   out.z = a.z + b.z;
@@ -4679,8 +4621,7 @@ vec3.add = function add (out, a, b)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.subtract = function subtract (out, a, b)
-{
+vec3.subtract = function subtract (out, a, b) {
   out.x = a.x - b.x;
   out.y = a.y - b.y;
   out.z = a.z - b.z;
@@ -4690,9 +4631,8 @@ vec3.subtract = function subtract (out, a, b)
 /**
  * Alias of {@link vec3.subtract}.
  */
-vec3.sub = function sub (out, a, b)
-{
-	return vec3.subtract(out, a, b);
+vec3.sub = function sub (out, a, b) {
+  return vec3.subtract(out, a, b);
 };
 
 /**
@@ -4705,8 +4645,7 @@ vec3.sub = function sub (out, a, b)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.multiply = function multiply (out, a, b)
-{
+vec3.multiply = function multiply (out, a, b) {
   out.x = a.x * b.x;
   out.y = a.y * b.y;
   out.z = a.z * b.z;
@@ -4716,9 +4655,8 @@ vec3.multiply = function multiply (out, a, b)
 /**
  * Alias of {@link vec3.multiply}.
  */
-vec3.mul = function mul (out, a, b)
-{
-	return vec3.multiply(out, a, b);
+vec3.mul = function mul (out, a, b) {
+  return vec3.multiply(out, a, b);
 };
 
 /**
@@ -4731,8 +4669,7 @@ vec3.mul = function mul (out, a, b)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.divide = function divide (out, a, b)
-{
+vec3.divide = function divide (out, a, b) {
   out.x = a.x / b.x;
   out.y = a.y / b.y;
   out.z = a.z / b.z;
@@ -4742,9 +4679,8 @@ vec3.divide = function divide (out, a, b)
 /**
  * Alias of {@link vec3.divide}.
  */
-vec3.div = function div (out, a, b)
-{
-	return vec3.divide(out, a, b);
+vec3.div = function div (out, a, b) {
+  return vec3.divide(out, a, b);
 };
 
 /**
@@ -4756,8 +4692,7 @@ vec3.div = function div (out, a, b)
  * @param {vec3} a - Vector to perform operation.
  * @returns {vec3} out.
  */
-vec3.ceil = function ceil (out, a)
-{
+vec3.ceil = function ceil (out, a) {
   out.x = Math.ceil(a.x);
   out.y = Math.ceil(a.y);
   out.z = Math.ceil(a.z);
@@ -4773,8 +4708,7 @@ vec3.ceil = function ceil (out, a)
  * @param {vec3} a - Vector to perform operation.
  * @returns {vec3} out.
  */
-vec3.floor = function floor (out, a)
-{
+vec3.floor = function floor (out, a) {
   out.x = Math.floor(a.x);
   out.y = Math.floor(a.y);
   out.z = Math.floor(a.z);
@@ -4791,8 +4725,7 @@ vec3.floor = function floor (out, a)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.min = function min (out, a, b)
-{
+vec3.min = function min (out, a, b) {
   out.x = Math.min(a.x, b.x);
   out.y = Math.min(a.y, b.y);
   out.z = Math.min(a.z, b.z);
@@ -4809,8 +4742,7 @@ vec3.min = function min (out, a, b)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.max = function max (out, a, b)
-{
+vec3.max = function max (out, a, b) {
   out.x = Math.max(a.x, b.x);
   out.y = Math.max(a.y, b.y);
   out.z = Math.max(a.z, b.z);
@@ -4826,8 +4758,7 @@ vec3.max = function max (out, a, b)
  * @param {vec3} a - Vector to perform operation.
  * @returns {vec3} out.
  */
-vec3.round = function round (out, a)
-{
+vec3.round = function round (out, a) {
   out.x = Math.round(a.x);
   out.y = Math.round(a.y);
   out.z = Math.round(a.z);
@@ -4842,8 +4773,7 @@ vec3.round = function round (out, a)
  * @param {number} b - The scale number.
  * @returns {vec3} out.
  * */
-vec3.scale = function scale (out, a, b)
-{
+vec3.scale = function scale (out, a, b) {
   out.x = a.x * b;
   out.y = a.y * b;
   out.z = a.z * b;
@@ -4859,8 +4789,7 @@ vec3.scale = function scale (out, a, b)
  * @param {number} scale - The scale number before adding.
  * @returns {vec3} out.
  */
-vec3.scaleAndAdd = function scaleAndAdd (out, a, b, scale)
-{
+vec3.scaleAndAdd = function scaleAndAdd (out, a, b, scale) {
   out.x = a.x + (b.x * scale);
   out.y = a.y + (b.y * scale);
   out.z = a.z + (b.z * scale);
@@ -4874,8 +4803,7 @@ vec3.scaleAndAdd = function scaleAndAdd (out, a, b, scale)
  * @param {vec3} b - The second operand.
  * @returns {number} Distance between a and b.
  */
-vec3.distance = function distance (a, b)
-{
+vec3.distance = function distance (a, b) {
   var x = b.x - a.x,
     y = b.y - a.y,
     z = b.z - a.z;
@@ -4885,9 +4813,8 @@ vec3.distance = function distance (a, b)
 /**
  * Alias of {@link vec3.distance}.
  */
-vec3.dist = function dist (a, b)
-{
-	return vec3.distance(a, b);
+vec3.dist = function dist (a, b) {
+  return vec3.distance(a, b);
 };
 
 /**
@@ -4897,8 +4824,7 @@ vec3.dist = function dist (a, b)
  * @param {vec3} b - The second operand.
  * @returns {number} Squared distance between a and b.
  */
-vec3.squaredDistance = function squaredDistance (a, b)
-{
+vec3.squaredDistance = function squaredDistance (a, b) {
   var x = b.x - a.x,
     y = b.y - a.y,
     z = b.z - a.z;
@@ -4908,9 +4834,8 @@ vec3.squaredDistance = function squaredDistance (a, b)
 /**
  * Alias of {@link vec3.squaredDistance}.
  */
-vec3.sqrDist = function sqrDist (a, b)
-{
-	return vec3.squaredDistance(a, b);
+vec3.sqrDist = function sqrDist (a, b) {
+  return vec3.squaredDistance(a, b);
 };
 
 /**
@@ -4919,8 +4844,7 @@ vec3.sqrDist = function sqrDist (a, b)
  * @param {vec3} a - The vector.
  * @returns {Number} Length of the vector.
  */
-vec3.magnitude = function magnitude (a)
-{
+vec3.magnitude = function magnitude (a) {
   var x = a.x,
     y = a.y,
     z = a.z;
@@ -4930,8 +4854,7 @@ vec3.magnitude = function magnitude (a)
 /**
  *Alias of {@link vec3.magnitude}.
  */
-vec3.mag = function mag (a)
-{
+vec3.mag = function mag (a) {
   return vec3.magnitude(a);
 };
 
@@ -4941,8 +4864,7 @@ vec3.mag = function mag (a)
  * @param {vec3} a - The vector.
  * @returns {Number} Squared length of the vector.
  */
-vec3.squaredMagnitude = function squaredMagnitude (a)
-{
+vec3.squaredMagnitude = function squaredMagnitude (a) {
   var x = a.x,
     y = a.y,
     z = a.z;
@@ -4952,8 +4874,7 @@ vec3.squaredMagnitude = function squaredMagnitude (a)
 /**
  *Alias of {@link vec3.squaredMagnitude}
  */
-vec3.sqrMag = function sqrMag (a)
-{
+vec3.sqrMag = function sqrMag (a) {
   return vec3.squaredMagnitude(a);
 };
 
@@ -4964,8 +4885,7 @@ vec3.sqrMag = function sqrMag (a)
  * @param {vec3} a - Vector to negate.
  * @returns {vec3} out.
  */
-vec3.negate = function negate (out, a)
-{
+vec3.negate = function negate (out, a) {
   out.x = -a.x;
   out.y = -a.y;
   out.z = -a.z;
@@ -4979,8 +4899,7 @@ vec3.negate = function negate (out, a)
  * @param {vec3} a - Vector to invert.
  * @returns {vec3} out.
  */
-vec3.inverse = function inverse (out, a)
-{
+vec3.inverse = function inverse (out, a) {
   out.x = 1.0 / a.x;
   out.y = 1.0 / a.y;
   out.z = 1.0 / a.z;
@@ -4994,33 +4913,26 @@ vec3.inverse = function inverse (out, a)
  * @param {vec3} a - Vector to invert.
  * @returns {vec3} out.
  */
-vec3.inverseSafe = function inverseSafe (out, a)
-{
+vec3.inverseSafe = function inverseSafe (out, a) {
   var x = a.x,
     y = a.y,
     z = a.z;
 
-  if (Math.abs(x) < EPSILON)
-  {
+  if (Math.abs(x) < EPSILON) {
     out.x = 0;
-  } else
-  {
+  } else {
     out.x = 1.0 / x;
   }
 
-  if (Math.abs(y) < EPSILON)
-  {
+  if (Math.abs(y) < EPSILON) {
     out.y = 0;
-  } else
-  {
+  } else {
     out.y = 1.0 / y;
   }
 
-  if (Math.abs(z) < EPSILON)
-  {
+  if (Math.abs(z) < EPSILON) {
     out.z = 0;
-  } else
-  {
+  } else {
     out.z = 1.0 / z;
   }
 
@@ -5034,15 +4946,13 @@ vec3.inverseSafe = function inverseSafe (out, a)
  * @param {vec3} a - Vector to normalize.
  * @returns {vec3} out.
  */
-vec3.normalize = function normalize (out, a)
-{
+vec3.normalize = function normalize (out, a) {
   var x = a.x,
     y = a.y,
     z = a.z;
 
   var len = x * x + y * y + z * z;
-  if (len > 0)
-  {
+  if (len > 0) {
     //TODO: evaluate use of glm_invsqrt here?
     len = 1 / Math.sqrt(len);
     out.x = x * len;
@@ -5059,8 +4969,7 @@ vec3.normalize = function normalize (out, a)
  * @param {vec3} b - The second operand.
  * @returns {Number} Dot product of a and b.
  */
-vec3.dot = function dot (a, b)
-{
+vec3.dot = function dot (a, b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 };
 
@@ -5072,8 +4981,7 @@ vec3.dot = function dot (a, b)
  * @param {vec3} b - The second operand.
  * @returns {vec3} out.
  */
-vec3.cross = function cross (out, a, b)
-{
+vec3.cross = function cross (out, a, b) {
   var ax = a.x, ay = a.y, az = a.z,
     bx = b.x, by = b.y, bz = b.z;
 
@@ -5092,8 +5000,7 @@ vec3.cross = function cross (out, a, b)
  * @param {Number} t - The interpolation coefficient.
  * @returns {vec3} out.
  */
-vec3.lerp = function lerp$$1 (out, a, b, t)
-{
+vec3.lerp = function lerp$$1 (out, a, b, t) {
   var ax = a.x,
     ay = a.y,
     az = a.z;
@@ -5114,8 +5021,7 @@ vec3.lerp = function lerp$$1 (out, a, b, t)
  * @param {Number} t - The interpolation coefficient.
  * @returns {vec3} out.
  */
-vec3.hermite = function hermite (out, a, b, c, d, t)
-{
+vec3.hermite = function hermite (out, a, b, c, d, t) {
   var factorTimes2 = t * t,
     factor1 = factorTimes2 * (2 * t - 3) + 1,
     factor2 = factorTimes2 * (t - 2) + t,
@@ -5140,8 +5046,7 @@ vec3.hermite = function hermite (out, a, b, c, d, t)
  * @param {Number} t - The interpolation coefficient.
  * @returns {vec3} out.
  */
-vec3.bezier = function bezier (out, a, b, c, d, t)
-{
+vec3.bezier = function bezier (out, a, b, c, d, t) {
   var inverseFactor = 1 - t,
     inverseFactorTimesTwo = inverseFactor * inverseFactor,
     factorTimes2 = t * t,
@@ -5164,8 +5069,7 @@ vec3.bezier = function bezier (out, a, b, c, d, t)
  * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned.
  * @returns {vec3} out.
  */
-vec3.random = function random$1 (out, scale)
-{
+vec3.random = function random$1 (out, scale) {
   scale = scale || 1.0;
 
   var r = random() * 2.0 * Math.PI;
@@ -5186,8 +5090,7 @@ vec3.random = function random$1 (out, scale)
  * @param {mat4} m - The matrix.
  * @returns {vec3} out.
  */
-vec3.transformMat4 = function transformMat4 (out, a, m)
-{
+vec3.transformMat4 = function transformMat4 (out, a, m) {
   var x = a.x, y = a.y, z = a.z,
     w = m.m03 * x + m.m07 * y + m.m11 * z + m.m15;
   w = w || 1.0;
@@ -5205,8 +5108,7 @@ vec3.transformMat4 = function transformMat4 (out, a, m)
  * @param {mat3} m - The matrix.
  * @returns {vec3} out.
  */
-vec3.transformMat3 = function transformMat3 (out, a, m)
-{
+vec3.transformMat3 = function transformMat3 (out, a, m) {
   var x = a.x, y = a.y, z = a.z;
   out.x = x * m.m00 + y * m.m03 + z * m.m06;
   out.y = x * m.m01 + y * m.m04 + z * m.m07;
@@ -5222,8 +5124,7 @@ vec3.transformMat3 = function transformMat3 (out, a, m)
  * @param {quat} q - The quaternion.
  * @returns {vec3} out.
  */
-vec3.transformQuat = function transformQuat (out, a, q)
-{
+vec3.transformQuat = function transformQuat (out, a, q) {
   // benchmarks: http://jsperf.com/quaternion-transform-vec3-implementations
 
   var x = a.x, y = a.y, z = a.z;
@@ -5250,8 +5151,7 @@ vec3.transformQuat = function transformQuat (out, a, q)
  * @param {Number} c - The angle of rotation.
  * @returns {vec3} out.
  */
-vec3.rotateX = function rotateX (out, a, b, c)
-{
+vec3.rotateX = function rotateX (out, a, b, c) {
   var p = [], r = [];
   // Translate point to the origin
   p.x = a.x - b.x;
@@ -5279,8 +5179,7 @@ vec3.rotateX = function rotateX (out, a, b, c)
  * @param {Number} c - The angle of rotation.
  * @returns {vec3} out.
  */
-vec3.rotateY = function rotateY (out, a, b, c)
-{
+vec3.rotateY = function rotateY (out, a, b, c) {
   var p = [], r = [];
   //Translate point to the origin
   p.x = a.x - b.x;
@@ -5308,8 +5207,7 @@ vec3.rotateY = function rotateY (out, a, b, c)
  * @param {Number} c - The angle of rotation.
  * @returns {vec3} out.
  */
-vec3.rotateZ = function rotateZ (out, a, b, c)
-{
+vec3.rotateZ = function rotateZ (out, a, b, c) {
   var p = [], r = [];
   //Translate point to the origin
   p.x = a.x - b.x;
@@ -5335,8 +5233,7 @@ vec3.rotateZ = function rotateZ (out, a, b, c)
  * @param {vec3} a - The vector.
  * @returns {String} - String representation of this vector.
  */
-vec3.str = function str (a)
-{
+vec3.str = function str (a) {
   return ("vec3(" + (a.x) + ", " + (a.y) + ", " + (a.z) + ")");
 };
 
@@ -5347,8 +5244,7 @@ vec3.str = function str (a)
  * @param {vec3} v - The vector.
  * @returns {Array} out.
  */
-vec3.array = function array (out, v)
-{
+vec3.array = function array (out, v) {
   out[0] = v.x;
   out[1] = v.y;
   out[2] = v.z;
@@ -5363,8 +5259,7 @@ vec3.array = function array (out, v)
  * @param {vec3} b - The second vector.
  * @returns {Boolean} True if the vectors are equal, false otherwise.
  */
-vec3.exactEquals = function exactEquals (a, b)
-{
+vec3.exactEquals = function exactEquals (a, b) {
   return a.x === b.x && a.y === b.y && a.z === b.z;
 };
 
@@ -5375,15 +5270,14 @@ vec3.exactEquals = function exactEquals (a, b)
  * @param {vec3} b The second vector.
  * @returns {Boolean} True if the vectors are approximately equal, false otherwise.
  */
-vec3.equals = function equals$$1 (a, b)
-{
+vec3.equals = function equals$$1 (a, b) {
   var a0 = a.x, a1 = a.y, a2 = a.z;
   var b0 = b.x, b1 = b.y, b2 = b.z;
   return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
     Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
     Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)));
 };
-  
+
 /**
  * Perform some operation over an array of vec3s.
  *
@@ -5395,20 +5289,18 @@ vec3.equals = function equals$$1 (a, b)
  * @param {Object} [arg] additional argument to pass to fn.
  * @returns {Array} a.
  */
-vec3.forEach = function forEach (a, stride, offset, count, fn, arg)
-{
-	return vec3._forEach(a, stride, offset, count, fn, arg);
+vec3.forEach = function forEach (a, stride, offset, count, fn, arg) {
+  return vec3._forEach(a, stride, offset, count, fn, arg);
 };
-  
+
 /**
  * Gets the angle between two 3D vectors.
  * @param {vec3} a - The first operand.
  * @param {vec3} b - The second operand.
  * @returns {Number} - The angle in radians.
  */
-vec3.angle = function angle (a, b)
-{
-	return vec3._angle(a, b);
+vec3.angle = function angle (a, b) {
+  return vec3._angle(a, b);
 };
 
 /**
@@ -5423,44 +5315,37 @@ vec3.angle = function angle (a, b)
 * @returns {Array} a.
 * @ignore.
 */
-vec3._forEach = (function ()
-{
-var vec = vec3.zero();
+vec3._forEach = (function () {
+  var vec = vec3.zero();
 
-return function (a, stride, offset, count, fn, arg)
-{
-  var i, l;
-  if (!stride)
-  {
-	stride = 3;
-  }
+  return function (a, stride, offset, count, fn, arg) {
+    var i, l;
+    if (!stride) {
+      stride = 3;
+    }
 
-  if (!offset)
-  {
-	offset = 0;
-  }
+    if (!offset) {
+      offset = 0;
+    }
 
-  if (count)
-  {
-	l = Math.min((count * stride) + offset, a.length);
-  } else
-  {
-	l = a.length;
-  }
+    if (count) {
+      l = Math.min((count * stride) + offset, a.length);
+    } else {
+      l = a.length;
+    }
 
-  for (i = offset; i < l; i += stride)
-  {
-	vec.x = a[i];
-	vec.y = a[i + 1];
-	vec.z = a[i + 2];
-	fn(vec, vec, arg);
-	a[i] = vec.x;
-	a[i + 1] = vec.y;
-	a[i + 2] = vec.z;
-  }
+    for (i = offset; i < l; i += stride) {
+      vec.x = a[i];
+      vec.y = a[i + 1];
+      vec.z = a[i + 2];
+      fn(vec, vec, arg);
+      a[i] = vec.x;
+      a[i + 1] = vec.y;
+      a[i + 2] = vec.z;
+    }
 
-  return a;
-};
+    return a;
+  };
 })();
 
   /**
@@ -5470,52 +5355,50 @@ return function (a, stride, offset, count, fn, arg)
    * @returns {Number} The angle in radians.
    * @ignore
    */
-vec3._angle = (function ()
-{
-var tempA = vec3.zero();
-var tempB = vec3.zero();
+vec3._angle = (function () {
+  var tempA = vec3.zero();
+  var tempB = vec3.zero();
 
-return function (a, b)
-{
-  vec3.copy(tempA, a);
-  vec3.copy(tempB, b);
+  return function (a, b) {
+    vec3.copy(tempA, a);
+    vec3.copy(tempB, b);
 
-  vec3.normalize(tempA, tempA);
-  vec3.normalize(tempB, tempB);
+    vec3.normalize(tempA, tempA);
+    vec3.normalize(tempB, tempB);
 
-  var cosine = vec3.dot(tempA, tempB);
+    var cosine = vec3.dot(tempA, tempB);
 
-  if (cosine > 1.0)
-  {
-	return 0;
-  }
+    if (cosine > 1.0) {
+      return 0;
+    }
 
-  if (cosine < -1.0)
-  {
-	return Math.PI;
-  }
+    if (cosine < -1.0) {
+      return Math.PI;
+    }
 
-  return Math.acos(cosine);
-};
+    return Math.acos(cosine);
+  };
 })();
 
-var vec4 = function vec4(x, y, z, w)
-{
+var vec4 = function vec4(x, y, z, w) {
   /**
    * The x component.
    * @type {number}
    * */
   this.x = x;
+
   /**
    * The y component.
    * @type {number}
    * */
   this.y = y;
+
   /**
    * The z component.
    * @type {number}
    * */
   this.z = z;
+
   /**
    * The w component.
    * @type {number}
@@ -5532,8 +5415,7 @@ var vec4 = function vec4(x, y, z, w)
  * @param {number} w - Value assigned to w component.
  * @return {vec4} The newly created vector.
  */
-vec4.new = function new$1 (x, y, z, w)
-{
+vec4.new = function new$1 (x, y, z, w) {
   return new vec4(x, y, z, w);
 };
 
@@ -5542,8 +5424,7 @@ vec4.new = function new$1 (x, y, z, w)
  *
  * @return {vec4} The newly created vector.
  */
-vec4.zero = function zero ()
-{
+vec4.zero = function zero () {
   return vec4.new(0, 0, 0, 0);
 };
 
@@ -5553,8 +5434,7 @@ vec4.zero = function zero ()
  * @param {vec4} a - Vector to clone.
  * @returns {vec4} The newly created vector.
  */
-vec4.clone = function clone (a)
-{
+vec4.clone = function clone (a) {
   return new vec4(a.x, a.y, a.z, a.w);
 };
 
@@ -5565,8 +5445,7 @@ vec4.clone = function clone (a)
  * @param {vec4} a - The specified vector.
  * @returns {vec4} out.
  */
-vec4.copy = function copy (out, a)
-{
+vec4.copy = function copy (out, a) {
   out.x = a.x;
   out.y = a.y;
   out.z = a.z;
@@ -5584,8 +5463,7 @@ vec4.copy = function copy (out, a)
  * @param {Number} w - Value set to w component.
  * @returns {vec4} out.
  */
-vec4.set = function set (out, x, y, z, w)
-{
+vec4.set = function set (out, x, y, z, w) {
   out.x = x;
   out.y = y;
   out.z = z;
@@ -5603,8 +5481,7 @@ vec4.set = function set (out, x, y, z, w)
  * @param {vec4} b - The second operand.
  * @returns {vec4} out.
  */
-vec4.add = function add (out, a, b)
-{
+vec4.add = function add (out, a, b) {
   out.x = a.x + b.x;
   out.y = a.y + b.y;
   out.z = a.z + b.z;
@@ -5622,8 +5499,7 @@ vec4.add = function add (out, a, b)
  * @param {vec4} b - The second operand.
  * @returns {vec4} out.
  */
-vec4.subtract = function subtract (out, a, b)
-{
+vec4.subtract = function subtract (out, a, b) {
   out.x = a.x - b.x;
   out.y = a.y - b.y;
   out.z = a.z - b.z;
@@ -5634,8 +5510,7 @@ vec4.subtract = function subtract (out, a, b)
 /**
  * Alias of {@link vec4.subtract}.
  */
-vec4.sub = function sub (out, a, b)
-{
+vec4.sub = function sub (out, a, b) {
   return vec4.subtract(out, a, b);
 };
 
@@ -5649,8 +5524,7 @@ vec4.sub = function sub (out, a, b)
  * @param {vec4} b - The second operand.
  * @returns {vec4} out.
  */
-vec4.multiply = function multiply (out, a, b)
-{
+vec4.multiply = function multiply (out, a, b) {
   out.x = a.x * b.x;
   out.y = a.y * b.y;
   out.z = a.z * b.z;
@@ -5661,8 +5535,7 @@ vec4.multiply = function multiply (out, a, b)
 /**
  * Alias of {@link vec4.multiply}.
  */
-vec4.mul = function mul (out, a, b)
-{
+vec4.mul = function mul (out, a, b) {
   return vec4.multiply(out, a, b);
 };
 
@@ -5676,8 +5549,7 @@ vec4.mul = function mul (out, a, b)
  * @param {vec4} b - The second operand.
  * @returns {vec4} out.
  */
-vec4.divide = function divide (out, a, b)
-{
+vec4.divide = function divide (out, a, b) {
   out.x = a.x / b.x;
   out.y = a.y / b.y;
   out.z = a.z / b.z;
@@ -5688,8 +5560,7 @@ vec4.divide = function divide (out, a, b)
 /**
  * Alias of {@link vec4.divide}.
  */
-vec4.div = function div (out, a, b)
-{
+vec4.div = function div (out, a, b) {
   return vec4.divide(out, a, b);
 };
 
@@ -5702,8 +5573,7 @@ vec4.div = function div (out, a, b)
  * @param {vec4} a - Vector to perform operation.
  * @returns {vec4} out.
  */
-vec4.ceil = function ceil (out, a)
-{
+vec4.ceil = function ceil (out, a) {
   out.x = Math.ceil(a.x);
   out.y = Math.ceil(a.y);
   out.z = Math.ceil(a.z);
@@ -5720,8 +5590,7 @@ vec4.ceil = function ceil (out, a)
  * @param {vec4} a - Vector to perform operation.
  * @returns {vec4} out.
  */
-vec4.floor = function floor (out, a)
-{
+vec4.floor = function floor (out, a) {
   out.x = Math.floor(a.x);
   out.y = Math.floor(a.y);
   out.z = Math.floor(a.z);
@@ -5739,8 +5608,7 @@ vec4.floor = function floor (out, a)
  * @param {vec4} b - The second operand.
  * @returns {vec4} out.
  */
-vec4.min = function min (out, a, b)
-{
+vec4.min = function min (out, a, b) {
   out.x = Math.min(a.x, b.x);
   out.y = Math.min(a.y, b.y);
   out.z = Math.min(a.z, b.z);
@@ -5758,8 +5626,7 @@ vec4.min = function min (out, a, b)
  * @param {vec4} b - The second operand.
  * @returns {vec4} out.
  */
-vec4.max = function max (out, a, b)
-{
+vec4.max = function max (out, a, b) {
   out.x = Math.max(a.x, b.x);
   out.y = Math.max(a.y, b.y);
   out.z = Math.max(a.z, b.z);
@@ -5776,8 +5643,7 @@ vec4.max = function max (out, a, b)
  * @param {vec4} a - Vector to perform operation.
  * @returns {vec4} out.
  */
-vec4.round = function round (out, a)
-{
+vec4.round = function round (out, a) {
   out.x = Math.round(a.x);
   out.y = Math.round(a.y);
   out.z = Math.round(a.z);
@@ -5793,8 +5659,7 @@ vec4.round = function round (out, a)
  * @param {number} b - The scale number.
  * @returns {vec4} out.
  * */
-vec4.scale = function scale (out, a, b)
-{
+vec4.scale = function scale (out, a, b) {
   out.x = a.x * b;
   out.y = a.y * b;
   out.z = a.z * b;
@@ -5811,8 +5676,7 @@ vec4.scale = function scale (out, a, b)
  * @param {number} scale - The scale number before adding.
  * @returns {vec4} out.
  */
-vec4.scaleAndAdd = function scaleAndAdd (out, a, b, scale)
-{
+vec4.scaleAndAdd = function scaleAndAdd (out, a, b, scale) {
   out.x = a.x + (b.x * scale);
   out.y = a.y + (b.y * scale);
   out.z = a.z + (b.z * scale);
@@ -5827,8 +5691,7 @@ vec4.scaleAndAdd = function scaleAndAdd (out, a, b, scale)
  * @param {vec4} b - The second operand.
  * @returns {number} Distance between a and b.
  */
-vec4.distance = function distance (a, b)
-{
+vec4.distance = function distance (a, b) {
   var x = b.x - a.x,
     y = b.y - a.y,
     z = b.z - a.z,
@@ -5839,8 +5702,7 @@ vec4.distance = function distance (a, b)
 /**
  * Alias of {@link vec4.distance}.
  */
-vec4.dist = function dist (a, b)
-{
+vec4.dist = function dist (a, b) {
   return vec4.distance(a, b);
 };
 
@@ -5851,8 +5713,7 @@ vec4.dist = function dist (a, b)
  * @param {vec4} b - The second operand.
  * @returns {number} Squared distance between a and b.
  */
-vec4.squaredDistance = function squaredDistance (a, b)
-{
+vec4.squaredDistance = function squaredDistance (a, b) {
   var x = b.x - a.x,
     y = b.y - a.y,
     z = b.z - a.z,
@@ -5863,8 +5724,7 @@ vec4.squaredDistance = function squaredDistance (a, b)
 /**
  * Alias of {@link vec4.squaredDistance}.
  */
-vec4.sqrDist = function sqrDist (a, b)
-{
+vec4.sqrDist = function sqrDist (a, b) {
   return vec4.squaredDistance(a, b);
 };
 
@@ -5874,8 +5734,7 @@ vec4.sqrDist = function sqrDist (a, b)
  * @param {vec4} a - The vector.
  * @returns {Number} Length of the vector.
  */
-vec4.magnitude = function magnitude (a)
-{
+vec4.magnitude = function magnitude (a) {
   var x = a.x,
     y = a.y,
     z = a.z,
@@ -5886,8 +5745,7 @@ vec4.magnitude = function magnitude (a)
 /**
  *Alias of {@link vec4.magnitude}.
  */
-vec4.mag = function mag (a)
-{
+vec4.mag = function mag (a) {
   return vec4.magnitude(a);
 };
 
@@ -5897,8 +5755,7 @@ vec4.mag = function mag (a)
  * @param {vec4} a - The vector.
  * @returns {Number} Squared length of the vector.
  */
-vec4.squaredMagnitude = function squaredMagnitude (a)
-{
+vec4.squaredMagnitude = function squaredMagnitude (a) {
   var x = a.x,
     y = a.y,
     z = a.z,
@@ -5909,8 +5766,7 @@ vec4.squaredMagnitude = function squaredMagnitude (a)
 /**
  *Alias of {@link vec4.squaredMagnitude}
  */
-vec4.sqrMag = function sqrMag (a)
-{
+vec4.sqrMag = function sqrMag (a) {
   return vec4.squaredMagnitude(a);
 };
 
@@ -5921,8 +5777,7 @@ vec4.sqrMag = function sqrMag (a)
  * @param {vec4} a - Vector to negate.
  * @returns {vec4} out.
  */
-vec4.negate = function negate (out, a)
-{
+vec4.negate = function negate (out, a) {
   out.x = -a.x;
   out.y = -a.y;
   out.z = -a.z;
@@ -5937,8 +5792,7 @@ vec4.negate = function negate (out, a)
  * @param {vec4} a - Vector to invert.
  * @returns {vec4} out.
  */
-vec4.inverse = function inverse (out, a)
-{
+vec4.inverse = function inverse (out, a) {
   out.x = 1.0 / a.x;
   out.y = 1.0 / a.y;
   out.z = 1.0 / a.z;
@@ -5953,42 +5807,33 @@ vec4.inverse = function inverse (out, a)
  * @param {vec4} a - Vector to invert.
  * @returns {vec4} out.
  */
-vec4.inverseSafe = function inverseSafe (out, a)
-{
+vec4.inverseSafe = function inverseSafe (out, a) {
   var x = a.x,
     y = a.y,
     z = a.z,
     w = a.w;
 
-  if (Math.abs(x) < EPSILON)
-  {
+  if (Math.abs(x) < EPSILON) {
     out.x = 0;
-  } else
-  {
+  } else {
     out.x = 1.0 / x;
   }
 
-  if (Math.abs(y) < EPSILON)
-  {
+  if (Math.abs(y) < EPSILON) {
     out.y = 0;
-  } else
-  {
+  } else {
     out.y = 1.0 / y;
   }
 
-  if (Math.abs(z) < EPSILON)
-  {
+  if (Math.abs(z) < EPSILON) {
     out.z = 0;
-  } else
-  {
+  } else {
     out.z = 1.0 / z;
   }
 
-  if (Math.abs(w) < EPSILON)
-  {
+  if (Math.abs(w) < EPSILON) {
     out.w = 0;
-  } else
-  {
+  } else {
     out.w = 1.0 / w;
   }
 
@@ -6027,8 +5872,7 @@ vec4.normalize = function normalize (out, a)
  * @param {vec4} b - The second operand.
  * @returns {Number} Dot product of a and b.
  */
-vec4.dot = function dot (a, b)
-{
+vec4.dot = function dot (a, b) {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 };
 
@@ -6041,8 +5885,7 @@ vec4.dot = function dot (a, b)
  * @param {Number} t - The interpolation coefficient.
  * @returns {vec4} out.
  */
-vec4.lerp = function lerp$$1 (out, a, b, t)
-{
+vec4.lerp = function lerp$$1 (out, a, b, t) {
   var ax = a.x,
     ay = a.y,
     az = a.z,
@@ -6061,8 +5904,7 @@ vec4.lerp = function lerp$$1 (out, a, b, t)
  * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned.
  * @returns {vec4} out.
  */
-vec4.random = function random$1 (out, scale)
-{
+vec4.random = function random$1 (out, scale) {
   scale = scale || 1.0;
 
   //TODO: This is a pretty awful way of doing this. Find something better.
@@ -6083,8 +5925,7 @@ vec4.random = function random$1 (out, scale)
  * @param {mat4} m - The matrix.
  * @returns {vec4} out.
  */
-vec4.transformMat4 = function transformMat4 (out, a, m)
-{
+vec4.transformMat4 = function transformMat4 (out, a, m) {
   var x = a.x, y = a.y, z = a.z, w = a.w;
   out.x = m.m00 * x + m.m04 * y + m.m08 * z + m.m12 * w;
   out.y = m.m01 * x + m.m05 * y + m.m09 * z + m.m13 * w;
@@ -6101,8 +5942,7 @@ vec4.transformMat4 = function transformMat4 (out, a, m)
  * @param {quat} q - The quaternion.
  * @returns {vec4} out.
  */
-vec4.transformQuat = function transformQuat (out, a, q)
-{
+vec4.transformQuat = function transformQuat (out, a, q) {
   var x = a.x, y = a.y, z = a.z;
   var qx = q.x, qy = q.y, qz = q.z, qw = q.w;
 
@@ -6126,8 +5966,7 @@ vec4.transformQuat = function transformQuat (out, a, q)
  * @param {vec4} a - The vector.
  * @returns {String} - String representation of this vector.
  */
-vec4.str = function str (a)
-{
+vec4.str = function str (a) {
   return ("vec4(" + (a.x) + ", " + (a.y) + ", " + (a.z) + ", " + (a.w) + ")");
 };
 
@@ -6138,8 +5977,7 @@ vec4.str = function str (a)
  * @param {vec4} v - The vector.
  * @returns {Array} out.
  */
-vec4.array = function array (out, v)
-{
+vec4.array = function array (out, v) {
   out[0] = v.x;
   out[1] = v.y;
   out[2] = v.z;
@@ -6155,8 +5993,7 @@ vec4.array = function array (out, v)
  * @param {vec4} b - The second vector.
  * @returns {Boolean} True if the vectors are equal, false otherwise.
  */
-vec4.exactEquals = function exactEquals (a, b)
-{
+vec4.exactEquals = function exactEquals (a, b) {
   return a.x === b.x && a.y === b.y && a.z === b.z && a.w === b.w;
 };
 
@@ -6167,8 +6004,7 @@ vec4.exactEquals = function exactEquals (a, b)
  * @param {vec4} b The second vector.
  * @returns {Boolean} True if the vectors are approximately equal, false otherwise.
  */
-vec4.equals = function equals$$1 (a, b)
-{
+vec4.equals = function equals$$1 (a, b) {
   var a0 = a.x, a1 = a.y, a2 = a.z, a3 = a.w;
   var b0 = b.x, b1 = b.y, b2 = b.z, b3 = b.w;
   return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
@@ -6188,8 +6024,7 @@ vec4.equals = function equals$$1 (a, b)
  * @param {Object} [arg] additional argument to pass to fn.
  * @returns {Array} a.
  */
-vec4.forEach = function forEach (a, stride, offset, count, fn, arg)
-{
+vec4.forEach = function forEach (a, stride, offset, count, fn, arg) {
   return vec4._forEach(a, stride, offset, count, fn, arg);
 };
 
@@ -6205,33 +6040,26 @@ vec4.forEach = function forEach (a, stride, offset, count, fn, arg)
  * @returns {Array} a.
  * @ignore
  */
-vec4._forEach = (function()
-{
+vec4._forEach = (function () {
   var vec = vec4.zero();
 
-  return function (a, stride, offset, count, fn, arg)
-  {
+  return function (a, stride, offset, count, fn, arg) {
     var i, l;
-    if (!stride)
-    {
+    if (!stride) {
       stride = 4;
     }
 
-    if (!offset)
-    {
+    if (!offset) {
       offset = 0;
     }
 
-    if (count)
-    {
+    if (count) {
       l = Math.min((count * stride) + offset, a.length);
-    } else
-    {
+    } else {
       l = a.length;
     }
 
-    for (i = offset; i < l; i += stride)
-    {
+    for (i = offset; i < l; i += stride) {
       vec.x = a[i];
       vec.y = a[i + 1];
       vec.z = a[i + 2];
@@ -6248,58 +6076,63 @@ vec4._forEach = (function()
 })();
 
 var mat3 = function mat3(
-m00, m01, m02, m03,
-m04, m05, m06, m07,
-m08
-)
-{
-/**
- * The element at column 0 row 0.
- * @type {number}
- * */
-this.m00 = m00;
-/**
- * The element at column 0 row 1.
- * @type {number}
- * */
-this.m01 = m01;
-/**
- * The element at column 0 row 2.
- * @type {number}
- * */
-this.m02 = m02;
+  m00, m01, m02, m03,
+  m04, m05, m06, m07,
+  m08
+) {
+  /**
+   * The element at column 0 row 0.
+   * @type {number}
+   * */
+  this.m00 = m00;
 
-/**
- * The element at column 1 row 0.
- * @type {number}
- * */
-this.m03 = m03;
-/**
- * The element at column 1 row 1.
- * @type {number}
- * */
-this.m04 = m04;
-/**
- * The element at column 1 row 2.
- * @type {number}
- * */
-this.m05 = m05;
+  /**
+   * The element at column 0 row 1.
+   * @type {number}
+   * */
+  this.m01 = m01;
 
-/**
- * The element at column 2 row 0.
- * @type {number}
- * */
-this.m06 = m06;
-/**
- * The element at column 2 row 1.
- * @type {number}
- * */
-this.m07 = m07;
-/**
- * The element at column 2 row 2.
- * @type {number}
- * */
-this.m08 = m08;
+  /**
+   * The element at column 0 row 2.
+   * @type {number}
+   * */
+  this.m02 = m02;
+
+  /**
+   * The element at column 1 row 0.
+   * @type {number}
+   * */
+  this.m03 = m03;
+
+  /**
+   * The element at column 1 row 1.
+   * @type {number}
+   * */
+  this.m04 = m04;
+
+  /**
+   * The element at column 1 row 2.
+   * @type {number}
+   * */
+  this.m05 = m05;
+
+  /**
+   * The element at column 2 row 0.
+   * @type {number}
+   * */
+  this.m06 = m06;
+
+  /**
+   * The element at column 2 row 1.
+   * @type {number}
+   * */
+  this.m07 = m07;
+
+  /**
+   * The element at column 2 row 2.
+   * @type {number}
+   * */
+  this.m08 = m08;
 };
 
 /**
@@ -6307,13 +6140,12 @@ this.m08 = m08;
  *
  * @returns {mat3} The newly created matrix.
  */
-mat3.create = function create ()
-{
-return new mat3(
-  1, 0, 0,
-  0, 1, 0,
-  0, 0, 1
-);
+mat3.create = function create () {
+  return new mat3(
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, 1
+  );
 };
 
 /**
@@ -6330,9 +6162,8 @@ return new mat3(
  * @param {Number} m08 - Value assigned to element at column 2 row 2.
  * @returns {mat3} The newly created matrix.
  */
-mat3.new = function new$1 (m00, m01, m02, m03, m04, m05, m06, m07, m08)
-{
-return new mat3(m00, m01, m02, m03, m04, m05, m06, m07, m08);
+mat3.new = function new$1 (m00, m01, m02, m03, m04, m05, m06, m07, m08) {
+  return new mat3(m00, m01, m02, m03, m04, m05, m06, m07, m08);
 };
 
 /**
@@ -6341,8 +6172,7 @@ return new mat3(m00, m01, m02, m03, m04, m05, m06, m07, m08);
  * @param {mat3} a - Matrix to clone.
  * @returns {mat3} The newly created matrix.
  */
-mat3.clone = function clone (a)
-{
+mat3.clone = function clone (a) {
   return new mat3(
     a.m00, a.m01, a.m02,
     a.m03, a.m04, a.m05,
@@ -6357,18 +6187,17 @@ mat3.clone = function clone (a)
  * @param {mat3} a - The specified matrix.
  * @returns {mat3} out.
  */
-mat3.copy = function copy (out, a)
-{
-out.m00 = a.m00;
-out.m01 = a.m01;
-out.m02 = a.m02;
-out.m03 = a.m03;
-out.m04 = a.m04;
-out.m05 = a.m05;
-out.m06 = a.m06;
-out.m07 = a.m07;
-out.m08 = a.m08;
-return out;
+mat3.copy = function copy (out, a) {
+  out.m00 = a.m00;
+  out.m01 = a.m01;
+  out.m02 = a.m02;
+  out.m03 = a.m03;
+  out.m04 = a.m04;
+  out.m05 = a.m05;
+  out.m06 = a.m06;
+  out.m07 = a.m07;
+  out.m08 = a.m08;
+  return out;
 };
 
 /**
@@ -6386,8 +6215,7 @@ return out;
  * @param {Number} m22 - Value assigned to element at column 2 row 2.
  * @returns {mat3} out.
  */
-mat3.set = function set (out, m00, m01, m02, m10, m11, m12, m20, m21, m22)
-{
+mat3.set = function set (out, m00, m01, m02, m10, m11, m12, m20, m21, m22) {
   out.m00 = m00;
   out.m01 = m01;
   out.m02 = m02;
@@ -6406,18 +6234,17 @@ mat3.set = function set (out, m00, m01, m02, m10, m11, m12, m20, m21, m22)
  * @param {mat3} out - Matrix to modified.
  * @returns {mat3} out.
  */
-mat3.identity = function identity (out)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 1;
-out.m05 = 0;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 1;
-return out;
+mat3.identity = function identity (out) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 1;
+  out.m05 = 0;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 1;
+  return out;
 };
 
 /**
@@ -6427,30 +6254,29 @@ return out;
  * @param {mat3} a - Matrix to transpose.
  * @returns {mat3} out.
  */
-mat3.transpose = function transpose (out, a)
-{
-// If we are transposing ourselves we can skip a few steps but have to cache some values
-if (out === a) {
-  var a01 = a.m01, a02 = a.m02, a12 = a.m05;
-  out.m01 = a.m03;
-  out.m02 = a.m06;
-  out.m03 = a01;
-  out.m05 = a.m07;
-  out.m06 = a02;
-  out.m07 = a12;
-} else {
-  out.m00 = a.m00;
-  out.m01 = a.m03;
-  out.m02 = a.m06;
-  out.m03 = a.m01;
-  out.m04 = a.m04;
-  out.m05 = a.m07;
-  out.m06 = a.m02;
-  out.m07 = a.m05;
-  out.m08 = a.m08;
-}
+mat3.transpose = function transpose (out, a) {
+  // If we are transposing ourselves we can skip a few steps but have to cache some values
+  if (out === a) {
+    var a01 = a.m01, a02 = a.m02, a12 = a.m05;
+    out.m01 = a.m03;
+    out.m02 = a.m06;
+    out.m03 = a01;
+    out.m05 = a.m07;
+    out.m06 = a02;
+    out.m07 = a12;
+  } else {
+    out.m00 = a.m00;
+    out.m01 = a.m03;
+    out.m02 = a.m06;
+    out.m03 = a.m01;
+    out.m04 = a.m04;
+    out.m05 = a.m07;
+    out.m06 = a.m02;
+    out.m07 = a.m05;
+    out.m08 = a.m08;
+  }
 
-return out;
+  return out;
 };
 
 /**
@@ -6460,34 +6286,33 @@ return out;
  * @param {mat3} a - Matrix to invert.
  * @returns {mat3} out.
  */
-mat3.invert = function invert (out, a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02,
+mat3.invert = function invert (out, a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02,
     a10 = a.m03, a11 = a.m04, a12 = a.m05,
     a20 = a.m06, a21 = a.m07, a22 = a.m08;
 
-var b01 = a22 * a11 - a12 * a21;
-var b11 = -a22 * a10 + a12 * a20;
-var b21 = a21 * a10 - a11 * a20;
+  var b01 = a22 * a11 - a12 * a21;
+  var b11 = -a22 * a10 + a12 * a20;
+  var b21 = a21 * a10 - a11 * a20;
 
-// Calculate the determinant
-var det = a00 * b01 + a01 * b11 + a02 * b21;
+  // Calculate the determinant
+  var det = a00 * b01 + a01 * b11 + a02 * b21;
 
-if (!det) {
-  return null;
-}
-det = 1.0 / det;
+  if (!det) {
+    return null;
+  }
+  det = 1.0 / det;
 
-out.m00 = b01 * det;
-out.m01 = (-a22 * a01 + a02 * a21) * det;
-out.m02 = (a12 * a01 - a02 * a11) * det;
-out.m03 = b11 * det;
-out.m04 = (a22 * a00 - a02 * a20) * det;
-out.m05 = (-a12 * a00 + a02 * a10) * det;
-out.m06 = b21 * det;
-out.m07 = (-a21 * a00 + a01 * a20) * det;
-out.m08 = (a11 * a00 - a01 * a10) * det;
-return out;
+  out.m00 = b01 * det;
+  out.m01 = (-a22 * a01 + a02 * a21) * det;
+  out.m02 = (a12 * a01 - a02 * a11) * det;
+  out.m03 = b11 * det;
+  out.m04 = (a22 * a00 - a02 * a20) * det;
+  out.m05 = (-a12 * a00 + a02 * a10) * det;
+  out.m06 = b21 * det;
+  out.m07 = (-a21 * a00 + a01 * a20) * det;
+  out.m08 = (a11 * a00 - a01 * a10) * det;
+  return out;
 };
 
 /**
@@ -6497,22 +6322,21 @@ return out;
  * @param {mat3} a - Matrix to calculate.
  * @returns {mat3} out.
  */
-mat3.adjoint = function adjoint (out, a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02,
+mat3.adjoint = function adjoint (out, a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02,
     a10 = a.m03, a11 = a.m04, a12 = a.m05,
     a20 = a.m06, a21 = a.m07, a22 = a.m08;
 
-out.m00 = (a11 * a22 - a12 * a21);
-out.m01 = (a02 * a21 - a01 * a22);
-out.m02 = (a01 * a12 - a02 * a11);
-out.m03 = (a12 * a20 - a10 * a22);
-out.m04 = (a00 * a22 - a02 * a20);
-out.m05 = (a02 * a10 - a00 * a12);
-out.m06 = (a10 * a21 - a11 * a20);
-out.m07 = (a01 * a20 - a00 * a21);
-out.m08 = (a00 * a11 - a01 * a10);
-return out;
+  out.m00 = (a11 * a22 - a12 * a21);
+  out.m01 = (a02 * a21 - a01 * a22);
+  out.m02 = (a01 * a12 - a02 * a11);
+  out.m03 = (a12 * a20 - a10 * a22);
+  out.m04 = (a00 * a22 - a02 * a20);
+  out.m05 = (a02 * a10 - a00 * a12);
+  out.m06 = (a10 * a21 - a11 * a20);
+  out.m07 = (a01 * a20 - a00 * a21);
+  out.m08 = (a00 * a11 - a01 * a10);
+  return out;
 };
 
 /**
@@ -6521,13 +6345,12 @@ return out;
  * @param {mat3} a - Matrix to calculate.
  * @returns {Number} Determinant of a.
  */
-mat3.determinant = function determinant (a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02,
+mat3.determinant = function determinant (a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02,
     a10 = a.m03, a11 = a.m04, a12 = a.m05,
     a20 = a.m06, a21 = a.m07, a22 = a.m08;
 
-return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a21 * a10 - a11 * a20);
+  return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a21 * a10 - a11 * a20);
 };
 
 /**
@@ -6538,36 +6361,34 @@ return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a
  * @param {mat3} b - The second operand.
  * @returns {mat3} out.
  */
-mat3.multiply = function multiply (out, a, b)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02,
+mat3.multiply = function multiply (out, a, b) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02,
     a10 = a.m03, a11 = a.m04, a12 = a.m05,
     a20 = a.m06, a21 = a.m07, a22 = a.m08;
 
-var b00 = b.m00, b01 = b.m01, b02 = b.m02;
-var b10 = b.m03, b11 = b.m04, b12 = b.m05;
-var b20 = b.m06, b21 = b.m07, b22 = b.m08;
+  var b00 = b.m00, b01 = b.m01, b02 = b.m02;
+  var b10 = b.m03, b11 = b.m04, b12 = b.m05;
+  var b20 = b.m06, b21 = b.m07, b22 = b.m08;
 
-out.m00 = b00 * a00 + b01 * a10 + b02 * a20;
-out.m01 = b00 * a01 + b01 * a11 + b02 * a21;
-out.m02 = b00 * a02 + b01 * a12 + b02 * a22;
+  out.m00 = b00 * a00 + b01 * a10 + b02 * a20;
+  out.m01 = b00 * a01 + b01 * a11 + b02 * a21;
+  out.m02 = b00 * a02 + b01 * a12 + b02 * a22;
 
-out.m03 = b10 * a00 + b11 * a10 + b12 * a20;
-out.m04 = b10 * a01 + b11 * a11 + b12 * a21;
-out.m05 = b10 * a02 + b11 * a12 + b12 * a22;
+  out.m03 = b10 * a00 + b11 * a10 + b12 * a20;
+  out.m04 = b10 * a01 + b11 * a11 + b12 * a21;
+  out.m05 = b10 * a02 + b11 * a12 + b12 * a22;
 
-out.m06 = b20 * a00 + b21 * a10 + b22 * a20;
-out.m07 = b20 * a01 + b21 * a11 + b22 * a21;
-out.m08 = b20 * a02 + b21 * a12 + b22 * a22;
-return out;
+  out.m06 = b20 * a00 + b21 * a10 + b22 * a20;
+  out.m07 = b20 * a01 + b21 * a11 + b22 * a21;
+  out.m08 = b20 * a02 + b21 * a12 + b22 * a22;
+  return out;
 };
 
 /**
  * Alias of {@link mat3.multiply}.
  */
-mat3.mul = function mul (out, a, b)
-{
-return mat3.multiply(out, a, b);
+mat3.mul = function mul (out, a, b) {
+  return mat3.multiply(out, a, b);
 };
 
 /**
@@ -6578,25 +6399,24 @@ return mat3.multiply(out, a, b);
  * @param {vec2} v - The translation offset.
  * @returns {mat3} out.
  */
-mat3.translate = function translate (out, a, v)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02,
+mat3.translate = function translate (out, a, v) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02,
     a10 = a.m03, a11 = a.m04, a12 = a.m05,
     a20 = a.m06, a21 = a.m07, a22 = a.m08;
-var x = v.x, y = v.y;
+  var x = v.x, y = v.y;
 
-out.m00 = a00;
-out.m01 = a01;
-out.m02 = a02;
+  out.m00 = a00;
+  out.m01 = a01;
+  out.m02 = a02;
 
-out.m03 = a10;
-out.m04 = a11;
-out.m05 = a12;
+  out.m03 = a10;
+  out.m04 = a11;
+  out.m05 = a12;
 
-out.m06 = x * a00 + y * a10 + a20;
-out.m07 = x * a01 + y * a11 + a21;
-out.m08 = x * a02 + y * a12 + a22;
-return out;
+  out.m06 = x * a00 + y * a10 + a20;
+  out.m07 = x * a01 + y * a11 + a21;
+  out.m08 = x * a02 + y * a12 + a22;
+  return out;
 };
 
 /**
@@ -6607,27 +6427,26 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat3} out
  */
-mat3.rotate = function rotate (out, a, rad)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02,
+mat3.rotate = function rotate (out, a, rad) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02,
     a10 = a.m03, a11 = a.m04, a12 = a.m05,
     a20 = a.m06, a21 = a.m07, a22 = a.m08;
 
-var s = Math.sin(rad);
-var c = Math.cos(rad);
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
 
-out.m00 = c * a00 + s * a10;
-out.m01 = c * a01 + s * a11;
-out.m02 = c * a02 + s * a12;
+  out.m00 = c * a00 + s * a10;
+  out.m01 = c * a01 + s * a11;
+  out.m02 = c * a02 + s * a12;
 
-out.m03 = c * a10 - s * a00;
-out.m04 = c * a11 - s * a01;
-out.m05 = c * a12 - s * a02;
+  out.m03 = c * a10 - s * a00;
+  out.m04 = c * a11 - s * a01;
+  out.m05 = c * a12 - s * a02;
 
-out.m06 = a20;
-out.m07 = a21;
-out.m08 = a22;
-return out;
+  out.m06 = a20;
+  out.m07 = a21;
+  out.m08 = a22;
+  return out;
 };
 
 /**
@@ -6638,22 +6457,21 @@ return out;
  * @param {vec2} v - The scale vector.
  * @returns {mat3} out
  **/
-mat3.scale = function scale (out, a, v)
-{
-var x = v.x, y = v.y;
+mat3.scale = function scale (out, a, v) {
+  var x = v.x, y = v.y;
 
-out.m00 = x * a.m00;
-out.m01 = x * a.m01;
-out.m02 = x * a.m02;
+  out.m00 = x * a.m00;
+  out.m01 = x * a.m01;
+  out.m02 = x * a.m02;
 
-out.m03 = y * a.m03;
-out.m04 = y * a.m04;
-out.m05 = y * a.m05;
+  out.m03 = y * a.m03;
+  out.m04 = y * a.m04;
+  out.m05 = y * a.m05;
 
-out.m06 = a.m06;
-out.m07 = a.m07;
-out.m08 = a.m08;
-return out;
+  out.m06 = a.m06;
+  out.m07 = a.m07;
+  out.m08 = a.m08;
+  return out;
 };
 
 /**
@@ -6663,18 +6481,17 @@ return out;
  * @param {mat4} a - The 4x4 matrix.
  * @returns {mat3} out.
  */
-mat3.fromMat4 = function fromMat4 (out, a)
-{
-out.m00 = a.m00;
-out.m01 = a.m01;
-out.m02 = a.m02;
-out.m03 = a.m04;
-out.m04 = a.m05;
-out.m05 = a.m06;
-out.m06 = a.m08;
-out.m07 = a.m09;
-out.m08 = a.m10;
-return out;
+mat3.fromMat4 = function fromMat4 (out, a) {
+  out.m00 = a.m00;
+  out.m01 = a.m01;
+  out.m02 = a.m02;
+  out.m03 = a.m04;
+  out.m04 = a.m05;
+  out.m05 = a.m06;
+  out.m06 = a.m08;
+  out.m07 = a.m09;
+  out.m08 = a.m10;
+  return out;
 };
 
 /**
@@ -6688,18 +6505,17 @@ return out;
  * @param {vec2} v - The translation offset.
  * @returns {mat3} out.
  */
-mat3.fromTranslation = function fromTranslation (out, v)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 1;
-out.m05 = 0;
-out.m06 = v.x;
-out.m07 = v.y;
-out.m08 = 1;
-return out;
+mat3.fromTranslation = function fromTranslation (out, v) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 1;
+  out.m05 = 0;
+  out.m06 = v.x;
+  out.m07 = v.y;
+  out.m08 = 1;
+  return out;
 };
 
 /**
@@ -6713,22 +6529,21 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat3} out.
  */
-mat3.fromRotation = function fromRotation (out, rad)
-{
-var s = Math.sin(rad), c = Math.cos(rad);
+mat3.fromRotation = function fromRotation (out, rad) {
+  var s = Math.sin(rad), c = Math.cos(rad);
 
-out.m00 = c;
-out.m01 = s;
-out.m02 = 0;
+  out.m00 = c;
+  out.m01 = s;
+  out.m02 = 0;
 
-out.m03 = -s;
-out.m04 = c;
-out.m05 = 0;
+  out.m03 = -s;
+  out.m04 = c;
+  out.m05 = 0;
 
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 1;
-return out;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 1;
+  return out;
 };
 
 /**
@@ -6742,20 +6557,19 @@ return out;
  * @param {vec2} v - Scale vector.
  * @returns {mat3} out.
  */
-mat3.fromScaling = function fromScaling (out, v)
-{
-out.m00 = v.x;
-out.m01 = 0;
-out.m02 = 0;
+mat3.fromScaling = function fromScaling (out, v) {
+  out.m00 = v.x;
+  out.m01 = 0;
+  out.m02 = 0;
 
-out.m03 = 0;
-out.m04 = v.y;
-out.m05 = 0;
+  out.m03 = 0;
+  out.m04 = v.y;
+  out.m05 = 0;
 
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 1;
-return out;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 1;
+  return out;
 };
 
 /**
@@ -6765,20 +6579,19 @@ return out;
  * @param {mat23} a - The 2x3 matrix.
  * @returns {mat3} out.
  **/
-mat3.fromMat2d = function fromMat2d (out, a)
-{
-out.m00 = a.m00;
-out.m01 = a.m01;
-out.m02 = 0;
+mat3.fromMat2d = function fromMat2d (out, a) {
+  out.m00 = a.m00;
+  out.m01 = a.m01;
+  out.m02 = 0;
 
-out.m03 = a.m02;
-out.m04 = a.m03;
-out.m05 = 0;
+  out.m03 = a.m02;
+  out.m04 = a.m03;
+  out.m05 = 0;
 
-out.m06 = a.m04;
-out.m07 = a.m05;
-out.m08 = 1;
-return out;
+  out.m06 = a.m04;
+  out.m07 = a.m05;
+  out.m08 = 1;
+  return out;
 };
 
 /**
@@ -6789,36 +6602,35 @@ return out;
  *
  * @returns {mat3} out.
  */
-mat3.fromQuat = function fromQuat (out, q)
-{
-var x = q.x, y = q.y, z = q.z, w = q.w;
-var x2 = x + x;
-var y2 = y + y;
-var z2 = z + z;
+mat3.fromQuat = function fromQuat (out, q) {
+  var x = q.x, y = q.y, z = q.z, w = q.w;
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
 
-var xx = x * x2;
-var yx = y * x2;
-var yy = y * y2;
-var zx = z * x2;
-var zy = z * y2;
-var zz = z * z2;
-var wx = w * x2;
-var wy = w * y2;
-var wz = w * z2;
+  var xx = x * x2;
+  var yx = y * x2;
+  var yy = y * y2;
+  var zx = z * x2;
+  var zy = z * y2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
 
-out.m00 = 1 - yy - zz;
-out.m03 = yx - wz;
-out.m06 = zx + wy;
+  out.m00 = 1 - yy - zz;
+  out.m03 = yx - wz;
+  out.m06 = zx + wy;
 
-out.m01 = yx + wz;
-out.m04 = 1 - xx - zz;
-out.m07 = zy - wx;
+  out.m01 = yx + wz;
+  out.m04 = 1 - xx - zz;
+  out.m07 = zy - wx;
 
-out.m02 = zx - wy;
-out.m05 = zy + wx;
-out.m08 = 1 - xx - yy;
+  out.m02 = zx - wy;
+  out.m05 = zy + wx;
+  out.m08 = 1 - xx - yy;
 
-return out;
+  return out;
 };
 
 /**
@@ -6830,9 +6642,8 @@ return out;
  *
  * @returns {mat3} out
  */
-mat3.fromViewUp = function fromViewUp (out, view, up)
-{
-return mat3._fromViewUp(out, view, up);
+mat3.fromViewUp = function fromViewUp (out, view, up) {
+  return mat3._fromViewUp(out, view, up);
 };
 
 /**
@@ -6843,47 +6654,46 @@ return mat3._fromViewUp(out, view, up);
  *
  * @returns {mat3} out.
  */
-mat3.normalFromMat4 = function normalFromMat4 (out, a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
+mat3.normalFromMat4 = function normalFromMat4 (out, a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
     a10 = a.m04, a11 = a.m05, a12 = a.m06, a13 = a.m07,
     a20 = a.m08, a21 = a.m09, a22 = a.m10, a23 = a.m11,
     a30 = a.m12, a31 = a.m13, a32 = a.m14, a33 = a.m15;
 
-var b00 = a00 * a11 - a01 * a10;
-var b01 = a00 * a12 - a02 * a10;
-var b02 = a00 * a13 - a03 * a10;
-var b03 = a01 * a12 - a02 * a11;
-var b04 = a01 * a13 - a03 * a11;
-var b05 = a02 * a13 - a03 * a12;
-var b06 = a20 * a31 - a21 * a30;
-var b07 = a20 * a32 - a22 * a30;
-var b08 = a20 * a33 - a23 * a30;
-var b09 = a21 * a32 - a22 * a31;
-var b10 = a21 * a33 - a23 * a31;
-var b11 = a22 * a33 - a23 * a32;
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32;
 
-// Calculate the determinant
-var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+  // Calculate the determinant
+  var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
-if (!det) {
-  return null;
-}
-det = 1.0 / det;
+  if (!det) {
+    return null;
+  }
+  det = 1.0 / det;
 
-out.m00 = (a11 * b11 - a12 * b10 + a13 * b09) * det;
-out.m01 = (a12 * b08 - a10 * b11 - a13 * b07) * det;
-out.m02 = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+  out.m00 = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+  out.m01 = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+  out.m02 = (a10 * b10 - a11 * b08 + a13 * b06) * det;
 
-out.m03 = (a02 * b10 - a01 * b11 - a03 * b09) * det;
-out.m04 = (a00 * b11 - a02 * b08 + a03 * b07) * det;
-out.m05 = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+  out.m03 = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+  out.m04 = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+  out.m05 = (a01 * b08 - a00 * b10 - a03 * b06) * det;
 
-out.m06 = (a31 * b05 - a32 * b04 + a33 * b03) * det;
-out.m07 = (a32 * b02 - a30 * b05 - a33 * b01) * det;
-out.m08 = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+  out.m06 = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+  out.m07 = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+  out.m08 = (a30 * b04 - a31 * b02 + a33 * b00) * det;
 
-return out;
+  return out;
 };
 
 /**
@@ -6892,8 +6702,7 @@ return out;
  * @param {mat3} a - The matrix.
  * @returns {String} String representation of this matrix.
  */
-mat3.str = function str (a)
-{
+mat3.str = function str (a) {
   ("mat3(" + (a.m00) + ", " + (a.m01) + ", " + (a.m02) + ", " + (a.m03) + ", " + (a.m04) + ", " + (a.m05) + ", " + (a.m06) + ", " + (a.m07) + ", " + (a.m08) + ")");
 };
 
@@ -6904,19 +6713,18 @@ mat3.str = function str (a)
  * @param {mat3} m - The matrix.
  * @returns {Array} out.
  */
-mat3.array = function array (out, m)
-{
-out[0] = m.m00;
-out[1] = m.m01;
-out[2] = m.m02;
-out[3] = m.m03;
-out[4] = m.m04;
-out[5] = m.m05;
-out[6] = m.m06;
-out[7] = m.m07;
-out[8] = m.m08;
+mat3.array = function array (out, m) {
+  out[0] = m.m00;
+  out[1] = m.m01;
+  out[2] = m.m02;
+  out[3] = m.m03;
+  out[4] = m.m04;
+  out[5] = m.m05;
+  out[6] = m.m06;
+  out[7] = m.m07;
+  out[8] = m.m08;
 
-return out;
+  return out;
 };
 
 /**
@@ -6925,9 +6733,8 @@ return out;
  * @param {mat3} a - Matrix to calculate Frobenius norm of.
  * @returns {Number} - The frobenius norm.
  */
-mat3.frob = function frob (a)
-{
-return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2) + Math.pow(a.m04, 2) + Math.pow(a.m05, 2) + Math.pow(a.m06, 2) + Math.pow(a.m07, 2) + Math.pow(a.m08, 2)));
+mat3.frob = function frob (a) {
+  return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2) + Math.pow(a.m04, 2) + Math.pow(a.m05, 2) + Math.pow(a.m06, 2) + Math.pow(a.m07, 2) + Math.pow(a.m08, 2)));
 };
 
 /**
@@ -6938,18 +6745,17 @@ return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) +
  * @param {mat3} b - The second operand.
  * @returns {mat3} out.
  */
-mat3.add = function add (out, a, b)
-{
-out.m00 = a.m00 + b.m00;
-out.m01 = a.m01 + b.m01;
-out.m02 = a.m02 + b.m02;
-out.m03 = a.m03 + b.m03;
-out.m04 = a.m04 + b.m04;
-out.m05 = a.m05 + b.m05;
-out.m06 = a.m06 + b.m06;
-out.m07 = a.m07 + b.m07;
-out.m08 = a.m08 + b.m08;
-return out;
+mat3.add = function add (out, a, b) {
+  out.m00 = a.m00 + b.m00;
+  out.m01 = a.m01 + b.m01;
+  out.m02 = a.m02 + b.m02;
+  out.m03 = a.m03 + b.m03;
+  out.m04 = a.m04 + b.m04;
+  out.m05 = a.m05 + b.m05;
+  out.m06 = a.m06 + b.m06;
+  out.m07 = a.m07 + b.m07;
+  out.m08 = a.m08 + b.m08;
+  return out;
 };
 
 /**
@@ -6960,26 +6766,24 @@ return out;
  * @param {mat3} b - The second operand.
  * @returns {mat3} out.
  */
-mat3.subtract = function subtract (out, a, b)
-{
-out.m00 = a.m00 - b.m00;
-out.m01 = a.m01 - b.m01;
-out.m02 = a.m02 - b.m02;
-out.m03 = a.m03 - b.m03;
-out.m04 = a.m04 - b.m04;
-out.m05 = a.m05 - b.m05;
-out.m06 = a.m06 - b.m06;
-out.m07 = a.m07 - b.m07;
-out.m08 = a.m08 - b.m08;
-return out;
+mat3.subtract = function subtract (out, a, b) {
+  out.m00 = a.m00 - b.m00;
+  out.m01 = a.m01 - b.m01;
+  out.m02 = a.m02 - b.m02;
+  out.m03 = a.m03 - b.m03;
+  out.m04 = a.m04 - b.m04;
+  out.m05 = a.m05 - b.m05;
+  out.m06 = a.m06 - b.m06;
+  out.m07 = a.m07 - b.m07;
+  out.m08 = a.m08 - b.m08;
+  return out;
 };
 
 /**
  * Alias of {@link mat3.subtract}.
  */
-mat3.sub = function sub (out, a, b)
-{
-return mat3.subtract(out, a, b);
+mat3.sub = function sub (out, a, b) {
+  return mat3.subtract(out, a, b);
 };
 
 /**
@@ -6990,18 +6794,17 @@ return mat3.subtract(out, a, b);
  * @param {Number} b - The scale number.
  * @returns {mat3} out.
  */
-mat3.multiplyScalar = function multiplyScalar (out, a, b)
-{
-out.m00 = a.m00 * b;
-out.m01 = a.m01 * b;
-out.m02 = a.m02 * b;
-out.m03 = a.m03 * b;
-out.m04 = a.m04 * b;
-out.m05 = a.m05 * b;
-out.m06 = a.m06 * b;
-out.m07 = a.m07 * b;
-out.m08 = a.m08 * b;
-return out;
+mat3.multiplyScalar = function multiplyScalar (out, a, b) {
+  out.m00 = a.m00 * b;
+  out.m01 = a.m01 * b;
+  out.m02 = a.m02 * b;
+  out.m03 = a.m03 * b;
+  out.m04 = a.m04 * b;
+  out.m05 = a.m05 * b;
+  out.m06 = a.m06 * b;
+  out.m07 = a.m07 * b;
+  out.m08 = a.m08 * b;
+  return out;
 };
 
 /**
@@ -7013,18 +6816,17 @@ return out;
  * @param {Number} scale - The scale number.
  * @returns {mat3} out.
  */
-mat3.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale)
-{
-out.m00 = a.m00 + (b.m00 * scale);
-out.m01 = a.m01 + (b.m01 * scale);
-out.m02 = a.m02 + (b.m02 * scale);
-out.m03 = a.m03 + (b.m03 * scale);
-out.m04 = a.m04 + (b.m04 * scale);
-out.m05 = a.m05 + (b.m05 * scale);
-out.m06 = a.m06 + (b.m06 * scale);
-out.m07 = a.m07 + (b.m07 * scale);
-out.m08 = a.m08 + (b.m08 * scale);
-return out;
+mat3.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale) {
+  out.m00 = a.m00 + (b.m00 * scale);
+  out.m01 = a.m01 + (b.m01 * scale);
+  out.m02 = a.m02 + (b.m02 * scale);
+  out.m03 = a.m03 + (b.m03 * scale);
+  out.m04 = a.m04 + (b.m04 * scale);
+  out.m05 = a.m05 + (b.m05 * scale);
+  out.m06 = a.m06 + (b.m06 * scale);
+  out.m07 = a.m07 + (b.m07 * scale);
+  out.m08 = a.m08 + (b.m08 * scale);
+  return out;
 };
 
 /**
@@ -7034,11 +6836,10 @@ return out;
  * @param {mat3} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat3.exactEquals = function exactEquals (a, b)
-{
-return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 &&
-  a.m03 === b.m03 && a.m04 === b.m04 && a.m05 === b.m05 &&
-  a.m06 === b.m06 && a.m07 === b.m07 && a.m08 === b.m08;
+mat3.exactEquals = function exactEquals (a, b) {
+  return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 &&
+    a.m03 === b.m03 && a.m04 === b.m04 && a.m05 === b.m05 &&
+    a.m06 === b.m06 && a.m07 === b.m07 && a.m08 === b.m08;
 };
 
 /**
@@ -7048,49 +6849,44 @@ return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 &&
  * @param {mat3} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat3.equals = function equals$$1 (a, b)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05, a6 = a.m06, a7 = a.m07, a8 = a.m08;
-var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03, b4 = b.m04, b5 = b.m05, b6 = b.m06, b7 = b.m07, b8 = b.m08;
-return (
-  Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-  Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-  Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-  Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-  Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
-  Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
-  Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
-  Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
-  Math.abs(a8 - b8) <= EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8))
-);
+mat3.equals = function equals$$1 (a, b) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05, a6 = a.m06, a7 = a.m07, a8 = a.m08;
+  var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03, b4 = b.m04, b5 = b.m05, b6 = b.m06, b7 = b.m07, b8 = b.m08;
+  return (
+    Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+    Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+    Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+    Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+    Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+    Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
+    Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
+    Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
+    Math.abs(a8 - b8) <= EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8))
+  );
 };
 
-mat3._fromViewUp = (function ()
-{
+mat3._fromViewUp = (function () {
   var default_up = vec3.new(0, 1, 0);
   var x = vec3.zero();
   var y = vec3.zero();
 
-  return function (out, view, up)
-  {
-    if (vec3.sqrMag(view) < EPSILON * EPSILON)
-    {
+  return function (out, view, up) {
+    if (vec3.sqrMag(view) < EPSILON * EPSILON) {
       mat3.identity(out);
       return out;
     }
 
     up = up || default_up;
-    vec3.cross(x, up, view);
+    vec3.normalize(x, vec3.cross(x, up, view));
 
-    if (vec3.sqrMag(x) < EPSILON * EPSILON)
-    {
+    if (vec3.sqrMag(x) < EPSILON * EPSILON) {
       mat3.identity(out);
       return out;
     }
 
     vec3.cross(y, view, x);
     mat3.set(
-	  out,
+      out,
       x.x, x.y, x.z,
       y.x, y.y, y.z,
       view.x, view.y, view.z
@@ -7100,23 +6896,25 @@ mat3._fromViewUp = (function ()
   };
 })();
 
-var quat = function quat(x, y, z, w)
-{
+var quat = function quat(x, y, z, w) {
   /**
    * The x component.
    * @type {number}
    * */
   this.x = x;
+
   /**
    * The y component.
    * @type {number}
    * */
   this.y = y;
+
   /**
    * The z component.
    * @type {number}
    * */
   this.z = z;
+
   /**
    * The w component.
    * @type {number}
@@ -7133,8 +6931,7 @@ var quat = function quat(x, y, z, w)
  * @param {number} w - Value assigned to w component.
  * @return {quat} The newly created quaternion.
  */
-quat.new = function new$1 (x, y, z, w)
-{
+quat.new = function new$1 (x, y, z, w) {
   return new quat(x, y, z, w);
 };
 
@@ -7143,8 +6940,7 @@ quat.new = function new$1 (x, y, z, w)
  *
  * @returns {quat} The newly created quaternion.
  */
-quat.create = function create ()
-{
+quat.create = function create () {
   return new quat(0, 0, 0, 1);
 };
 
@@ -7154,8 +6950,7 @@ quat.create = function create ()
  * @param {quat} a - Quaternion to clone.
  * @returns {quat} The newly created quaternion.
  */
-quat.clone = function clone (a)
-{
+quat.clone = function clone (a) {
   return new quat(a.x, a.y, a.z, a.w);
 };
 
@@ -7166,9 +6961,8 @@ quat.clone = function clone (a)
  * @param {quat} a - The specified quaternion.
  * @returns {quat} out.
  */
-quat.copy = function copy (out, a)
-{
-	return vec4.copy(out, a);
+quat.copy = function copy (out, a) {
+  return vec4.copy(out, a);
 };
 
 /**
@@ -7181,23 +6975,21 @@ quat.copy = function copy (out, a)
  * @param {Number} w - Value set to w component.
  * @returns {quat} out.
  */
-quat.set = function set (out, x, y, z, w)
-{
+quat.set = function set (out, x, y, z, w) {
   out.x = x;
   out.y = y;
   out.z = z;
   out.w = w;
   return out;
 };
-  
+
 /**
  * Sets a quaternion as identity quaternion.
  *
  * @param {quat} out - Quaternion to set.
  * @returns {quat} out.
  */
-quat.identity = function identity (out)
-{
+quat.identity = function identity (out) {
   out.x = 0;
   out.y = 0;
   out.z = 0;
@@ -7216,8 +7008,7 @@ quat.identity = function identity (out)
  * @param {vec3} b - The destination vector.
  * @returns {quat} out.
  */
-quat.rotationTo = function rotationTo (out, a, b)
-{
+quat.rotationTo = function rotationTo (out, a, b) {
   return quat._rotationTo(out, a, b);
 };
 
@@ -7234,17 +7025,14 @@ quat.rotationTo = function rotationTo (out, a, b)
  * @param{quat} q - Quaternion to be decomposed.
  * @return {Number} - Angle, in radians, of the rotation.
  */
-quat.getAxisAngle = function getAxisAngle (out_axis, q)
-{
+quat.getAxisAngle = function getAxisAngle (out_axis, q) {
   var rad = Math.acos(q.w) * 2.0;
   var s = Math.sin(rad / 2.0);
-  if (s != 0.0)
-  {
+  if (s != 0.0) {
     out_axis.x = q.x / s;
     out_axis.y = q.y / s;
     out_axis.z = q.z / s;
-  } else
-  {
+  } else {
     // If s is zero, return any axis (no rotation - axis does not matter)
     out_axis.x = 1;
     out_axis.y = 0;
@@ -7261,8 +7049,7 @@ quat.getAxisAngle = function getAxisAngle (out_axis, q)
  * @param {quat} b - The second operand.
  * @returns {quat} out.
  */
-quat.multiply = function multiply (out, a, b)
-{
+quat.multiply = function multiply (out, a, b) {
   var ax = a.x, ay = a.y, az = a.z, aw = a.w,
     bx = b.x, by = b.y, bz = b.z, bw = b.w;
 
@@ -7276,9 +7063,8 @@ quat.multiply = function multiply (out, a, b)
 /**
  * Alias of {@link quat.multiply}.
  */
-quat.mul = function mul (out, a, b)
-{
-	return quat.multiply(out, a, b);
+quat.mul = function mul (out, a, b) {
+  return quat.multiply(out, a, b);
 };
 
 /**
@@ -7289,15 +7075,14 @@ quat.mul = function mul (out, a, b)
  * @param {quat} b - The scale number.
  * @returns {quat} out.
  * */
-quat.scale = function scale (out, a, b)
-{
+quat.scale = function scale (out, a, b) {
   out.x = a.x * b;
   out.y = a.y * b;
   out.z = a.z * b;
   out.w = a.w * b;
   return out;
 };
-  
+
 /**
  * Rotates a quaternion by the given angle about the X axis.
  *
@@ -7306,8 +7091,7 @@ quat.scale = function scale (out, a, b)
  * @param {number} rad - Angle (in radians) to rotate.
  * @returns {quat} out.
  */
-quat.rotateX = function rotateX (out, a, rad)
-{
+quat.rotateX = function rotateX (out, a, rad) {
   rad *= 0.5;
 
   var ax = a.x, ay = a.y, az = a.z, aw = a.w,
@@ -7328,8 +7112,7 @@ quat.rotateX = function rotateX (out, a, rad)
  * @param {number} rad - Angle (in radians) to rotate.
  * @returns {quat} out.
  */
-quat.rotateY = function rotateY (out, a, rad)
-{
+quat.rotateY = function rotateY (out, a, rad) {
   rad *= 0.5;
 
   var ax = a.x, ay = a.y, az = a.z, aw = a.w,
@@ -7350,8 +7133,7 @@ quat.rotateY = function rotateY (out, a, rad)
  * @param {number} rad - Angle (in radians) to rotate.
  * @returns {quat} out.
  */
-quat.rotateZ = function rotateZ (out, a, rad)
-{
+quat.rotateZ = function rotateZ (out, a, rad) {
   rad *= 0.5;
 
   var ax = a.x, ay = a.y, az = a.z, aw = a.w,
@@ -7373,8 +7155,7 @@ quat.rotateZ = function rotateZ (out, a, rad)
  * @param {number} rad - Angle (in radians) to rotate.
  * @returns {quat} out.
  */
-quat.rotateAround = function rotateAround (out, rot, axis, rad)
-{
+quat.rotateAround = function rotateAround (out, rot, axis, rad) {
   return quat._rotateAround(out, rot, axis, rad);
 };
 
@@ -7387,8 +7168,7 @@ quat.rotateAround = function rotateAround (out, rot, axis, rad)
  * @param {number} rad - Angle (in radians) to rotate.
  * @returns {quat} out.
  */
-quat.rotateAroundLocal = function rotateAroundLocal (out, rot, axis, rad)
-{
+quat.rotateAroundLocal = function rotateAroundLocal (out, rot, axis, rad) {
   return quat._rotateAroundLocal(out, rot, axis, rad);
 };
 
@@ -7401,8 +7181,7 @@ quat.rotateAroundLocal = function rotateAroundLocal (out, rot, axis, rad)
  * @param {quat} a - Quaternion to calculate W.
  * @returns {quat} out.
  */
-quat.calculateW = function calculateW (out, a)
-{
+quat.calculateW = function calculateW (out, a) {
   var x = a.x, y = a.y, z = a.z;
 
   out.x = x;
@@ -7419,11 +7198,10 @@ quat.calculateW = function calculateW (out, a)
  * @param {quat} b - The second operand.
  * @returns {Number} - The dot product of a and b.
  */
-quat.dot = function dot (a, b)
-{
+quat.dot = function dot (a, b) {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 };
-  
+
 /**
  * Performs a linear interpolation between two quaternions.
  *
@@ -7433,8 +7211,7 @@ quat.dot = function dot (a, b)
  * @param {Number} t - The interpolation coefficient.
  * @returns {quat} out.
  */
-quat.lerp = function lerp (out, a, b, t)
-{
+quat.lerp = function lerp (out, a, b, t) {
   var ax = a.x,
     ay = a.y,
     az = a.z,
@@ -7445,7 +7222,7 @@ quat.lerp = function lerp (out, a, b, t)
   out.w = aw + t * (b.w - aw);
   return out;
 };
-  
+
 /**
  * Performs a spherical linear interpolation between two quaternions.
  *
@@ -7455,8 +7232,7 @@ quat.lerp = function lerp (out, a, b, t)
  * @param {Number} t - The interpolation coefficient.
  * @returns {quat} out.
  */
-quat.slerp = function slerp (out, a, b, t)
-{
+quat.slerp = function slerp (out, a, b, t) {
   // benchmarks:
   //  http://jsperf.com/quaternion-slerp-implementations
 
@@ -7468,8 +7244,7 @@ quat.slerp = function slerp (out, a, b, t)
   // calc cosine
   cosom = ax * bx + ay * by + az * bz + aw * bw;
   // adjust signs (if necessary)
-  if (cosom < 0.0)
-  {
+  if (cosom < 0.0) {
     cosom = -cosom;
     bx = -bx;
     by = -by;
@@ -7477,15 +7252,13 @@ quat.slerp = function slerp (out, a, b, t)
     bw = -bw;
   }
   // calculate coefficients
-  if ((1.0 - cosom) > 0.000001)
-  {
+  if ((1.0 - cosom) > 0.000001) {
     // standard case (slerp)
     omega = Math.acos(cosom);
     sinom = Math.sin(omega);
     scale0 = Math.sin((1.0 - t) * omega) / sinom;
     scale1 = Math.sin(t * omega) / sinom;
-  } else
-  {
+  } else {
     // "from" and "to" quaternions are very close
     //... so we can do a linear interpolation
     scale0 = 1.0 - t;
@@ -7511,8 +7284,7 @@ quat.slerp = function slerp (out, a, b, t)
  * @param {Number} t - The interpolation coefficient.
  * @returns {quat} out
  */
-quat.sqlerp = function sqlerp (out, a, b, c, d, t)
-{
+quat.sqlerp = function sqlerp (out, a, b, c, d, t) {
   return quat._sqlerp(out, a, b, c, d, t);
 };
 
@@ -7523,8 +7295,7 @@ quat.sqlerp = function sqlerp (out, a, b, c, d, t)
  * @param {quat} a - Quaternion to calculate inverse of.
  * @returns {quat} out.
  */
-quat.invert = function invert (out, a)
-{
+quat.invert = function invert (out, a) {
   var a0 = a.x, a1 = a.y, a2 = a.z, a3 = a.w;
   var dot = a0 * a0 + a1 * a1 + a2 * a2 + a3 * a3;
   var invDot = dot ? 1.0 / dot : 0;
@@ -7546,8 +7317,7 @@ quat.invert = function invert (out, a)
  * @param {quat} a - Quaternion to calculate conjugate of.
  * @returns {quat} out.
  */
-quat.conjugate = function conjugate (out, a)
-{
+quat.conjugate = function conjugate (out, a) {
   out.x = -a.x;
   out.y = -a.y;
   out.z = -a.z;
@@ -7561,8 +7331,7 @@ quat.conjugate = function conjugate (out, a)
  * @param {quat} a - The quaternion.
  * @returns {Number} Length of the quaternion.
  */
-quat.magnitude = function magnitude (a)
-{
+quat.magnitude = function magnitude (a) {
   var x = a.x,
     y = a.y,
     z = a.z,
@@ -7573,8 +7342,7 @@ quat.magnitude = function magnitude (a)
 /**
  *Alias of {@link quat.magnitude}.
  */
-quat.mag = function mag (a)
-{
+quat.mag = function mag (a) {
   return quat.magnitude(a);
 };
 
@@ -7584,8 +7352,7 @@ quat.mag = function mag (a)
  * @param {quat} a - The quaternion.
  * @returns {Number} Squared length of the quaternion.
  */
-quat.squaredMagnitude = function squaredMagnitude (a)
-{
+quat.squaredMagnitude = function squaredMagnitude (a) {
   var x = a.x,
     y = a.y,
     z = a.z,
@@ -7596,11 +7363,10 @@ quat.squaredMagnitude = function squaredMagnitude (a)
 /**
  *Alias of {@link quat.squaredMagnitude}
  */
-quat.sqrMag = function sqrMag (a)
-{
+quat.sqrMag = function sqrMag (a) {
   return quat.squaredMagnitude(a);
 };
-  
+
 /**
  * Normalizes a quaternion.
  *
@@ -7609,15 +7375,13 @@ quat.sqrMag = function sqrMag (a)
  * @returns {quat} out.
  * @function
  */
-quat.normalize = function normalize (out, a)
-{
+quat.normalize = function normalize (out, a) {
   var x = a.x,
     y = a.y,
     z = a.z,
     w = a.w;
   var len = x * x + y * y + z * z + w * w;
-  if (len > 0)
-  {
+  if (len > 0) {
     len = 1 / Math.sqrt(len);
     out.x = x * len;
     out.y = y * len;
@@ -7626,7 +7390,7 @@ quat.normalize = function normalize (out, a)
   }
   return out;
 };
-  
+
 /**
  * Sets the specified quaternion with values corresponding to the given
  * axes. Each axis is a vec3 and is expected to be unit length and
@@ -7638,8 +7402,7 @@ quat.normalize = function normalize (out, a)
  * @param {vec3} zAxis - Vector representing the viewing direction.
  * @returns {quat} out.
  */
-quat.fromAxes = function fromAxes (out, xAxis, yAxis, zAxis)
-{
+quat.fromAxes = function fromAxes (out, xAxis, yAxis, zAxis) {
   return quat._fromAxes(out, xAxis, yAxis, zAxis);
 };
 
@@ -7652,8 +7415,7 @@ quat.fromAxes = function fromAxes (out, xAxis, yAxis, zAxis)
  *
  * @returns {quat} out.
  */
-quat.fromViewUp = function fromViewUp (out, view, up)
-{
+quat.fromViewUp = function fromViewUp (out, view, up) {
   return quat._fromViewUp(out, view, up);
 };
 
@@ -7666,8 +7428,7 @@ quat.fromViewUp = function fromViewUp (out, view, up)
  * @param {Number} rad - The angle in radians.
  * @returns {quat} out.
  **/
-quat.fromAxisAngle = function fromAxisAngle (out, axis, rad)
-{
+quat.fromAxisAngle = function fromAxisAngle (out, axis, rad) {
   rad = rad * 0.5;
   var s = Math.sin(rad);
   out.x = s * axis.x;
@@ -7688,8 +7449,7 @@ quat.fromAxisAngle = function fromAxisAngle (out, axis, rad)
  * @returns {quat} out.
  * @function
  */
-quat.fromMat3 = function fromMat3 (out, m)
-{
+quat.fromMat3 = function fromMat3 (out, m) {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
   var m00 = m.m00, m01 = m.m03, m02 = m.m06,
@@ -7698,8 +7458,7 @@ quat.fromMat3 = function fromMat3 (out, m)
 
   var trace = m00 + m11 + m22;
 
-  if (trace > 0)
-  {
+  if (trace > 0) {
     var s = 0.5 / Math.sqrt(trace + 1.0);
 
     out.w = 0.25 / s;
@@ -7707,8 +7466,7 @@ quat.fromMat3 = function fromMat3 (out, m)
     out.y = (m02 - m20) * s;
     out.z = (m10 - m01) * s;
 
-  } else if ((m00 > m11) && (m00 > m22))
-  {
+  } else if ((m00 > m11) && (m00 > m22)) {
     var s$1 = 2.0 * Math.sqrt(1.0 + m00 - m11 - m22);
 
     out.w = (m21 - m12) / s$1;
@@ -7716,8 +7474,7 @@ quat.fromMat3 = function fromMat3 (out, m)
     out.y = (m01 + m10) / s$1;
     out.z = (m02 + m20) / s$1;
 
-  } else if (m11 > m22)
-  {
+  } else if (m11 > m22) {
     var s$2 = 2.0 * Math.sqrt(1.0 + m11 - m00 - m22);
 
     out.w = (m02 - m20) / s$2;
@@ -7725,8 +7482,7 @@ quat.fromMat3 = function fromMat3 (out, m)
     out.y = 0.25 * s$2;
     out.z = (m12 + m21) / s$2;
 
-  } else
-  {
+  } else {
     var s$3 = 2.0 * Math.sqrt(1.0 + m22 - m00 - m11);
 
     out.w = (m10 - m01) / s$3;
@@ -7748,8 +7504,7 @@ quat.fromMat3 = function fromMat3 (out, m)
  * @returns {quat} out.
  * @function
  */
-quat.fromEuler = function fromEuler (out, x, y, z)
-{
+quat.fromEuler = function fromEuler (out, x, y, z) {
   var halfToRad = 0.5 * Math.PI / 180.0;
   x *= halfToRad;
   y *= halfToRad;
@@ -7776,8 +7531,7 @@ quat.fromEuler = function fromEuler (out, x, y, z)
  * @param {quat} a - The quaternion.
  * @returns {String} - String representation of this quaternion.
  */
-quat.str = function str (a)
-{
+quat.str = function str (a) {
   return ("quat(" + (a.x) + ", " + (a.y) + ", " + (a.z) + ", " + (a.w) + ")");
 };
 
@@ -7788,8 +7542,7 @@ quat.str = function str (a)
  * @param {quat} q - The quaternion.
  * @returns {Array} out.
  */
-quat.array = function array (out, q)
-{
+quat.array = function array (out, q) {
   out[0] = q.x;
   out[1] = q.y;
   out[2] = q.z;
@@ -7805,9 +7558,8 @@ quat.array = function array (out, q)
  * @param {quat} b - The second quaternion.
  * @returns {Boolean} True if the quaternions are equal, false otherwise.
  */
-quat.exactEquals = function exactEquals (a, b)
-{
-	return vec4.exactEquals(a, b);
+quat.exactEquals = function exactEquals (a, b) {
+  return vec4.exactEquals(a, b);
 };
 
 /**
@@ -7817,9 +7569,8 @@ quat.exactEquals = function exactEquals (a, b)
  * @param {quat} b The second quaternion.
  * @returns {Boolean} True if the quaternions are approximately equal, false otherwise.
  */
-quat.equals = function equals (a, b)
-{
-	return vec4.equals(a, b);
+quat.equals = function equals (a, b) {
+  return vec4.equals(a, b);
 };
 
 /**
@@ -7882,13 +7633,11 @@ quat._rotationTo = (function ()
  * @returns {quat} out
  * @ignore
  */
-quat._rotateAround = (function ()
-{
+quat._rotateAround = (function () {
   var v3_tmp = vec3.zero();
   var q_tmp = quat.create();
 
-  return function (out, rot, axis, rad)
-  {
+  return function (out, rot, axis, rad) {
     // get inv-axis (local to rot)
     quat.invert(q_tmp, rot);
     vec3.transformQuat(v3_tmp, axis, q_tmp);
@@ -7910,12 +7659,10 @@ quat._rotateAround = (function ()
  * @returns {quat} out
  * @ignore
  */
-quat._rotateAroundLocal = (function ()
-{
+quat._rotateAroundLocal = (function () {
   var q_tmp = quat.create();
 
-  return function (out, rot, axis, rad)
-  {
+  return function (out, rot, axis, rad) {
     quat.fromAxisAngle(q_tmp, axis, rad);
     quat.mul(out, rot, q_tmp);
 
@@ -7935,13 +7682,11 @@ quat._rotateAroundLocal = (function ()
  * @returns {quat} out
  * @ignore
  */
-quat._sqlerp = (function ()
-{
+quat._sqlerp = (function () {
   var temp1 = quat.create();
   var temp2 = quat.create();
 
-  return function (out, a, b, c, d, t)
-  {
+  return function (out, a, b, c, d, t) {
     quat.slerp(temp1, a, d, t);
     quat.slerp(temp2, b, c, t);
     quat.slerp(out, temp1, temp2, 2 * t * (1 - t));
@@ -7961,12 +7706,10 @@ quat._sqlerp = (function ()
  * @returns {quat} out
  * @ignore
  */
-quat._fromAxes = (function ()
-{
+quat._fromAxes = (function () {
   var matr = mat3.create();
 
-  return function (out, xAxis, yAxis, zAxis)
-  {
+  return function (out, xAxis, yAxis, zAxis) {
     mat3.set(matr,
       xAxis.x, xAxis.y, xAxis.z,
       yAxis.x, yAxis.y, yAxis.z,
@@ -7986,15 +7729,12 @@ quat._fromAxes = (function ()
  * @returns {quat} out
  * @ignore
  */
-quat._fromViewUp = (function ()
-{
+quat._fromViewUp = (function () {
   var matr = mat3.create();
 
-  return function (out, view, up)
-  {
+  return function (out, view, up) {
     mat3.fromViewUp(matr, view, up);
-    if (!matr)
-    {
+    if (!matr) {
       return null;
     }
 
@@ -8002,28 +7742,30 @@ quat._fromViewUp = (function ()
   };
 })();
 
-var mat2 = function mat2(m00, m01, m02, m03)
-{
-/**
- * The element at column 0 row 0.
- * @type {number}
- * */
-this.m00 = m00;
-/**
- * The element at column 0 row 1.
- * @type {number}
- * */
-this.m01 = m01;
-/**
- * The element at column 1 row 0.
- * @type {number}
- * */
-this.m02 = m02;
-/**
- * The element at column 1 row 1.
- * @type {number}
- * */
-this.m03 = m03;
+var mat2 = function mat2(m00, m01, m02, m03) {
+  /**
+   * The element at column 0 row 0.
+   * @type {number}
+   * */
+  this.m00 = m00;
+
+  /**
+   * The element at column 0 row 1.
+   * @type {number}
+   * */
+  this.m01 = m01;
+
+  /**
+   * The element at column 1 row 0.
+   * @type {number}
+   * */
+  this.m02 = m02;
+
+  /**
+   * The element at column 1 row 1.
+   * @type {number}
+   * */
+  this.m03 = m03;
 };
 
 /**
@@ -8031,9 +7773,8 @@ this.m03 = m03;
  *
  * @returns {mat2} The newly created matrix.
  */
-mat2.create = function create ()
-{
-return new mat2(1, 0, 0, 1);
+mat2.create = function create () {
+  return new mat2(1, 0, 0, 1);
 };
 
 /**
@@ -8045,9 +7786,8 @@ return new mat2(1, 0, 0, 1);
  * @param {Number} m03 - Value assigned to element at column 1 row 1.
  * @returns {mat2} The newly created matrix.
  */
-mat2.new = function new$1 (m00, m01, m02, m03)
-{
-return new mat2(m00, m01, m02, m03);
+mat2.new = function new$1 (m00, m01, m02, m03) {
+  return new mat2(m00, m01, m02, m03);
 };
 
 /**
@@ -8056,8 +7796,7 @@ return new mat2(m00, m01, m02, m03);
  * @param {mat2} a - Matrix to clone.
  * @returns {mat2} The newly created matrix.
  */
-mat2.clone = function clone (a)
-{
+mat2.clone = function clone (a) {
   return new mat2(a.m00, a.m01, a.m02, a.m03);
 };
 
@@ -8068,13 +7807,12 @@ mat2.clone = function clone (a)
  * @param {mat2} a - The specified matrix.
  * @returns {mat2} out.
  */
-mat2.copy = function copy (out, a)
-{
-out.m00 = a.m00;
-out.m01 = a.m01;
-out.m02 = a.m02;
-out.m03 = a.m03;
-return out;
+mat2.copy = function copy (out, a) {
+  out.m00 = a.m00;
+  out.m01 = a.m01;
+  out.m02 = a.m02;
+  out.m03 = a.m03;
+  return out;
 };
 
 /**
@@ -8083,13 +7821,12 @@ return out;
  * @param {mat2} out - Matrix to modified.
  * @returns {mat2} out.
  */
-mat2.identity = function identity (out)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 1;
-return out;
+mat2.identity = function identity (out) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 1;
+  return out;
 };
 
 /**
@@ -8102,8 +7839,7 @@ return out;
  * @param {Number} m11 - Value assigned to element at column 1 row 1.
  * @returns {mat2} out.
  */
-mat2.set = function set (out, m00, m01, m10, m11)
-{
+mat2.set = function set (out, m00, m01, m10, m11) {
   out.m00 = m00;
   out.m01 = m01;
   out.m02 = m10;
@@ -8119,21 +7855,20 @@ mat2.set = function set (out, m00, m01, m10, m11)
  * @param {mat2} a - Matrix to transpose.
  * @returns {mat2} out.
  */
-mat2.transpose = function transpose (out, a)
-{
-// If we are transposing ourselves we can skip a few steps but have to cache some values
-if (out === a) {
-  var a1 = a.m01;
-  out.m01 = a.m02;
-  out.m02 = a1;
-} else {
-  out.m00 = a.m00;
-  out.m01 = a.m02;
-  out.m02 = a.m01;
-  out.m03 = a.m03;
-}
+mat2.transpose = function transpose (out, a) {
+  // If we are transposing ourselves we can skip a few steps but have to cache some values
+  if (out === a) {
+    var a1 = a.m01;
+    out.m01 = a.m02;
+    out.m02 = a1;
+  } else {
+    out.m00 = a.m00;
+    out.m01 = a.m02;
+    out.m02 = a.m01;
+    out.m03 = a.m03;
+  }
 
-return out;
+  return out;
 };
 
 /**
@@ -8143,24 +7878,23 @@ return out;
  * @param {mat2} a - Matrix to invert.
  * @returns {mat2} out.
  */
-mat2.invert = function invert (out, a)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03;
+mat2.invert = function invert (out, a) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03;
 
-// Calculate the determinant
-var det = a0 * a3 - a2 * a1;
+  // Calculate the determinant
+  var det = a0 * a3 - a2 * a1;
 
-if (!det) {
-  return null;
-}
-det = 1.0 / det;
+  if (!det) {
+    return null;
+  }
+  det = 1.0 / det;
 
-out.m00 = a3 * det;
-out.m01 = -a1 * det;
-out.m02 = -a2 * det;
-out.m03 = a0 * det;
+  out.m00 = a3 * det;
+  out.m01 = -a1 * det;
+  out.m02 = -a2 * det;
+  out.m03 = a0 * det;
 
-return out;
+  return out;
 };
 
 /**
@@ -8170,16 +7904,15 @@ return out;
  * @param {mat2} a - Matrix to calculate.
  * @returns {mat2} out.
  */
-mat2.adjoint = function adjoint (out, a)
-{
-// Caching this value is nessecary if out == a
-var a0 = a.m00;
-out.m00 = a.m03;
-out.m01 = -a.m01;
-out.m02 = -a.m02;
-out.m03 = a0;
+mat2.adjoint = function adjoint (out, a) {
+  // Caching this value is nessecary if out == a
+  var a0 = a.m00;
+  out.m00 = a.m03;
+  out.m01 = -a.m01;
+  out.m02 = -a.m02;
+  out.m03 = a0;
 
-return out;
+  return out;
 };
 
 /**
@@ -8188,9 +7921,8 @@ return out;
  * @param {mat2} a - Matrix to calculate.
  * @returns {Number} Determinant of a.
  */
-mat2.determinant = function determinant (a)
-{
-return a.m00 * a.m03 - a.m02 * a.m01;
+mat2.determinant = function determinant (a) {
+  return a.m00 * a.m03 - a.m02 * a.m01;
 };
 
 /**
@@ -8201,23 +7933,21 @@ return a.m00 * a.m03 - a.m02 * a.m01;
  * @param {mat2} b - The second operand.
  * @returns {mat2} out.
  */
-mat2.multiply = function multiply (out, a, b)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03;
-var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03;
-out.m00 = a0 * b0 + a2 * b1;
-out.m01 = a1 * b0 + a3 * b1;
-out.m02 = a0 * b2 + a2 * b3;
-out.m03 = a1 * b2 + a3 * b3;
-return out;
+mat2.multiply = function multiply (out, a, b) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03;
+  var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03;
+  out.m00 = a0 * b0 + a2 * b1;
+  out.m01 = a1 * b0 + a3 * b1;
+  out.m02 = a0 * b2 + a2 * b3;
+  out.m03 = a1 * b2 + a3 * b3;
+  return out;
 };
 
 /**
  * Alias of {@link mat2.multiply}.
  */
-mat2.mul = function mul (out, a, b)
-{
-return mat2.multiply(out, a, b);
+mat2.mul = function mul (out, a, b) {
+  return mat2.multiply(out, a, b);
 };
 
 /**
@@ -8228,16 +7958,15 @@ return mat2.multiply(out, a, b);
  * @param {Number} rad - The rotation angle.
  * @returns {mat2} out
  */
-mat2.rotate = function rotate (out, a, rad)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03,
+mat2.rotate = function rotate (out, a, rad) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03,
     s = Math.sin(rad),
     c = Math.cos(rad);
-out.m00 = a0 * c + a2 * s;
-out.m01 = a1 * c + a3 * s;
-out.m02 = a0 * -s + a2 * c;
-out.m03 = a1 * -s + a3 * c;
-return out;
+  out.m00 = a0 * c + a2 * s;
+  out.m01 = a1 * c + a3 * s;
+  out.m02 = a0 * -s + a2 * c;
+  out.m03 = a1 * -s + a3 * c;
+  return out;
 };
 
 /**
@@ -8248,15 +7977,14 @@ return out;
  * @param {vec2} v - The scale vector.
  * @returns {mat2} out
  **/
-mat2.scale = function scale (out, a, v)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03,
+mat2.scale = function scale (out, a, v) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03,
     v0 = v.x, v1 = v.y;
-out.m00 = a0 * v0;
-out.m01 = a1 * v0;
-out.m02 = a2 * v1;
-out.m03 = a3 * v1;
-return out;
+  out.m00 = a0 * v0;
+  out.m01 = a1 * v0;
+  out.m02 = a2 * v1;
+  out.m03 = a3 * v1;
+  return out;
 };
 
 /**
@@ -8270,15 +7998,14 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat2} out.
  */
-mat2.fromRotation = function fromRotation (out, rad)
-{
-var s = Math.sin(rad),
+mat2.fromRotation = function fromRotation (out, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad);
-out.m00 = c;
-out.m01 = s;
-out.m02 = -s;
-out.m03 = c;
-return out;
+  out.m00 = c;
+  out.m01 = s;
+  out.m02 = -s;
+  out.m03 = c;
+  return out;
 };
 
 /**
@@ -8292,13 +8019,12 @@ return out;
  * @param {vec2} v - Scale vector.
  * @returns {mat2} out.
  */
-mat2.fromScaling = function fromScaling (out, v)
-{
-out.m00 = v.x;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = v.y;
-return out;
+mat2.fromScaling = function fromScaling (out, v) {
+  out.m00 = v.x;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = v.y;
+  return out;
 };
 
 /**
@@ -8307,8 +8033,7 @@ return out;
  * @param {mat2} a - The matrix.
  * @returns {String} String representation of this matrix.
  */
-mat2.str = function str (a)
-{
+mat2.str = function str (a) {
   return ("mat2(" + (a.m00) + ", " + (a.m01) + ", " + (a.m02) + ", " + (a.m03) + ")");
 };
 
@@ -8319,14 +8044,13 @@ mat2.str = function str (a)
  * @param {mat2} m - The matrix.
  * @returns {Array} out.
  */
-mat2.array = function array (out, m)
-{
-out[0] = m.m00;
-out[1] = m.m01;
-out[2] = m.m02;
-out[3] = m.m03;
+mat2.array = function array (out, m) {
+  out[0] = m.m00;
+  out[1] = m.m01;
+  out[2] = m.m02;
+  out[3] = m.m03;
 
-return out;
+  return out;
 };
 
 /**
@@ -8335,9 +8059,8 @@ return out;
  * @param {mat2} a - Matrix to calculate Frobenius norm of.
  * @returns {Number} - The frobenius norm.
  */
-mat2.frob = function frob (a)
-{
-return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2)));
+mat2.frob = function frob (a) {
+  return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2)));
 };
 
 /**
@@ -8347,12 +8070,11 @@ return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) +
  * @param {mat2} U - The upper triangular matrix.
  * @param {mat2} a - The input matrix to factorize.
  */
-mat2.LDU = function LDU (L, D, U, a)
-{
-L.m02 = a.m02 / a.m00;
-U.m00 = a.m00;
-U.m01 = a.m01;
-U.m03 = a.m03 - L.m02 * U.m01;
+mat2.LDU = function LDU (L, D, U, a) {
+  L.m02 = a.m02 / a.m00;
+  U.m00 = a.m00;
+  U.m01 = a.m01;
+  U.m03 = a.m03 - L.m02 * U.m01;
 };
 
 /**
@@ -8363,13 +8085,12 @@ U.m03 = a.m03 - L.m02 * U.m01;
  * @param {mat2} b - The second operand.
  * @returns {mat2} out.
  */
-mat2.add = function add (out, a, b)
-{
-out.m00 = a.m00 + b.m00;
-out.m01 = a.m01 + b.m01;
-out.m02 = a.m02 + b.m02;
-out.m03 = a.m03 + b.m03;
-return out;
+mat2.add = function add (out, a, b) {
+  out.m00 = a.m00 + b.m00;
+  out.m01 = a.m01 + b.m01;
+  out.m02 = a.m02 + b.m02;
+  out.m03 = a.m03 + b.m03;
+  return out;
 };
 
 /**
@@ -8380,21 +8101,19 @@ return out;
  * @param {mat2} b - The second operand.
  * @returns {mat2} out.
  */
-mat2.subtract = function subtract (out, a, b)
-{
-out.m00 = a.m00 - b.m00;
-out.m01 = a.m01 - b.m01;
-out.m02 = a.m02 - b.m02;
-out.m03 = a.m03 - b.m03;
-return out;
+mat2.subtract = function subtract (out, a, b) {
+  out.m00 = a.m00 - b.m00;
+  out.m01 = a.m01 - b.m01;
+  out.m02 = a.m02 - b.m02;
+  out.m03 = a.m03 - b.m03;
+  return out;
 };
 
 /**
  * Alias of {@link mat2.subtract}.
  */
-mat2.sub = function sub (out, a, b)
-{
-return mat2.subtract(out, a, b);
+mat2.sub = function sub (out, a, b) {
+  return mat2.subtract(out, a, b);
 };
 
 /**
@@ -8404,9 +8123,8 @@ return mat2.subtract(out, a, b);
  * @param {mat2} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat2.exactEquals = function exactEquals (a, b)
-{
-return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03;
+mat2.exactEquals = function exactEquals (a, b) {
+  return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03;
 };
 
 /**
@@ -8416,16 +8134,15 @@ return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03;
  * @param {mat2} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat2.equals = function equals$$1 (a, b)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03;
-var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03;
-return (
-  Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-  Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-  Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-  Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3))
-);
+mat2.equals = function equals$$1 (a, b) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03;
+  var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03;
+  return (
+    Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+    Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+    Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+    Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3))
+  );
 };
 
 /**
@@ -8436,13 +8153,12 @@ return (
  * @param {Number} b - The scale number.
  * @returns {mat2} out.
  */
-mat2.multiplyScalar = function multiplyScalar (out, a, b)
-{
-out.m00 = a.m00 * b;
-out.m01 = a.m01 * b;
-out.m02 = a.m02 * b;
-out.m03 = a.m03 * b;
-return out;
+mat2.multiplyScalar = function multiplyScalar (out, a, b) {
+  out.m00 = a.m00 * b;
+  out.m01 = a.m01 * b;
+  out.m02 = a.m02 * b;
+  out.m03 = a.m03 * b;
+  return out;
 };
 
 /**
@@ -8454,47 +8170,50 @@ return out;
  * @param {Number} scale - The scale number.
  * @returns {mat2} out.
  */
-mat2.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale)
-{
-out.m00 = a.m00 + (b.m00 * scale);
-out.m01 = a.m01 + (b.m01 * scale);
-out.m02 = a.m02 + (b.m02 * scale);
-out.m03 = a.m03 + (b.m03 * scale);
-return out;
+mat2.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale) {
+  out.m00 = a.m00 + (b.m00 * scale);
+  out.m01 = a.m01 + (b.m01 * scale);
+  out.m02 = a.m02 + (b.m02 * scale);
+  out.m03 = a.m03 + (b.m03 * scale);
+  return out;
 };
 
-var mat23 = function mat23(m00, m01, m02, m03, m04, m05)
-{
-/**
- * The element a.
- * @type {number}
- * */
-this.m00 = m00;
-/**
- * The element b.
- * @type {number}
- * */
-this.m01 = m01;
-/**
- * The element c.
- * @type {number}
- * */
-this.m02 = m02;
-/**
- * The element d.
- * @type {number}
- * */
-this.m03 = m03;
-/**
- * The element tx.
- * @type {number}
- * */
-this.m04 = m04;
-/**
- * The element ty.
- * @type {number}
- * */
-this.m05 = m05;
+var mat23 = function mat23(m00, m01, m02, m03, m04, m05) {
+  /**
+   * The element a.
+   * @type {number}
+   * */
+  this.m00 = m00;
+
+  /**
+   * The element b.
+   * @type {number}
+   * */
+  this.m01 = m01;
+
+  /**
+   * The element c.
+   * @type {number}
+   * */
+  this.m02 = m02;
+
+  /**
+   * The element d.
+   * @type {number}
+   * */
+  this.m03 = m03;
+
+  /**
+   * The element tx.
+   * @type {number}
+   * */
+  this.m04 = m04;
+
+  /**
+   * The element ty.
+   * @type {number}
+   * */
+  this.m05 = m05;
 };
 
 /**
@@ -8502,13 +8221,12 @@ this.m05 = m05;
  *
  * @returns {mat23} The newly created matrix.
  */
-mat23.create = function create ()
-{
-return new mat23(
-  1, 0,
-  0, 1,
-  0, 0
-);
+mat23.create = function create () {
+  return new mat23(
+    1, 0,
+    0, 1,
+    0, 0
+  );
 };
 
 /**
@@ -8522,9 +8240,8 @@ return new mat23(
  * @param {Number} m05 -Value assigned to element ty.
  * @returns {mat23} The newly created matrix.
  */
-mat23.new = function new$1 (m00, m01, m02, m03, m04, m05)
-{
-return new mat23(m00, m01, m02, m03, m04, m05);
+mat23.new = function new$1 (m00, m01, m02, m03, m04, m05) {
+  return new mat23(m00, m01, m02, m03, m04, m05);
 };
 
 /**
@@ -8533,8 +8250,7 @@ return new mat23(m00, m01, m02, m03, m04, m05);
  * @param {mat23} a - Matrix to clone.
  * @returns {mat23} The newly created matrix.
  */
-mat23.clone = function clone (a)
-{
+mat23.clone = function clone (a) {
   return new mat23(
     a.m00, a.m01,
     a.m02, a.m03,
@@ -8549,15 +8265,14 @@ mat23.clone = function clone (a)
  * @param {mat23} a - The specified matrix.
  * @returns {mat23} out.
  */
-mat23.copy = function copy (out, a)
-{
-out.m00 = a.m00;
-out.m01 = a.m01;
-out.m02 = a.m02;
-out.m03 = a.m03;
-out.m04 = a.m04;
-out.m05 = a.m05;
-return out;
+mat23.copy = function copy (out, a) {
+  out.m00 = a.m00;
+  out.m01 = a.m01;
+  out.m02 = a.m02;
+  out.m03 = a.m03;
+  out.m04 = a.m04;
+  out.m05 = a.m05;
+  return out;
 };
 
 /**
@@ -8566,15 +8281,14 @@ return out;
  * @param {mat23} out - Matrix to modified.
  * @returns {mat23} out.
  */
-mat23.identity = function identity (out)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 1;
-out.m04 = 0;
-out.m05 = 0;
-return out;
+mat23.identity = function identity (out) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 1;
+  out.m04 = 0;
+  out.m05 = 0;
+  return out;
 };
 
 /**
@@ -8589,8 +8303,7 @@ return out;
  * @param {Number} ty - Value assigned to element ty.
  * @returns {mat23} out.
  */
-mat23.set = function set (out, a, b, c, d, tx, ty)
-{
+mat23.set = function set (out, a, b, c, d, tx, ty) {
   out.m00 = a;
   out.m01 = b;
   out.m02 = c;
@@ -8607,24 +8320,23 @@ mat23.set = function set (out, a, b, c, d, tx, ty)
  * @param {mat23} a - Matrix to invert.
  * @returns {mat23} out.
  */
-mat23.invert = function invert (out, a)
-{
-var aa = a.m00, ab = a.m01, ac = a.m02, ad = a.m03,
-  atx = a.m04, aty = a.m05;
+mat23.invert = function invert (out, a) {
+  var aa = a.m00, ab = a.m01, ac = a.m02, ad = a.m03,
+    atx = a.m04, aty = a.m05;
 
-var det = aa * ad - ab * ac;
-if (!det) {
-  return null;
-}
-det = 1.0 / det;
+  var det = aa * ad - ab * ac;
+  if (!det) {
+    return null;
+  }
+  det = 1.0 / det;
 
-out.m00 = ad * det;
-out.m01 = -ab * det;
-out.m02 = -ac * det;
-out.m03 = aa * det;
-out.m04 = (ac * aty - ad * atx) * det;
-out.m05 = (ab * atx - aa * aty) * det;
-return out;
+  out.m00 = ad * det;
+  out.m01 = -ab * det;
+  out.m02 = -ac * det;
+  out.m03 = aa * det;
+  out.m04 = (ac * aty - ad * atx) * det;
+  out.m05 = (ab * atx - aa * aty) * det;
+  return out;
 };
 
 /**
@@ -8633,9 +8345,8 @@ return out;
  * @param {mat23} a - Matrix to calculate.
  * @returns {Number} Determinant of a.
  */
-mat23.determinant = function determinant (a)
-{
-return a.m00 * a.m03 - a.m01 * a.m02;
+mat23.determinant = function determinant (a) {
+  return a.m00 * a.m03 - a.m01 * a.m02;
 };
 
 /**
@@ -8646,25 +8357,23 @@ return a.m00 * a.m03 - a.m01 * a.m02;
  * @param {mat23} b - The second operand.
  * @returns {mat23} out.
  */
-mat23.multiply = function multiply (out, a, b)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
-  b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03, b4 = b.m04, b5 = b.m05;
-out.m00 = a0 * b0 + a2 * b1;
-out.m01 = a1 * b0 + a3 * b1;
-out.m02 = a0 * b2 + a2 * b3;
-out.m03 = a1 * b2 + a3 * b3;
-out.m04 = a0 * b4 + a2 * b5 + a4;
-out.m05 = a1 * b4 + a3 * b5 + a5;
-return out;
+mat23.multiply = function multiply (out, a, b) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
+    b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03, b4 = b.m04, b5 = b.m05;
+  out.m00 = a0 * b0 + a2 * b1;
+  out.m01 = a1 * b0 + a3 * b1;
+  out.m02 = a0 * b2 + a2 * b3;
+  out.m03 = a1 * b2 + a3 * b3;
+  out.m04 = a0 * b4 + a2 * b5 + a4;
+  out.m05 = a1 * b4 + a3 * b5 + a5;
+  return out;
 };
 
 /**
  * Alias of {@link mat23.multiply}.
  */
-mat23.mul = function mul (out, a, b)
-{
-return mat23.multiply(out, a, b);
+mat23.mul = function mul (out, a, b) {
+  return mat23.multiply(out, a, b);
 };
 
 /**
@@ -8675,18 +8384,17 @@ return mat23.multiply(out, a, b);
  * @param {Number} rad - The rotation angle.
  * @returns {mat23} out
  */
-mat23.rotate = function rotate (out, a, rad)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
-  s = Math.sin(rad),
-  c = Math.cos(rad);
-out.m00 = a0 * c + a2 * s;
-out.m01 = a1 * c + a3 * s;
-out.m02 = a0 * -s + a2 * c;
-out.m03 = a1 * -s + a3 * c;
-out.m04 = a4;
-out.m05 = a5;
-return out;
+mat23.rotate = function rotate (out, a, rad) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
+    s = Math.sin(rad),
+    c = Math.cos(rad);
+  out.m00 = a0 * c + a2 * s;
+  out.m01 = a1 * c + a3 * s;
+  out.m02 = a0 * -s + a2 * c;
+  out.m03 = a1 * -s + a3 * c;
+  out.m04 = a4;
+  out.m05 = a5;
+  return out;
 };
 
 /**
@@ -8697,17 +8405,16 @@ return out;
  * @param {vec2} v - The scale vector.
  * @returns {mat23} out
  **/
-mat23.scale = function scale (out, a, v)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
-  v0 = v.x, v1 = v.y;
-out.m00 = a0 * v0;
-out.m01 = a1 * v0;
-out.m02 = a2 * v1;
-out.m03 = a3 * v1;
-out.m04 = a4;
-out.m05 = a5;
-return out;
+mat23.scale = function scale (out, a, v) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
+    v0 = v.x, v1 = v.y;
+  out.m00 = a0 * v0;
+  out.m01 = a1 * v0;
+  out.m02 = a2 * v1;
+  out.m03 = a3 * v1;
+  out.m04 = a4;
+  out.m05 = a5;
+  return out;
 };
 
 /**
@@ -8718,17 +8425,16 @@ return out;
  * @param {vec2} v - The translation offset.
  * @returns {mat23} out.
  */
-mat23.translate = function translate (out, a, v)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
-  v0 = v.x, v1 = v.y;
-out.m00 = a0;
-out.m01 = a1;
-out.m02 = a2;
-out.m03 = a3;
-out.m04 = a0 * v0 + a2 * v1 + a4;
-out.m05 = a1 * v0 + a3 * v1 + a5;
-return out;
+mat23.translate = function translate (out, a, v) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05,
+    v0 = v.x, v1 = v.y;
+  out.m00 = a0;
+  out.m01 = a1;
+  out.m02 = a2;
+  out.m03 = a3;
+  out.m04 = a0 * v0 + a2 * v1 + a4;
+  out.m05 = a1 * v0 + a3 * v1 + a5;
+  return out;
 };
 
 /**
@@ -8742,16 +8448,15 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat23} out.
  */
-mat23.fromRotation = function fromRotation (out, rad)
-{
-var s = Math.sin(rad), c = Math.cos(rad);
-out.m00 = c;
-out.m01 = s;
-out.m02 = -s;
-out.m03 = c;
-out.m04 = 0;
-out.m05 = 0;
-return out;
+mat23.fromRotation = function fromRotation (out, rad) {
+  var s = Math.sin(rad), c = Math.cos(rad);
+  out.m00 = c;
+  out.m01 = s;
+  out.m02 = -s;
+  out.m03 = c;
+  out.m04 = 0;
+  out.m05 = 0;
+  return out;
 };
 
 /**
@@ -8765,15 +8470,14 @@ return out;
  * @param {vec2} v - Scale vector.
  * @returns {mat23} out.
  */
-mat23.fromScaling = function fromScaling (out, v)
-{
-out.m00 = v.m00;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = v.m01;
-out.m04 = 0;
-out.m05 = 0;
-return out;
+mat23.fromScaling = function fromScaling (out, v) {
+  out.m00 = v.m00;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = v.m01;
+  out.m04 = 0;
+  out.m05 = 0;
+  return out;
 };
 
 /**
@@ -8787,15 +8491,14 @@ return out;
  * @param {vec2} v - The translation offset.
  * @returns {mat23} out.
  */
-mat23.fromTranslation = function fromTranslation (out, v)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 1;
-out.m04 = v.x;
-out.m05 = v.y;
-return out;
+mat23.fromTranslation = function fromTranslation (out, v) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 1;
+  out.m04 = v.x;
+  out.m05 = v.y;
+  return out;
 };
 
 /**
@@ -8816,16 +8519,15 @@ return out;
  * @param {vec2} s - Scale vector.
  * @returns {mat23} out.
  */
-mat23.fromRTS = function fromRTS (out, r, t, s)
-{
-var sr = Math.sin(r), cr = Math.cos(r);
-out.m00 = cr * s.x;
-out.m01 = sr * s.x;
-out.m02 = -sr * s.y;
-out.m03 = cr * s.y;
-out.m04 = t.x;
-out.m05 = t.y;
-return out;
+mat23.fromRTS = function fromRTS (out, r, t, s) {
+  var sr = Math.sin(r), cr = Math.cos(r);
+  out.m00 = cr * s.x;
+  out.m01 = sr * s.x;
+  out.m02 = -sr * s.y;
+  out.m03 = cr * s.y;
+  out.m04 = t.x;
+  out.m05 = t.y;
+  return out;
 };
 
 /**
@@ -8834,8 +8536,7 @@ return out;
  * @param {mat23} a - The matrix.
  * @returns {String} String representation of this matrix.
  */
-mat23.str = function str (a)
-{
+mat23.str = function str (a) {
   return ("mat23(" + (a.m00) + ", " + (a.m01) + ", " + (a.m02) + ", " + (a.m03) + ", " + (a.m04) + ", " + (a.m05) + ")");
 };
 
@@ -8846,16 +8547,15 @@ mat23.str = function str (a)
  * @param {mat23} m - The matrix.
  * @returns {Array} out.
  */
-mat23.array = function array (out, m)
-{
-out[0] = m.m00;
-out[1] = m.m01;
-out[2] = m.m02;
-out[3] = m.m03;
-out[4] = m.m04;
-out[5] = m.m05;
+mat23.array = function array (out, m) {
+  out[0] = m.m00;
+  out[1] = m.m01;
+  out[2] = m.m02;
+  out[3] = m.m03;
+  out[4] = m.m04;
+  out[5] = m.m05;
 
-return out;
+  return out;
 };
 
 /**
@@ -8865,26 +8565,25 @@ return out;
  * @param {mat23} m
  * @returns {array}
  */
-mat23.array4x4 = function array4x4 (out, m)
-{
-out[0] = m.m00;
-out[1] = m.m01;
-out[2] = 0;
-out[3] = 0;
-out[4] = m.m02;
-out[5] = m.m03;
-out[6] = 0;
-out[7] = 0;
-out[8] = 0;
-out[9] = 0;
-out[10] = 1;
-out[11] = 0;
-out[12] = m.m04;
-out[13] = m.m05;
-out[14] = 0;
-out[15] = 1;
+mat23.array4x4 = function array4x4 (out, m) {
+  out[0] = m.m00;
+  out[1] = m.m01;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = m.m02;
+  out[5] = m.m03;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = m.m04;
+  out[13] = m.m05;
+  out[14] = 0;
+  out[15] = 1;
 
-return out;
+  return out;
 };
 
 /**
@@ -8893,9 +8592,8 @@ return out;
  * @param {mat23} a - Matrix to calculate Frobenius norm of.
  * @returns {Number} - The frobenius norm.
  */
-mat23.frob = function frob (a)
-{
-return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2) + Math.pow(a.m04, 2) + Math.pow(a.m05, 2) + 1));
+mat23.frob = function frob (a) {
+  return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2) + Math.pow(a.m04, 2) + Math.pow(a.m05, 2) + 1));
 };
 
 /**
@@ -8906,15 +8604,14 @@ return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) +
  * @param {mat23} b - The second operand.
  * @returns {mat23} out.
  */
-mat23.add = function add (out, a, b)
-{
-out.m00 = a.m00 + b.m00;
-out.m01 = a.m01 + b.m01;
-out.m02 = a.m02 + b.m02;
-out.m03 = a.m03 + b.m03;
-out.m04 = a.m04 + b.m04;
-out.m05 = a.m05 + b.m05;
-return out;
+mat23.add = function add (out, a, b) {
+  out.m00 = a.m00 + b.m00;
+  out.m01 = a.m01 + b.m01;
+  out.m02 = a.m02 + b.m02;
+  out.m03 = a.m03 + b.m03;
+  out.m04 = a.m04 + b.m04;
+  out.m05 = a.m05 + b.m05;
+  return out;
 };
 
 /**
@@ -8925,23 +8622,21 @@ return out;
  * @param {mat23} b - The second operand.
  * @returns {mat23} out.
  */
-mat23.subtract = function subtract (out, a, b)
-{
-out.m00 = a.m00 - b.m00;
-out.m01 = a.m01 - b.m01;
-out.m02 = a.m02 - b.m02;
-out.m03 = a.m03 - b.m03;
-out.m04 = a.m04 - b.m04;
-out.m05 = a.m05 - b.m05;
-return out;
+mat23.subtract = function subtract (out, a, b) {
+  out.m00 = a.m00 - b.m00;
+  out.m01 = a.m01 - b.m01;
+  out.m02 = a.m02 - b.m02;
+  out.m03 = a.m03 - b.m03;
+  out.m04 = a.m04 - b.m04;
+  out.m05 = a.m05 - b.m05;
+  return out;
 };
 
 /**
  * Alias of {@link mat23.subtract}.
  */
-mat23.sub = function sub (out, a, b)
-{
-return mat23.subtract(out, a, b);
+mat23.sub = function sub (out, a, b) {
+  return mat23.subtract(out, a, b);
 };
 
 /**
@@ -8952,15 +8647,14 @@ return mat23.subtract(out, a, b);
  * @param {Number} b - The scale number.
  * @returns {mat23} out.
  */
-mat23.multiplyScalar = function multiplyScalar (out, a, b)
-{
-out.m00 = a.m00 * b;
-out.m01 = a.m01 * b;
-out.m02 = a.m02 * b;
-out.m03 = a.m03 * b;
-out.m04 = a.m04 * b;
-out.m05 = a.m05 * b;
-return out;
+mat23.multiplyScalar = function multiplyScalar (out, a, b) {
+  out.m00 = a.m00 * b;
+  out.m01 = a.m01 * b;
+  out.m02 = a.m02 * b;
+  out.m03 = a.m03 * b;
+  out.m04 = a.m04 * b;
+  out.m05 = a.m05 * b;
+  return out;
 };
 
 /**
@@ -8972,15 +8666,14 @@ return out;
  * @param {Number} scale - The scale number.
  * @returns {mat23} out.
  */
-mat23.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale)
-{
-out.m00 = a.m00 + (b.m00 * scale);
-out.m01 = a.m01 + (b.m01 * scale);
-out.m02 = a.m02 + (b.m02 * scale);
-out.m03 = a.m03 + (b.m03 * scale);
-out.m04 = a.m04 + (b.m04 * scale);
-out.m05 = a.m05 + (b.m05 * scale);
-return out;
+mat23.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale) {
+  out.m00 = a.m00 + (b.m00 * scale);
+  out.m01 = a.m01 + (b.m01 * scale);
+  out.m02 = a.m02 + (b.m02 * scale);
+  out.m03 = a.m03 + (b.m03 * scale);
+  out.m04 = a.m04 + (b.m04 * scale);
+  out.m05 = a.m05 + (b.m05 * scale);
+  return out;
 };
 
 /**
@@ -8990,9 +8683,8 @@ return out;
  * @param {mat23} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat23.exactEquals = function exactEquals (a, b)
-{
-return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03 && a.m04 === b.m04 && a.m05 === b.m05;
+mat23.exactEquals = function exactEquals (a, b) {
+  return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03 && a.m04 === b.m04 && a.m05 === b.m05;
 };
 
 /**
@@ -9002,110 +8694,120 @@ return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03 
  * @param {mat23} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat23.equals = function equals$$1 (a, b)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05;
-var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03, b4 = b.m04, b5 = b.m05;
-return (
-  Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-  Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-  Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-  Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-  Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
-  Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5))
-);
+mat23.equals = function equals$$1 (a, b) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03, a4 = a.m04, a5 = a.m05;
+  var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03, b4 = b.m04, b5 = b.m05;
+  return (
+    Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+    Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+    Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+    Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+    Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+    Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5))
+  );
 };
 
 var mat4 = function mat4(
-m00, m01, m02, m03,
-m04, m05, m06, m07,
-m08, m09, m10, m11,
-m12, m13, m14, m15
-)
-{
-/**
- * The element at column 0 row 0.
- * @type {number}
- * */
-this.m00 = m00;
-/**
- * The element at column 0 row 1.
- * @type {number}
- * */
-this.m01 = m01;
-/**
- * The element at column 0 row 2.
- * @type {number}
- * */
-this.m02 = m02;
-/**
- * The element at column 0 row 3.
- * @type {number}
- * */
-this.m03 = m03;
+  m00, m01, m02, m03,
+  m04, m05, m06, m07,
+  m08, m09, m10, m11,
+  m12, m13, m14, m15
+) {
+  /**
+   * The element at column 0 row 0.
+   * @type {number}
+   * */
+  this.m00 = m00;
 
-/**
- * The element at column 1 row 0.
- * @type {number}
- * */
-this.m04 = m04;
-/**
- * The element at column 1 row 1.
- * @type {number}
- * */
-this.m05 = m05;
-/**
- * The element at column 1 row 2.
- * @type {number}
- * */
-this.m06 = m06;
-/**
- * The element at column 1 row 3.
- * @type {number}
- * */
-this.m07 = m07;
+  /**
+   * The element at column 0 row 1.
+   * @type {number}
+   * */
+  this.m01 = m01;
 
-/**
- * The element at column 2 row 0.
- * @type {number}
- * */
-this.m08 = m08;
-/**
- * The element at column 2 row 1.
- * @type {number}
- * */
-this.m09 = m09;
-/**
- * The element at column 2 row 2.
- * @type {number}
- * */
-this.m10 = m10;
-/**
- * The element at column 2 row 3.
- * @type {number}
- * */
-this.m11 = m11;
+  /**
+   * The element at column 0 row 2.
+   * @type {number}
+   * */
+  this.m02 = m02;
 
-/**
- * The element at column 3 row 0.
- * @type {number}
- * */
-this.m12 = m12;
-/**
- * The element at column 3 row 1.
- * @type {number}
- * */
-this.m13 = m13;
-/**
- * The element at column 3 row 2.
- * @type {number}
- * */
-this.m14 = m14;
-/**
- * The element at column 3 row 3.
- * @type {number}
- * */
-this.m15 = m15;
+  /**
+   * The element at column 0 row 3.
+   * @type {number}
+   * */
+  this.m03 = m03;
+
+  /**
+   * The element at column 1 row 0.
+   * @type {number}
+   * */
+  this.m04 = m04;
+
+  /**
+   * The element at column 1 row 1.
+   * @type {number}
+   * */
+  this.m05 = m05;
+
+  /**
+   * The element at column 1 row 2.
+   * @type {number}
+   * */
+  this.m06 = m06;
+
+  /**
+   * The element at column 1 row 3.
+   * @type {number}
+   * */
+  this.m07 = m07;
+
+  /**
+   * The element at column 2 row 0.
+   * @type {number}
+   * */
+  this.m08 = m08;
+
+  /**
+   * The element at column 2 row 1.
+   * @type {number}
+   * */
+  this.m09 = m09;
+
+  /**
+   * The element at column 2 row 2.
+   * @type {number}
+   * */
+  this.m10 = m10;
+
+  /**
+   * The element at column 2 row 3.
+   * @type {number}
+   * */
+  this.m11 = m11;
+
+  /**
+   * The element at column 3 row 0.
+   * @type {number}
+   * */
+  this.m12 = m12;
+
+  /**
+   * The element at column 3 row 1.
+   * @type {number}
+   * */
+  this.m13 = m13;
+
+  /**
+   * The element at column 3 row 2.
+   * @type {number}
+   * */
+  this.m14 = m14;
+
+  /**
+   * The element at column 3 row 3.
+   * @type {number}
+   * */
+  this.m15 = m15;
 };
 
 /**
@@ -9130,17 +8832,16 @@ this.m15 = m15;
  * @returns {mat4} The newly created matrix.
  */
 mat4.new = function new$1 (
-m00, m01, m02, m03,
-m04, m05, m06, m07,
-m08, m09, m10, m11,
-m12, m13, m14, m15
-)
-{
-return new mat4(
   m00, m01, m02, m03,
   m04, m05, m06, m07,
   m08, m09, m10, m11,
-  m12, m13, m14, m15);
+  m12, m13, m14, m15
+) {
+  return new mat4(
+    m00, m01, m02, m03,
+    m04, m05, m06, m07,
+    m08, m09, m10, m11,
+    m12, m13, m14, m15);
 };
 
 /**
@@ -9148,14 +8849,13 @@ return new mat4(
  *
  * @returns {mat4} The newly created matrix.
  */
-mat4.create = function create ()
-{
-return new mat4(
-  1, 0, 0, 0,
-  0, 1, 0, 0,
-  0, 0, 1, 0,
-  0, 0, 0, 1
-);
+mat4.create = function create () {
+  return new mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
 };
 
 /**
@@ -9164,8 +8864,7 @@ return new mat4(
  * @param {mat4} a - Matrix to clone.
  * @returns {mat4} The newly created matrix.
  */
-mat4.clone = function clone (a)
-{
+mat4.clone = function clone (a) {
   return new mat4(
     a.m00, a.m01, a.m02, a.m03,
     a.m04, a.m05, a.m06, a.m07,
@@ -9181,25 +8880,24 @@ mat4.clone = function clone (a)
  * @param {mat4} a - The specified matrix.
  * @returns {mat4} out.
  */
-mat4.copy = function copy (out, a)
-{
-out.m00 = a.m00;
-out.m01 = a.m01;
-out.m02 = a.m02;
-out.m03 = a.m03;
-out.m04 = a.m04;
-out.m05 = a.m05;
-out.m06 = a.m06;
-out.m07 = a.m07;
-out.m08 = a.m08;
-out.m09 = a.m09;
-out.m10 = a.m10;
-out.m11 = a.m11;
-out.m12 = a.m12;
-out.m13 = a.m13;
-out.m14 = a.m14;
-out.m15 = a.m15;
-return out;
+mat4.copy = function copy (out, a) {
+  out.m00 = a.m00;
+  out.m01 = a.m01;
+  out.m02 = a.m02;
+  out.m03 = a.m03;
+  out.m04 = a.m04;
+  out.m05 = a.m05;
+  out.m06 = a.m06;
+  out.m07 = a.m07;
+  out.m08 = a.m08;
+  out.m09 = a.m09;
+  out.m10 = a.m10;
+  out.m11 = a.m11;
+  out.m12 = a.m12;
+  out.m13 = a.m13;
+  out.m14 = a.m14;
+  out.m15 = a.m15;
+  return out;
 };
 
 /**
@@ -9224,8 +8922,7 @@ return out;
  * @param {Number} m33 - Value assigned to element at column 3 row 3.
  * @returns {mat4} out.
  */
-mat4.set = function set (out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
-{
+mat4.set = function set (out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
   out.m00 = m00;
   out.m01 = m01;
   out.m02 = m02;
@@ -9252,25 +8949,24 @@ mat4.set = function set (out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, 
  * @param {mat4} out - Matrix to modified.
  * @returns {mat4} out.
  */
-mat4.identity = function identity (out)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = 1;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = 0;
-out.m10 = 1;
-out.m11 = 0;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
-return out;
+mat4.identity = function identity (out) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = 1;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = 0;
+  out.m10 = 1;
+  out.m11 = 0;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -9280,46 +8976,45 @@ return out;
  * @param {mat4} a - Matrix to transpose.
  * @returns {mat4} out.
  */
-mat4.transpose = function transpose (out, a)
-{
-// If we are transposing ourselves we can skip a few steps but have to cache some values
-if (out === a) {
-  var a01 = a.m01, a02 = a.m02, a03 = a.m03,
+mat4.transpose = function transpose (out, a) {
+  // If we are transposing ourselves we can skip a few steps but have to cache some values
+  if (out === a) {
+    var a01 = a.m01, a02 = a.m02, a03 = a.m03,
       a12 = a.m06, a13 = a.m07,
       a23 = a.m11;
 
-  out.m01 = a.m04;
-  out.m02 = a.m08;
-  out.m03 = a.m12;
-  out.m04 = a01;
-  out.m06 = a.m09;
-  out.m07 = a.m13;
-  out.m08 = a02;
-  out.m09 = a12;
-  out.m11 = a.m14;
-  out.m12 = a03;
-  out.m13 = a13;
-  out.m14 = a23;
-} else {
-  out.m00 = a.m00;
-  out.m01 = a.m04;
-  out.m02 = a.m08;
-  out.m03 = a.m12;
-  out.m04 = a.m01;
-  out.m05 = a.m05;
-  out.m06 = a.m09;
-  out.m07 = a.m13;
-  out.m08 = a.m02;
-  out.m09 = a.m06;
-  out.m10 = a.m10;
-  out.m11 = a.m14;
-  out.m12 = a.m03;
-  out.m13 = a.m07;
-  out.m14 = a.m11;
-  out.m15 = a.m15;
-}
+    out.m01 = a.m04;
+    out.m02 = a.m08;
+    out.m03 = a.m12;
+    out.m04 = a01;
+    out.m06 = a.m09;
+    out.m07 = a.m13;
+    out.m08 = a02;
+    out.m09 = a12;
+    out.m11 = a.m14;
+    out.m12 = a03;
+    out.m13 = a13;
+    out.m14 = a23;
+  } else {
+    out.m00 = a.m00;
+    out.m01 = a.m04;
+    out.m02 = a.m08;
+    out.m03 = a.m12;
+    out.m04 = a.m01;
+    out.m05 = a.m05;
+    out.m06 = a.m09;
+    out.m07 = a.m13;
+    out.m08 = a.m02;
+    out.m09 = a.m06;
+    out.m10 = a.m10;
+    out.m11 = a.m14;
+    out.m12 = a.m03;
+    out.m13 = a.m07;
+    out.m14 = a.m11;
+    out.m15 = a.m15;
+  }
 
-return out;
+  return out;
 };
 
 /**
@@ -9329,52 +9024,51 @@ return out;
  * @param {mat4} a - Matrix to invert.
  * @returns {mat4} out.
  */
-mat4.invert = function invert (out, a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
+mat4.invert = function invert (out, a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
     a10 = a.m04, a11 = a.m05, a12 = a.m06, a13 = a.m07,
     a20 = a.m08, a21 = a.m09, a22 = a.m10, a23 = a.m11,
     a30 = a.m12, a31 = a.m13, a32 = a.m14, a33 = a.m15;
 
-var b00 = a00 * a11 - a01 * a10;
-var b01 = a00 * a12 - a02 * a10;
-var b02 = a00 * a13 - a03 * a10;
-var b03 = a01 * a12 - a02 * a11;
-var b04 = a01 * a13 - a03 * a11;
-var b05 = a02 * a13 - a03 * a12;
-var b06 = a20 * a31 - a21 * a30;
-var b07 = a20 * a32 - a22 * a30;
-var b08 = a20 * a33 - a23 * a30;
-var b09 = a21 * a32 - a22 * a31;
-var b10 = a21 * a33 - a23 * a31;
-var b11 = a22 * a33 - a23 * a32;
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32;
 
-// Calculate the determinant
-var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+  // Calculate the determinant
+  var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
-if (!det) {
-  return null;
-}
-det = 1.0 / det;
+  if (!det) {
+    return null;
+  }
+  det = 1.0 / det;
 
-out.m00 = (a11 * b11 - a12 * b10 + a13 * b09) * det;
-out.m01 = (a02 * b10 - a01 * b11 - a03 * b09) * det;
-out.m02 = (a31 * b05 - a32 * b04 + a33 * b03) * det;
-out.m03 = (a22 * b04 - a21 * b05 - a23 * b03) * det;
-out.m04 = (a12 * b08 - a10 * b11 - a13 * b07) * det;
-out.m05 = (a00 * b11 - a02 * b08 + a03 * b07) * det;
-out.m06 = (a32 * b02 - a30 * b05 - a33 * b01) * det;
-out.m07 = (a20 * b05 - a22 * b02 + a23 * b01) * det;
-out.m08 = (a10 * b10 - a11 * b08 + a13 * b06) * det;
-out.m09 = (a01 * b08 - a00 * b10 - a03 * b06) * det;
-out.m10 = (a30 * b04 - a31 * b02 + a33 * b00) * det;
-out.m11 = (a21 * b02 - a20 * b04 - a23 * b00) * det;
-out.m12 = (a11 * b07 - a10 * b09 - a12 * b06) * det;
-out.m13 = (a00 * b09 - a01 * b07 + a02 * b06) * det;
-out.m14 = (a31 * b01 - a30 * b03 - a32 * b00) * det;
-out.m15 = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+  out.m00 = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+  out.m01 = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+  out.m02 = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+  out.m03 = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+  out.m04 = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+  out.m05 = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+  out.m06 = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+  out.m07 = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+  out.m08 = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+  out.m09 = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+  out.m10 = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+  out.m11 = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+  out.m12 = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+  out.m13 = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+  out.m14 = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+  out.m15 = (a20 * b03 - a21 * b01 + a22 * b00) * det;
 
-return out;
+  return out;
 };
 
 /**
@@ -9384,30 +9078,29 @@ return out;
  * @param {mat4} a - Matrix to calculate.
  * @returns {mat4} out.
  */
-mat4.adjoint = function adjoint (out, a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
+mat4.adjoint = function adjoint (out, a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
     a10 = a.m04, a11 = a.m05, a12 = a.m06, a13 = a.m07,
     a20 = a.m08, a21 = a.m09, a22 = a.m10, a23 = a.m11,
     a30 = a.m12, a31 = a.m13, a32 = a.m14, a33 = a.m15;
 
-out.m00 = (a11 * (a22 * a33 - a23 * a32) - a21 * (a12 * a33 - a13 * a32) + a31 * (a12 * a23 - a13 * a22));
-out.m01 = -(a01 * (a22 * a33 - a23 * a32) - a21 * (a02 * a33 - a03 * a32) + a31 * (a02 * a23 - a03 * a22));
-out.m02 = (a01 * (a12 * a33 - a13 * a32) - a11 * (a02 * a33 - a03 * a32) + a31 * (a02 * a13 - a03 * a12));
-out.m03 = -(a01 * (a12 * a23 - a13 * a22) - a11 * (a02 * a23 - a03 * a22) + a21 * (a02 * a13 - a03 * a12));
-out.m04 = -(a10 * (a22 * a33 - a23 * a32) - a20 * (a12 * a33 - a13 * a32) + a30 * (a12 * a23 - a13 * a22));
-out.m05 = (a00 * (a22 * a33 - a23 * a32) - a20 * (a02 * a33 - a03 * a32) + a30 * (a02 * a23 - a03 * a22));
-out.m06 = -(a00 * (a12 * a33 - a13 * a32) - a10 * (a02 * a33 - a03 * a32) + a30 * (a02 * a13 - a03 * a12));
-out.m07 = (a00 * (a12 * a23 - a13 * a22) - a10 * (a02 * a23 - a03 * a22) + a20 * (a02 * a13 - a03 * a12));
-out.m08 = (a10 * (a21 * a33 - a23 * a31) - a20 * (a11 * a33 - a13 * a31) + a30 * (a11 * a23 - a13 * a21));
-out.m09 = -(a00 * (a21 * a33 - a23 * a31) - a20 * (a01 * a33 - a03 * a31) + a30 * (a01 * a23 - a03 * a21));
-out.m10 = (a00 * (a11 * a33 - a13 * a31) - a10 * (a01 * a33 - a03 * a31) + a30 * (a01 * a13 - a03 * a11));
-out.m11 = -(a00 * (a11 * a23 - a13 * a21) - a10 * (a01 * a23 - a03 * a21) + a20 * (a01 * a13 - a03 * a11));
-out.m12 = -(a10 * (a21 * a32 - a22 * a31) - a20 * (a11 * a32 - a12 * a31) + a30 * (a11 * a22 - a12 * a21));
-out.m13 = (a00 * (a21 * a32 - a22 * a31) - a20 * (a01 * a32 - a02 * a31) + a30 * (a01 * a22 - a02 * a21));
-out.m14 = -(a00 * (a11 * a32 - a12 * a31) - a10 * (a01 * a32 - a02 * a31) + a30 * (a01 * a12 - a02 * a11));
-out.m15 = (a00 * (a11 * a22 - a12 * a21) - a10 * (a01 * a22 - a02 * a21) + a20 * (a01 * a12 - a02 * a11));
-return out;
+  out.m00 = (a11 * (a22 * a33 - a23 * a32) - a21 * (a12 * a33 - a13 * a32) + a31 * (a12 * a23 - a13 * a22));
+  out.m01 = -(a01 * (a22 * a33 - a23 * a32) - a21 * (a02 * a33 - a03 * a32) + a31 * (a02 * a23 - a03 * a22));
+  out.m02 = (a01 * (a12 * a33 - a13 * a32) - a11 * (a02 * a33 - a03 * a32) + a31 * (a02 * a13 - a03 * a12));
+  out.m03 = -(a01 * (a12 * a23 - a13 * a22) - a11 * (a02 * a23 - a03 * a22) + a21 * (a02 * a13 - a03 * a12));
+  out.m04 = -(a10 * (a22 * a33 - a23 * a32) - a20 * (a12 * a33 - a13 * a32) + a30 * (a12 * a23 - a13 * a22));
+  out.m05 = (a00 * (a22 * a33 - a23 * a32) - a20 * (a02 * a33 - a03 * a32) + a30 * (a02 * a23 - a03 * a22));
+  out.m06 = -(a00 * (a12 * a33 - a13 * a32) - a10 * (a02 * a33 - a03 * a32) + a30 * (a02 * a13 - a03 * a12));
+  out.m07 = (a00 * (a12 * a23 - a13 * a22) - a10 * (a02 * a23 - a03 * a22) + a20 * (a02 * a13 - a03 * a12));
+  out.m08 = (a10 * (a21 * a33 - a23 * a31) - a20 * (a11 * a33 - a13 * a31) + a30 * (a11 * a23 - a13 * a21));
+  out.m09 = -(a00 * (a21 * a33 - a23 * a31) - a20 * (a01 * a33 - a03 * a31) + a30 * (a01 * a23 - a03 * a21));
+  out.m10 = (a00 * (a11 * a33 - a13 * a31) - a10 * (a01 * a33 - a03 * a31) + a30 * (a01 * a13 - a03 * a11));
+  out.m11 = -(a00 * (a11 * a23 - a13 * a21) - a10 * (a01 * a23 - a03 * a21) + a20 * (a01 * a13 - a03 * a11));
+  out.m12 = -(a10 * (a21 * a32 - a22 * a31) - a20 * (a11 * a32 - a12 * a31) + a30 * (a11 * a22 - a12 * a21));
+  out.m13 = (a00 * (a21 * a32 - a22 * a31) - a20 * (a01 * a32 - a02 * a31) + a30 * (a01 * a22 - a02 * a21));
+  out.m14 = -(a00 * (a11 * a32 - a12 * a31) - a10 * (a01 * a32 - a02 * a31) + a30 * (a01 * a12 - a02 * a11));
+  out.m15 = (a00 * (a11 * a22 - a12 * a21) - a10 * (a01 * a22 - a02 * a21) + a20 * (a01 * a12 - a02 * a11));
+  return out;
 };
 
 /**
@@ -9416,28 +9109,27 @@ return out;
  * @param {mat4} a - Matrix to calculate.
  * @returns {Number} Determinant of a.
  */
-mat4.determinant = function determinant (a)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
+mat4.determinant = function determinant (a) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
     a10 = a.m04, a11 = a.m05, a12 = a.m06, a13 = a.m07,
     a20 = a.m08, a21 = a.m09, a22 = a.m10, a23 = a.m11,
     a30 = a.m12, a31 = a.m13, a32 = a.m14, a33 = a.m15;
 
-var b00 = a00 * a11 - a01 * a10;
-var b01 = a00 * a12 - a02 * a10;
-var b02 = a00 * a13 - a03 * a10;
-var b03 = a01 * a12 - a02 * a11;
-var b04 = a01 * a13 - a03 * a11;
-var b05 = a02 * a13 - a03 * a12;
-var b06 = a20 * a31 - a21 * a30;
-var b07 = a20 * a32 - a22 * a30;
-var b08 = a20 * a33 - a23 * a30;
-var b09 = a21 * a32 - a22 * a31;
-var b10 = a21 * a33 - a23 * a31;
-var b11 = a22 * a33 - a23 * a32;
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32;
 
-// Calculate the determinant
-return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+  // Calculate the determinant
+  return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 };
 
 /**
@@ -9448,46 +9140,44 @@ return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
  * @param {mat4} b - The second operand.
  * @returns {mat4} out.
  */
-mat4.multiply = function multiply (out, a, b)
-{
-var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
+mat4.multiply = function multiply (out, a, b) {
+  var a00 = a.m00, a01 = a.m01, a02 = a.m02, a03 = a.m03,
     a10 = a.m04, a11 = a.m05, a12 = a.m06, a13 = a.m07,
     a20 = a.m08, a21 = a.m09, a22 = a.m10, a23 = a.m11,
     a30 = a.m12, a31 = a.m13, a32 = a.m14, a33 = a.m15;
 
-// Cache only the current line of the second matrix
-var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03;
-out.m00 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-out.m01 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-out.m02 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-out.m03 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  // Cache only the current line of the second matrix
+  var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03;
+  out.m00 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out.m01 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out.m02 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out.m03 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-b0 = b.m04; b1 = b.m05; b2 = b.m06; b3 = b.m07;
-out.m04 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-out.m05 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-out.m06 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-out.m07 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b.m04; b1 = b.m05; b2 = b.m06; b3 = b.m07;
+  out.m04 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out.m05 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out.m06 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out.m07 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-b0 = b.m08; b1 = b.m09; b2 = b.m10; b3 = b.m11;
-out.m08 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-out.m09 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-out.m10 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-out.m11 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b.m08; b1 = b.m09; b2 = b.m10; b3 = b.m11;
+  out.m08 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out.m09 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out.m10 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out.m11 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-b0 = b.m12; b1 = b.m13; b2 = b.m14; b3 = b.m15;
-out.m12 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-out.m13 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-out.m14 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-out.m15 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-return out;
+  b0 = b.m12; b1 = b.m13; b2 = b.m14; b3 = b.m15;
+  out.m12 = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out.m13 = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out.m14 = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out.m15 = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  return out;
 };
 
 /**
  * Alias of {@link mat4.multiply}.
  */
-mat4.mul = function mul (out, a, b)
-{
-return mat4.multiply(out, a, b);
+mat4.mul = function mul (out, a, b) {
+  return mat4.multiply(out, a, b);
 };
 
 /**
@@ -9498,34 +9188,33 @@ return mat4.multiply(out, a, b);
  * @param {vec3} v - The translation offset.
  * @returns {mat4} out.
  */
-mat4.translate = function translate (out, a, v)
-{
-var x = v.x, y = v.y, z = v.z,
+mat4.translate = function translate (out, a, v) {
+  var x = v.x, y = v.y, z = v.z,
     a00, a01, a02, a03,
     a10, a11, a12, a13,
     a20, a21, a22, a23;
 
-if (a === out) {
-  out.m12 = a.m00 * x + a.m04 * y + a.m08 * z + a.m12;
-  out.m13 = a.m01 * x + a.m05 * y + a.m09 * z + a.m13;
-  out.m14 = a.m02 * x + a.m06 * y + a.m10 * z + a.m14;
-  out.m15 = a.m03 * x + a.m07 * y + a.m11 * z + a.m15;
-} else {
-  a00 = a.m00; a01 = a.m01; a02 = a.m02; a03 = a.m03;
-  a10 = a.m04; a11 = a.m05; a12 = a.m06; a13 = a.m07;
-  a20 = a.m08; a21 = a.m09; a22 = a.m10; a23 = a.m11;
+  if (a === out) {
+    out.m12 = a.m00 * x + a.m04 * y + a.m08 * z + a.m12;
+    out.m13 = a.m01 * x + a.m05 * y + a.m09 * z + a.m13;
+    out.m14 = a.m02 * x + a.m06 * y + a.m10 * z + a.m14;
+    out.m15 = a.m03 * x + a.m07 * y + a.m11 * z + a.m15;
+  } else {
+    a00 = a.m00; a01 = a.m01; a02 = a.m02; a03 = a.m03;
+    a10 = a.m04; a11 = a.m05; a12 = a.m06; a13 = a.m07;
+    a20 = a.m08; a21 = a.m09; a22 = a.m10; a23 = a.m11;
 
-  out.m00 = a00; out.m01 = a01; out.m02 = a02; out.m03 = a03;
-  out.m04 = a10; out.m05 = a11; out.m06 = a12; out.m07 = a13;
-  out.m08 = a20; out.m09 = a21; out.m10 = a22; out.m11 = a23;
+    out.m00 = a00; out.m01 = a01; out.m02 = a02; out.m03 = a03;
+    out.m04 = a10; out.m05 = a11; out.m06 = a12; out.m07 = a13;
+    out.m08 = a20; out.m09 = a21; out.m10 = a22; out.m11 = a23;
 
-  out.m12 = a00 * x + a10 * y + a20 * z + a.m12;
-  out.m13 = a01 * x + a11 * y + a21 * z + a.m13;
-  out.m14 = a02 * x + a12 * y + a22 * z + a.m14;
-  out.m15 = a03 * x + a13 * y + a23 * z + a.m15;
-}
+    out.m12 = a00 * x + a10 * y + a20 * z + a.m12;
+    out.m13 = a01 * x + a11 * y + a21 * z + a.m13;
+    out.m14 = a02 * x + a12 * y + a22 * z + a.m14;
+    out.m15 = a03 * x + a13 * y + a23 * z + a.m15;
+  }
 
-return out;
+  return out;
 };
 
 /**
@@ -9536,27 +9225,26 @@ return out;
  * @param {vec3} v - The scale vector.
  * @returns {mat4} out
  **/
-mat4.scale = function scale (out, a, v)
-{
-var x = v.x, y = v.y, z = v.z;
+mat4.scale = function scale (out, a, v) {
+  var x = v.x, y = v.y, z = v.z;
 
-out.m00 = a.m00 * x;
-out.m01 = a.m01 * x;
-out.m02 = a.m02 * x;
-out.m03 = a.m03 * x;
-out.m04 = a.m04 * y;
-out.m05 = a.m05 * y;
-out.m06 = a.m06 * y;
-out.m07 = a.m07 * y;
-out.m08 = a.m08 * z;
-out.m09 = a.m09 * z;
-out.m10 = a.m10 * z;
-out.m11 = a.m11 * z;
-out.m12 = a.m12;
-out.m13 = a.m13;
-out.m14 = a.m14;
-out.m15 = a.m15;
-return out;
+  out.m00 = a.m00 * x;
+  out.m01 = a.m01 * x;
+  out.m02 = a.m02 * x;
+  out.m03 = a.m03 * x;
+  out.m04 = a.m04 * y;
+  out.m05 = a.m05 * y;
+  out.m06 = a.m06 * y;
+  out.m07 = a.m07 * y;
+  out.m08 = a.m08 * z;
+  out.m09 = a.m09 * z;
+  out.m10 = a.m10 * z;
+  out.m11 = a.m11 * z;
+  out.m12 = a.m12;
+  out.m13 = a.m13;
+  out.m14 = a.m14;
+  out.m15 = a.m15;
+  return out;
 };
 
 /**
@@ -9568,10 +9256,9 @@ return out;
  * @param {vec3} axis - The rotation axis.
  * @returns {mat4} out.
  */
-mat4.rotate = function rotate (out, a, rad, axis)
-{
-var x = axis.x, y = axis.y, z = axis.z;
-var s, c, t,
+mat4.rotate = function rotate (out, a, rad, axis) {
+  var x = axis.x, y = axis.y, z = axis.z;
+  var s, c, t,
     a00, a01, a02, a03,
     a10, a11, a12, a13,
     a20, a21, a22, a23,
@@ -9579,53 +9266,53 @@ var s, c, t,
     b10, b11, b12,
     b20, b21, b22;
 
-var len = Math.sqrt(x * x + y * y + z * z);
+  var len = Math.sqrt(x * x + y * y + z * z);
 
-if (Math.abs(len) < EPSILON) {
-  return null;
-}
+  if (Math.abs(len) < EPSILON) {
+    return null;
+  }
 
-len = 1 / len;
-x *= len;
-y *= len;
-z *= len;
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
 
-s = Math.sin(rad);
-c = Math.cos(rad);
-t = 1 - c;
+  s = Math.sin(rad);
+  c = Math.cos(rad);
+  t = 1 - c;
 
-a00 = a.m00; a01 = a.m01; a02 = a.m02; a03 = a.m03;
-a10 = a.m04; a11 = a.m05; a12 = a.m06; a13 = a.m07;
-a20 = a.m08; a21 = a.m09; a22 = a.m10; a23 = a.m11;
+  a00 = a.m00; a01 = a.m01; a02 = a.m02; a03 = a.m03;
+  a10 = a.m04; a11 = a.m05; a12 = a.m06; a13 = a.m07;
+  a20 = a.m08; a21 = a.m09; a22 = a.m10; a23 = a.m11;
 
-// Construct the elements of the rotation matrix
-b00 = x * x * t + c; b01 = y * x * t + z * s; b02 = z * x * t - y * s;
-b10 = x * y * t - z * s; b11 = y * y * t + c; b12 = z * y * t + x * s;
-b20 = x * z * t + y * s; b21 = y * z * t - x * s; b22 = z * z * t + c;
+  // Construct the elements of the rotation matrix
+  b00 = x * x * t + c; b01 = y * x * t + z * s; b02 = z * x * t - y * s;
+  b10 = x * y * t - z * s; b11 = y * y * t + c; b12 = z * y * t + x * s;
+  b20 = x * z * t + y * s; b21 = y * z * t - x * s; b22 = z * z * t + c;
 
-// Perform rotation-specific matrix multiplication
-out.m00 = a00 * b00 + a10 * b01 + a20 * b02;
-out.m01 = a01 * b00 + a11 * b01 + a21 * b02;
-out.m02 = a02 * b00 + a12 * b01 + a22 * b02;
-out.m03 = a03 * b00 + a13 * b01 + a23 * b02;
-out.m04 = a00 * b10 + a10 * b11 + a20 * b12;
-out.m05 = a01 * b10 + a11 * b11 + a21 * b12;
-out.m06 = a02 * b10 + a12 * b11 + a22 * b12;
-out.m07 = a03 * b10 + a13 * b11 + a23 * b12;
-out.m08 = a00 * b20 + a10 * b21 + a20 * b22;
-out.m09 = a01 * b20 + a11 * b21 + a21 * b22;
-out.m10 = a02 * b20 + a12 * b21 + a22 * b22;
-out.m11 = a03 * b20 + a13 * b21 + a23 * b22;
+  // Perform rotation-specific matrix multiplication
+  out.m00 = a00 * b00 + a10 * b01 + a20 * b02;
+  out.m01 = a01 * b00 + a11 * b01 + a21 * b02;
+  out.m02 = a02 * b00 + a12 * b01 + a22 * b02;
+  out.m03 = a03 * b00 + a13 * b01 + a23 * b02;
+  out.m04 = a00 * b10 + a10 * b11 + a20 * b12;
+  out.m05 = a01 * b10 + a11 * b11 + a21 * b12;
+  out.m06 = a02 * b10 + a12 * b11 + a22 * b12;
+  out.m07 = a03 * b10 + a13 * b11 + a23 * b12;
+  out.m08 = a00 * b20 + a10 * b21 + a20 * b22;
+  out.m09 = a01 * b20 + a11 * b21 + a21 * b22;
+  out.m10 = a02 * b20 + a12 * b21 + a22 * b22;
+  out.m11 = a03 * b20 + a13 * b21 + a23 * b22;
 
-// If the source and destination differ, copy the unchanged last row
-if (a !== out) {
-  out.m12 = a.m12;
-  out.m13 = a.m13;
-  out.m14 = a.m14;
-  out.m15 = a.m15;
-}
+  // If the source and destination differ, copy the unchanged last row
+  if (a !== out) {
+    out.m12 = a.m12;
+    out.m13 = a.m13;
+    out.m14 = a.m14;
+    out.m15 = a.m15;
+  }
 
-return out;
+  return out;
 };
 
 /**
@@ -9636,9 +9323,8 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat4} out.
  */
-mat4.rotateX = function rotateX (out, a, rad)
-{
-var s = Math.sin(rad),
+mat4.rotateX = function rotateX (out, a, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad),
     a10 = a.m04,
     a11 = a.m05,
@@ -9649,28 +9335,28 @@ var s = Math.sin(rad),
     a22 = a.m10,
     a23 = a.m11;
 
-if (a !== out) { // If the source and destination differ, copy the unchanged rows
-  out.m00 = a.m00;
-  out.m01 = a.m01;
-  out.m02 = a.m02;
-  out.m03 = a.m03;
-  out.m12 = a.m12;
-  out.m13 = a.m13;
-  out.m14 = a.m14;
-  out.m15 = a.m15;
-}
+  if (a !== out) { // If the source and destination differ, copy the unchanged rows
+    out.m00 = a.m00;
+    out.m01 = a.m01;
+    out.m02 = a.m02;
+    out.m03 = a.m03;
+    out.m12 = a.m12;
+    out.m13 = a.m13;
+    out.m14 = a.m14;
+    out.m15 = a.m15;
+  }
 
-// Perform axis-specific matrix multiplication
-out.m04 = a10 * c + a20 * s;
-out.m05 = a11 * c + a21 * s;
-out.m06 = a12 * c + a22 * s;
-out.m07 = a13 * c + a23 * s;
-out.m08 = a20 * c - a10 * s;
-out.m09 = a21 * c - a11 * s;
-out.m10 = a22 * c - a12 * s;
-out.m11 = a23 * c - a13 * s;
+  // Perform axis-specific matrix multiplication
+  out.m04 = a10 * c + a20 * s;
+  out.m05 = a11 * c + a21 * s;
+  out.m06 = a12 * c + a22 * s;
+  out.m07 = a13 * c + a23 * s;
+  out.m08 = a20 * c - a10 * s;
+  out.m09 = a21 * c - a11 * s;
+  out.m10 = a22 * c - a12 * s;
+  out.m11 = a23 * c - a13 * s;
 
-return out;
+  return out;
 };
 
 /**
@@ -9681,9 +9367,8 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat4} out.
  */
-mat4.rotateY = function rotateY (out, a, rad)
-{
-var s = Math.sin(rad),
+mat4.rotateY = function rotateY (out, a, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad),
     a00 = a.m00,
     a01 = a.m01,
@@ -9694,28 +9379,28 @@ var s = Math.sin(rad),
     a22 = a.m10,
     a23 = a.m11;
 
-if (a !== out) { // If the source and destination differ, copy the unchanged rows
-  out.m04 = a.m04;
-  out.m05 = a.m05;
-  out.m06 = a.m06;
-  out.m07 = a.m07;
-  out.m12 = a.m12;
-  out.m13 = a.m13;
-  out.m14 = a.m14;
-  out.m15 = a.m15;
-}
+  if (a !== out) { // If the source and destination differ, copy the unchanged rows
+    out.m04 = a.m04;
+    out.m05 = a.m05;
+    out.m06 = a.m06;
+    out.m07 = a.m07;
+    out.m12 = a.m12;
+    out.m13 = a.m13;
+    out.m14 = a.m14;
+    out.m15 = a.m15;
+  }
 
-// Perform axis-specific matrix multiplication
-out.m00 = a00 * c - a20 * s;
-out.m01 = a01 * c - a21 * s;
-out.m02 = a02 * c - a22 * s;
-out.m03 = a03 * c - a23 * s;
-out.m08 = a00 * s + a20 * c;
-out.m09 = a01 * s + a21 * c;
-out.m10 = a02 * s + a22 * c;
-out.m11 = a03 * s + a23 * c;
+  // Perform axis-specific matrix multiplication
+  out.m00 = a00 * c - a20 * s;
+  out.m01 = a01 * c - a21 * s;
+  out.m02 = a02 * c - a22 * s;
+  out.m03 = a03 * c - a23 * s;
+  out.m08 = a00 * s + a20 * c;
+  out.m09 = a01 * s + a21 * c;
+  out.m10 = a02 * s + a22 * c;
+  out.m11 = a03 * s + a23 * c;
 
-return out;
+  return out;
 };
 
 /**
@@ -9726,9 +9411,8 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat4} out.
  */
-mat4.rotateZ = function rotateZ (out, a, rad)
-{
-var s = Math.sin(rad),
+mat4.rotateZ = function rotateZ (out, a, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad),
     a00 = a.m00,
     a01 = a.m01,
@@ -9739,29 +9423,29 @@ var s = Math.sin(rad),
     a12 = a.m06,
     a13 = a.m07;
 
-// If the source and destination differ, copy the unchanged last row
-if (a !== out) {
-  out.m08 = a.m08;
-  out.m09 = a.m09;
-  out.m10 = a.m10;
-  out.m11 = a.m11;
-  out.m12 = a.m12;
-  out.m13 = a.m13;
-  out.m14 = a.m14;
-  out.m15 = a.m15;
-}
+  // If the source and destination differ, copy the unchanged last row
+  if (a !== out) {
+    out.m08 = a.m08;
+    out.m09 = a.m09;
+    out.m10 = a.m10;
+    out.m11 = a.m11;
+    out.m12 = a.m12;
+    out.m13 = a.m13;
+    out.m14 = a.m14;
+    out.m15 = a.m15;
+  }
 
-// Perform axis-specific matrix multiplication
-out.m00 = a00 * c + a10 * s;
-out.m01 = a01 * c + a11 * s;
-out.m02 = a02 * c + a12 * s;
-out.m03 = a03 * c + a13 * s;
-out.m04 = a10 * c - a00 * s;
-out.m05 = a11 * c - a01 * s;
-out.m06 = a12 * c - a02 * s;
-out.m07 = a13 * c - a03 * s;
+  // Perform axis-specific matrix multiplication
+  out.m00 = a00 * c + a10 * s;
+  out.m01 = a01 * c + a11 * s;
+  out.m02 = a02 * c + a12 * s;
+  out.m03 = a03 * c + a13 * s;
+  out.m04 = a10 * c - a00 * s;
+  out.m05 = a11 * c - a01 * s;
+  out.m06 = a12 * c - a02 * s;
+  out.m07 = a13 * c - a03 * s;
 
-return out;
+  return out;
 };
 
 /**
@@ -9775,25 +9459,24 @@ return out;
  * @param {vec3} v - The translation offset.
  * @returns {mat4} out.
  */
-mat4.fromTranslation = function fromTranslation (out, v)
-{
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = 1;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = 0;
-out.m10 = 1;
-out.m11 = 0;
-out.m12 = v.x;
-out.m13 = v.y;
-out.m14 = v.z;
-out.m15 = 1;
-return out;
+mat4.fromTranslation = function fromTranslation (out, v) {
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = 1;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = 0;
+  out.m10 = 1;
+  out.m11 = 0;
+  out.m12 = v.x;
+  out.m13 = v.y;
+  out.m14 = v.z;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -9807,25 +9490,24 @@ return out;
  * @param {vec3} v - The scale vector.
  * @returns {mat4} out.
  */
-mat4.fromScaling = function fromScaling (out, v)
-{
-out.m00 = v.x;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = v.y;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = 0;
-out.m10 = v.z;
-out.m11 = 0;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
-return out;
+mat4.fromScaling = function fromScaling (out, v) {
+  out.m00 = v.x;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = v.y;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = 0;
+  out.m10 = v.z;
+  out.m11 = 0;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -9840,43 +9522,42 @@ return out;
  * @param {vec3} axis - The rotation axis.
  * @returns {mat4} out.
  */
-mat4.fromRotation = function fromRotation (out, rad, axis)
-{
-var x = axis.x, y = axis.y, z = axis.z;
-var len = Math.sqrt(x * x + y * y + z * z);
-var s, c, t;
+mat4.fromRotation = function fromRotation (out, rad, axis) {
+  var x = axis.x, y = axis.y, z = axis.z;
+  var len = Math.sqrt(x * x + y * y + z * z);
+  var s, c, t;
 
-if (Math.abs(len) < EPSILON) {
-  return null;
-}
+  if (Math.abs(len) < EPSILON) {
+    return null;
+  }
 
-len = 1 / len;
-x *= len;
-y *= len;
-z *= len;
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
 
-s = Math.sin(rad);
-c = Math.cos(rad);
-t = 1 - c;
+  s = Math.sin(rad);
+  c = Math.cos(rad);
+  t = 1 - c;
 
-// Perform rotation-specific matrix multiplication
-out.m00 = x * x * t + c;
-out.m01 = y * x * t + z * s;
-out.m02 = z * x * t - y * s;
-out.m03 = 0;
-out.m04 = x * y * t - z * s;
-out.m05 = y * y * t + c;
-out.m06 = z * y * t + x * s;
-out.m07 = 0;
-out.m08 = x * z * t + y * s;
-out.m09 = y * z * t - x * s;
-out.m10 = z * z * t + c;
-out.m11 = 0;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
-return out;
+  // Perform rotation-specific matrix multiplication
+  out.m00 = x * x * t + c;
+  out.m01 = y * x * t + z * s;
+  out.m02 = z * x * t - y * s;
+  out.m03 = 0;
+  out.m04 = x * y * t - z * s;
+  out.m05 = y * y * t + c;
+  out.m06 = z * y * t + x * s;
+  out.m07 = 0;
+  out.m08 = x * z * t + y * s;
+  out.m09 = y * z * t - x * s;
+  out.m10 = z * z * t + c;
+  out.m11 = 0;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -9890,29 +9571,28 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat4} out.
  */
-mat4.fromXRotation = function fromXRotation (out, rad)
-{
-var s = Math.sin(rad),
+mat4.fromXRotation = function fromXRotation (out, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad);
 
-// Perform axis-specific matrix multiplication
-out.m00 = 1;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = c;
-out.m06 = s;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = -s;
-out.m10 = c;
-out.m11 = 0;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
-return out;
+  // Perform axis-specific matrix multiplication
+  out.m00 = 1;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = c;
+  out.m06 = s;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = -s;
+  out.m10 = c;
+  out.m11 = 0;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -9926,29 +9606,28 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat4} out.
  */
-mat4.fromYRotation = function fromYRotation (out, rad)
-{
-var s = Math.sin(rad),
+mat4.fromYRotation = function fromYRotation (out, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad);
 
-// Perform axis-specific matrix multiplication
-out.m00 = c;
-out.m01 = 0;
-out.m02 = -s;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = 1;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = s;
-out.m09 = 0;
-out.m10 = c;
-out.m11 = 0;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
-return out;
+  // Perform axis-specific matrix multiplication
+  out.m00 = c;
+  out.m01 = 0;
+  out.m02 = -s;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = 1;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = s;
+  out.m09 = 0;
+  out.m10 = c;
+  out.m11 = 0;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -9962,29 +9641,28 @@ return out;
  * @param {Number} rad - The rotation angle.
  * @returns {mat4} out.
  */
-mat4.fromZRotation = function fromZRotation (out, rad)
-{
-var s = Math.sin(rad),
+mat4.fromZRotation = function fromZRotation (out, rad) {
+  var s = Math.sin(rad),
     c = Math.cos(rad);
 
-// Perform axis-specific matrix multiplication
-out.m00 = c;
-out.m01 = s;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = -s;
-out.m05 = c;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = 0;
-out.m10 = 1;
-out.m11 = 0;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
-return out;
+  // Perform axis-specific matrix multiplication
+  out.m00 = c;
+  out.m01 = s;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = -s;
+  out.m05 = c;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = 0;
+  out.m10 = 1;
+  out.m11 = 0;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -10002,42 +9680,41 @@ return out;
  * @param {vec3} v - Translation vector.
  * @returns {mat4} out.
  */
-mat4.fromRT = function fromRT (out, q, v)
-{
-// Quaternion math
-var x = q.x, y = q.y, z = q.z, w = q.w;
-var x2 = x + x;
-var y2 = y + y;
-var z2 = z + z;
+mat4.fromRT = function fromRT (out, q, v) {
+  // Quaternion math
+  var x = q.x, y = q.y, z = q.z, w = q.w;
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
 
-var xx = x * x2;
-var xy = x * y2;
-var xz = x * z2;
-var yy = y * y2;
-var yz = y * z2;
-var zz = z * z2;
-var wx = w * x2;
-var wy = w * y2;
-var wz = w * z2;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
 
-out.m00 = 1 - (yy + zz);
-out.m01 = xy + wz;
-out.m02 = xz - wy;
-out.m03 = 0;
-out.m04 = xy - wz;
-out.m05 = 1 - (xx + zz);
-out.m06 = yz + wx;
-out.m07 = 0;
-out.m08 = xz + wy;
-out.m09 = yz - wx;
-out.m10 = 1 - (xx + yy);
-out.m11 = 0;
-out.m12 = v.x;
-out.m13 = v.y;
-out.m14 = v.z;
-out.m15 = 1;
+  out.m00 = 1 - (yy + zz);
+  out.m01 = xy + wz;
+  out.m02 = xz - wy;
+  out.m03 = 0;
+  out.m04 = xy - wz;
+  out.m05 = 1 - (xx + zz);
+  out.m06 = yz + wx;
+  out.m07 = 0;
+  out.m08 = xz + wy;
+  out.m09 = yz - wx;
+  out.m10 = 1 - (xx + yy);
+  out.m11 = 0;
+  out.m12 = v.x;
+  out.m13 = v.y;
+  out.m14 = v.z;
+  out.m15 = 1;
 
-return out;
+  return out;
 };
 
 /**
@@ -10049,13 +9726,12 @@ return out;
  * @param{mat4} mat - Matrix to be decomposed.
  * @return {vec3} out.
  */
-mat4.getTranslation = function getTranslation (out, mat)
-{
-out.x = mat.m12;
-out.y = mat.m13;
-out.z = mat.m14;
+mat4.getTranslation = function getTranslation (out, mat) {
+  out.x = mat.m12;
+  out.y = mat.m13;
+  out.z = mat.m14;
 
-return out;
+  return out;
 };
 
 /**
@@ -10068,9 +9744,8 @@ return out;
  * @param{mat4} mat - Matrix to be decomposed.
  * @return {vec3} out.
  */
-mat4.getScaling = function getScaling (out, mat)
-{
-var m11 = mat.m00,
+mat4.getScaling = function getScaling (out, mat) {
+  var m11 = mat.m00,
     m12 = mat.m01,
     m13 = mat.m02,
     m21 = mat.m04,
@@ -10080,11 +9755,11 @@ var m11 = mat.m00,
     m32 = mat.m09,
     m33 = mat.m10;
 
-out.x = Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13);
-out.y = Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23);
-out.z = Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33);
+  out.x = Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13);
+  out.y = Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23);
+  out.z = Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33);
 
-return out;
+  return out;
 };
 
 /**
@@ -10096,39 +9771,38 @@ return out;
  * @param {mat4} mat - Matrix to be decomposed.
  * @return {quat} out.
  */
-mat4.getRotation = function getRotation (out, mat)
-{
-// Algorithm taken from http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-var trace = mat.m00 + mat.m05 + mat.m10;
-var S = 0;
+mat4.getRotation = function getRotation (out, mat) {
+  // Algorithm taken from http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+  var trace = mat.m00 + mat.m05 + mat.m10;
+  var S = 0;
 
-if (trace > 0) {
-  S = Math.sqrt(trace + 1.0) * 2;
-  out.w = 0.25 * S;
-  out.x = (mat.m06 - mat.m09) / S;
-  out.y = (mat.m08 - mat.m02) / S;
-  out.z = (mat.m01 - mat.m04) / S;
-} else if ((mat.m00 > mat.m05) & (mat.m00 > mat.m10)) {
-  S = Math.sqrt(1.0 + mat.m00 - mat.m05 - mat.m10) * 2;
-  out.w = (mat.m06 - mat.m09) / S;
-  out.x = 0.25 * S;
-  out.y = (mat.m01 + mat.m04) / S;
-  out.z = (mat.m08 + mat.m02) / S;
-} else if (mat.m05 > mat.m10) {
-  S = Math.sqrt(1.0 + mat.m05 - mat.m00 - mat.m10) * 2;
-  out.w = (mat.m08 - mat.m02) / S;
-  out.x = (mat.m01 + mat.m04) / S;
-  out.y = 0.25 * S;
-  out.z = (mat.m06 + mat.m09) / S;
-} else {
-  S = Math.sqrt(1.0 + mat.m10 - mat.m00 - mat.m05) * 2;
-  out.w = (mat.m01 - mat.m04) / S;
-  out.x = (mat.m08 + mat.m02) / S;
-  out.y = (mat.m06 + mat.m09) / S;
-  out.z = 0.25 * S;
-}
+  if (trace > 0) {
+    S = Math.sqrt(trace + 1.0) * 2;
+    out.w = 0.25 * S;
+    out.x = (mat.m06 - mat.m09) / S;
+    out.y = (mat.m08 - mat.m02) / S;
+    out.z = (mat.m01 - mat.m04) / S;
+  } else if ((mat.m00 > mat.m05) & (mat.m00 > mat.m10)) {
+    S = Math.sqrt(1.0 + mat.m00 - mat.m05 - mat.m10) * 2;
+    out.w = (mat.m06 - mat.m09) / S;
+    out.x = 0.25 * S;
+    out.y = (mat.m01 + mat.m04) / S;
+    out.z = (mat.m08 + mat.m02) / S;
+  } else if (mat.m05 > mat.m10) {
+    S = Math.sqrt(1.0 + mat.m05 - mat.m00 - mat.m10) * 2;
+    out.w = (mat.m08 - mat.m02) / S;
+    out.x = (mat.m01 + mat.m04) / S;
+    out.y = 0.25 * S;
+    out.z = (mat.m06 + mat.m09) / S;
+  } else {
+    S = Math.sqrt(1.0 + mat.m10 - mat.m00 - mat.m05) * 2;
+    out.w = (mat.m01 - mat.m04) / S;
+    out.x = (mat.m08 + mat.m02) / S;
+    out.y = (mat.m06 + mat.m09) / S;
+    out.z = 0.25 * S;
+  }
 
-return out;
+  return out;
 };
 
 /**
@@ -10148,45 +9822,44 @@ return out;
  * @param {vec3} s - Scale vector.
  * @returns {mat4} out.
  */
-mat4.fromRTS = function fromRTS (out, q, v, s)
-{
-// Quaternion math
-var x = q.x, y = q.y, z = q.z, w = q.w;
-var x2 = x + x;
-var y2 = y + y;
-var z2 = z + z;
+mat4.fromRTS = function fromRTS (out, q, v, s) {
+  // Quaternion math
+  var x = q.x, y = q.y, z = q.z, w = q.w;
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
 
-var xx = x * x2;
-var xy = x * y2;
-var xz = x * z2;
-var yy = y * y2;
-var yz = y * z2;
-var zz = z * z2;
-var wx = w * x2;
-var wy = w * y2;
-var wz = w * z2;
-var sx = s.x;
-var sy = s.y;
-var sz = s.z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  var sx = s.x;
+  var sy = s.y;
+  var sz = s.z;
 
-out.m00 = (1 - (yy + zz)) * sx;
-out.m01 = (xy + wz) * sx;
-out.m02 = (xz - wy) * sx;
-out.m03 = 0;
-out.m04 = (xy - wz) * sy;
-out.m05 = (1 - (xx + zz)) * sy;
-out.m06 = (yz + wx) * sy;
-out.m07 = 0;
-out.m08 = (xz + wy) * sz;
-out.m09 = (yz - wx) * sz;
-out.m10 = (1 - (xx + yy)) * sz;
-out.m11 = 0;
-out.m12 = v.x;
-out.m13 = v.y;
-out.m14 = v.z;
-out.m15 = 1;
+  out.m00 = (1 - (yy + zz)) * sx;
+  out.m01 = (xy + wz) * sx;
+  out.m02 = (xz - wy) * sx;
+  out.m03 = 0;
+  out.m04 = (xy - wz) * sy;
+  out.m05 = (1 - (xx + zz)) * sy;
+  out.m06 = (yz + wx) * sy;
+  out.m07 = 0;
+  out.m08 = (xz + wy) * sz;
+  out.m09 = (yz - wx) * sz;
+  out.m10 = (1 - (xx + yy)) * sz;
+  out.m11 = 0;
+  out.m12 = v.x;
+  out.m13 = v.y;
+  out.m14 = v.z;
+  out.m15 = 1;
 
-return out;
+  return out;
 };
 
 /**
@@ -10209,50 +9882,49 @@ return out;
  * @param {vec3} o The origin vector around which to scale and rotate.
  * @returns {mat4} out.
  */
-mat4.fromRTSOrigin = function fromRTSOrigin (out, q, v, s, o)
-{
-// Quaternion math
-var x = q.x, y = q.y, z = q.z, w = q.w;
-var x2 = x + x;
-var y2 = y + y;
-var z2 = z + z;
+mat4.fromRTSOrigin = function fromRTSOrigin (out, q, v, s, o) {
+  // Quaternion math
+  var x = q.x, y = q.y, z = q.z, w = q.w;
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
 
-var xx = x * x2;
-var xy = x * y2;
-var xz = x * z2;
-var yy = y * y2;
-var yz = y * z2;
-var zz = z * z2;
-var wx = w * x2;
-var wy = w * y2;
-var wz = w * z2;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
 
-var sx = s.x;
-var sy = s.y;
-var sz = s.z;
+  var sx = s.x;
+  var sy = s.y;
+  var sz = s.z;
 
-var ox = o.x;
-var oy = o.y;
-var oz = o.z;
+  var ox = o.x;
+  var oy = o.y;
+  var oz = o.z;
 
-out.m00 = (1 - (yy + zz)) * sx;
-out.m01 = (xy + wz) * sx;
-out.m02 = (xz - wy) * sx;
-out.m03 = 0;
-out.m04 = (xy - wz) * sy;
-out.m05 = (1 - (xx + zz)) * sy;
-out.m06 = (yz + wx) * sy;
-out.m07 = 0;
-out.m08 = (xz + wy) * sz;
-out.m09 = (yz - wx) * sz;
-out.m10 = (1 - (xx + yy)) * sz;
-out.m11 = 0;
-out.m12 = v.x + ox - (out.m00 * ox + out.m04 * oy + out.m08 * oz);
-out.m13 = v.y + oy - (out.m01 * ox + out.m05 * oy + out.m09 * oz);
-out.m14 = v.z + oz - (out.m02 * ox + out.m06 * oy + out.m10 * oz);
-out.m15 = 1;
+  out.m00 = (1 - (yy + zz)) * sx;
+  out.m01 = (xy + wz) * sx;
+  out.m02 = (xz - wy) * sx;
+  out.m03 = 0;
+  out.m04 = (xy - wz) * sy;
+  out.m05 = (1 - (xx + zz)) * sy;
+  out.m06 = (yz + wx) * sy;
+  out.m07 = 0;
+  out.m08 = (xz + wy) * sz;
+  out.m09 = (yz - wx) * sz;
+  out.m10 = (1 - (xx + yy)) * sz;
+  out.m11 = 0;
+  out.m12 = v.x + ox - (out.m00 * ox + out.m04 * oy + out.m08 * oz);
+  out.m13 = v.y + oy - (out.m01 * ox + out.m05 * oy + out.m09 * oz);
+  out.m14 = v.z + oz - (out.m02 * ox + out.m06 * oy + out.m10 * oz);
+  out.m15 = 1;
 
-return out;
+  return out;
 };
 
 /**
@@ -10263,44 +9935,43 @@ return out;
  *
  * @returns {mat4} out.
  */
-mat4.fromQuat = function fromQuat (out, q)
-{
-var x = q.x, y = q.y, z = q.z, w = q.w;
-var x2 = x + x;
-var y2 = y + y;
-var z2 = z + z;
+mat4.fromQuat = function fromQuat (out, q) {
+  var x = q.x, y = q.y, z = q.z, w = q.w;
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
 
-var xx = x * x2;
-var yx = y * x2;
-var yy = y * y2;
-var zx = z * x2;
-var zy = z * y2;
-var zz = z * z2;
-var wx = w * x2;
-var wy = w * y2;
-var wz = w * z2;
+  var xx = x * x2;
+  var yx = y * x2;
+  var yy = y * y2;
+  var zx = z * x2;
+  var zy = z * y2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
 
-out.m00 = 1 - yy - zz;
-out.m01 = yx + wz;
-out.m02 = zx - wy;
-out.m03 = 0;
+  out.m00 = 1 - yy - zz;
+  out.m01 = yx + wz;
+  out.m02 = zx - wy;
+  out.m03 = 0;
 
-out.m04 = yx - wz;
-out.m05 = 1 - xx - zz;
-out.m06 = zy + wx;
-out.m07 = 0;
+  out.m04 = yx - wz;
+  out.m05 = 1 - xx - zz;
+  out.m06 = zy + wx;
+  out.m07 = 0;
 
-out.m08 = zx + wy;
-out.m09 = zy - wx;
-out.m10 = 1 - xx - yy;
-out.m11 = 0;
+  out.m08 = zx + wy;
+  out.m09 = zy - wx;
+  out.m10 = 1 - xx - yy;
+  out.m11 = 0;
 
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = 0;
-out.m15 = 1;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = 0;
+  out.m15 = 1;
 
-return out;
+  return out;
 };
 
 /**
@@ -10315,29 +9986,28 @@ return out;
  * @param {Number} far - Far bound of the frustum.
  * @returns {mat4} out.
  */
-mat4.frustum = function frustum (out, left, right, bottom, top, near, far)
-{
-var rl = 1 / (right - left);
-var tb = 1 / (top - bottom);
-var nf = 1 / (near - far);
+mat4.frustum = function frustum (out, left, right, bottom, top, near, far) {
+  var rl = 1 / (right - left);
+  var tb = 1 / (top - bottom);
+  var nf = 1 / (near - far);
 
-out.m00 = (near * 2) * rl;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = (near * 2) * tb;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = (right + left) * rl;
-out.m09 = (top + bottom) * tb;
-out.m10 = (far + near) * nf;
-out.m11 = -1;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = (far * near * 2) * nf;
-out.m15 = 0;
-return out;
+  out.m00 = (near * 2) * rl;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = (near * 2) * tb;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = (right + left) * rl;
+  out.m09 = (top + bottom) * tb;
+  out.m10 = (far + near) * nf;
+  out.m11 = -1;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = (far * near * 2) * nf;
+  out.m15 = 0;
+  return out;
 };
 
 /**
@@ -10350,28 +10020,27 @@ return out;
  * @param {number} far - Far bound of the frustum.
  * @returns {mat4} out.
  */
-mat4.perspective = function perspective (out, fovy, aspect, near, far)
-{
-var f = 1.0 / Math.tan(fovy / 2);
-var nf = 1 / (near - far);
+mat4.perspective = function perspective (out, fovy, aspect, near, far) {
+  var f = 1.0 / Math.tan(fovy / 2);
+  var nf = 1 / (near - far);
 
-out.m00 = f / aspect;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = f;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = 0;
-out.m10 = (far + near) * nf;
-out.m11 = -1;
-out.m12 = 0;
-out.m13 = 0;
-out.m14 = (2 * far * near) * nf;
-out.m15 = 0;
-return out;
+  out.m00 = f / aspect;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = f;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = 0;
+  out.m10 = (far + near) * nf;
+  out.m11 = -1;
+  out.m12 = 0;
+  out.m13 = 0;
+  out.m14 = (2 * far * near) * nf;
+  out.m15 = 0;
+  return out;
 };
 
 /**
@@ -10385,32 +10054,31 @@ return out;
  * @param {number} far - Far bound of the frustum.
  * @returns {mat4} out.
  */
-mat4.perspectiveFromFieldOfView = function perspectiveFromFieldOfView (out, fov, near, far)
-{
-var upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
-var downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
-var leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
-var rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
-var xScale = 2.0 / (leftTan + rightTan);
-var yScale = 2.0 / (upTan + downTan);
+mat4.perspectiveFromFieldOfView = function perspectiveFromFieldOfView (out, fov, near, far) {
+  var upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
+  var downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
+  var leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
+  var rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
+  var xScale = 2.0 / (leftTan + rightTan);
+  var yScale = 2.0 / (upTan + downTan);
 
-out.m00 = xScale;
-out.m01 = 0.0;
-out.m02 = 0.0;
-out.m03 = 0.0;
-out.m04 = 0.0;
-out.m05 = yScale;
-out.m06 = 0.0;
-out.m07 = 0.0;
-out.m08 = -((leftTan - rightTan) * xScale * 0.5);
-out.m09 = ((upTan - downTan) * yScale * 0.5);
-out.m10 = far / (near - far);
-out.m11 = -1.0;
-out.m12 = 0.0;
-out.m13 = 0.0;
-out.m14 = (far * near) / (near - far);
-out.m15 = 0.0;
-return out;
+  out.m00 = xScale;
+  out.m01 = 0.0;
+  out.m02 = 0.0;
+  out.m03 = 0.0;
+  out.m04 = 0.0;
+  out.m05 = yScale;
+  out.m06 = 0.0;
+  out.m07 = 0.0;
+  out.m08 = -((leftTan - rightTan) * xScale * 0.5);
+  out.m09 = ((upTan - downTan) * yScale * 0.5);
+  out.m10 = far / (near - far);
+  out.m11 = -1.0;
+  out.m12 = 0.0;
+  out.m13 = 0.0;
+  out.m14 = (far * near) / (near - far);
+  out.m15 = 0.0;
+  return out;
 };
 
 /**
@@ -10425,28 +10093,27 @@ return out;
  * @param {number} far - Far bound of the frustum.
  * @returns {mat4} out.
  */
-mat4.ortho = function ortho (out, left, right, bottom, top, near, far)
-{
-var lr = 1 / (left - right);
-var bt = 1 / (bottom - top);
-var nf = 1 / (near - far);
-out.m00 = -2 * lr;
-out.m01 = 0;
-out.m02 = 0;
-out.m03 = 0;
-out.m04 = 0;
-out.m05 = -2 * bt;
-out.m06 = 0;
-out.m07 = 0;
-out.m08 = 0;
-out.m09 = 0;
-out.m10 = 2 * nf;
-out.m11 = 0;
-out.m12 = (left + right) * lr;
-out.m13 = (top + bottom) * bt;
-out.m14 = (far + near) * nf;
-out.m15 = 1;
-return out;
+mat4.ortho = function ortho (out, left, right, bottom, top, near, far) {
+  var lr = 1 / (left - right);
+  var bt = 1 / (bottom - top);
+  var nf = 1 / (near - far);
+  out.m00 = -2 * lr;
+  out.m01 = 0;
+  out.m02 = 0;
+  out.m03 = 0;
+  out.m04 = 0;
+  out.m05 = -2 * bt;
+  out.m06 = 0;
+  out.m07 = 0;
+  out.m08 = 0;
+  out.m09 = 0;
+  out.m10 = 2 * nf;
+  out.m11 = 0;
+  out.m12 = (left + right) * lr;
+  out.m13 = (top + bottom) * bt;
+  out.m14 = (far + near) * nf;
+  out.m15 = 1;
+  return out;
 };
 
 /**
@@ -10458,85 +10125,84 @@ return out;
  * @param {vec3} up - Vector pointing up.
  * @returns {mat4} out
  */
-mat4.lookAt = function lookAt (out, eye, center, up)
-{
-var x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
-var eyex = eye.x;
-var eyey = eye.y;
-var eyez = eye.z;
-var upx = up.x;
-var upy = up.y;
-var upz = up.z;
-var centerx = center.x;
-var centery = center.y;
-var centerz = center.z;
+mat4.lookAt = function lookAt (out, eye, center, up) {
+  var x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
+  var eyex = eye.x;
+  var eyey = eye.y;
+  var eyez = eye.z;
+  var upx = up.x;
+  var upy = up.y;
+  var upz = up.z;
+  var centerx = center.x;
+  var centery = center.y;
+  var centerz = center.z;
 
-if (
-  Math.abs(eyex - centerx) < EPSILON &&
-  Math.abs(eyey - centery) < EPSILON &&
-  Math.abs(eyez - centerz) < EPSILON
-) {
-  return mat4.identity(out);
-}
+  if (
+    Math.abs(eyex - centerx) < EPSILON &&
+    Math.abs(eyey - centery) < EPSILON &&
+    Math.abs(eyez - centerz) < EPSILON
+  ) {
+    return mat4.identity(out);
+  }
 
-z0 = eyex - centerx;
-z1 = eyey - centery;
-z2 = eyez - centerz;
+  z0 = eyex - centerx;
+  z1 = eyey - centery;
+  z2 = eyez - centerz;
 
-len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
-z0 *= len;
-z1 *= len;
-z2 *= len;
+  len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
+  z0 *= len;
+  z1 *= len;
+  z2 *= len;
 
-x0 = upy * z2 - upz * z1;
-x1 = upz * z0 - upx * z2;
-x2 = upx * z1 - upy * z0;
-len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
-if (!len) {
-  x0 = 0;
-  x1 = 0;
-  x2 = 0;
-} else {
-  len = 1 / len;
-  x0 *= len;
-  x1 *= len;
-  x2 *= len;
-}
+  x0 = upy * z2 - upz * z1;
+  x1 = upz * z0 - upx * z2;
+  x2 = upx * z1 - upy * z0;
+  len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
+  if (!len) {
+    x0 = 0;
+    x1 = 0;
+    x2 = 0;
+  } else {
+    len = 1 / len;
+    x0 *= len;
+    x1 *= len;
+    x2 *= len;
+  }
 
-y0 = z1 * x2 - z2 * x1;
-y1 = z2 * x0 - z0 * x2;
-y2 = z0 * x1 - z1 * x0;
+  y0 = z1 * x2 - z2 * x1;
+  y1 = z2 * x0 - z0 * x2;
+  y2 = z0 * x1 - z1 * x0;
 
-len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
-if (!len) {
-  y0 = 0;
-  y1 = 0;
-  y2 = 0;
-} else {
-  len = 1 / len;
-  y0 *= len;
-  y1 *= len;
-  y2 *= len;
-}
+  len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
+  if (!len) {
+    y0 = 0;
+    y1 = 0;
+    y2 = 0;
+  } else {
+    len = 1 / len;
+    y0 *= len;
+    y1 *= len;
+    y2 *= len;
+  }
 
-out.m00 = x0;
-out.m01 = y0;
-out.m02 = z0;
-out.m03 = 0;
-out.m04 = x1;
-out.m05 = y1;
-out.m06 = z1;
-out.m07 = 0;
-out.m08 = x2;
-out.m09 = y2;
-out.m10 = z2;
-out.m11 = 0;
-out.m12 = -(x0 * eyex + x1 * eyey + x2 * eyez);
-out.m13 = -(y0 * eyex + y1 * eyey + y2 * eyez);
-out.m14 = -(z0 * eyex + z1 * eyey + z2 * eyez);
-out.m15 = 1;
+  out.m00 = x0;
+  out.m01 = y0;
+  out.m02 = z0;
+  out.m03 = 0;
+  out.m04 = x1;
+  out.m05 = y1;
+  out.m06 = z1;
+  out.m07 = 0;
+  out.m08 = x2;
+  out.m09 = y2;
+  out.m10 = z2;
+  out.m11 = 0;
+  out.m12 = -(x0 * eyex + x1 * eyey + x2 * eyez);
+  out.m13 = -(y0 * eyex + y1 * eyey + y2 * eyez);
+  out.m14 = -(z0 * eyex + z1 * eyey + z2 * eyez);
+  out.m15 = 1;
 
-return out;
+  return out;
 };
 
 /**
@@ -10545,8 +10211,7 @@ return out;
  * @param {mat4} a - The matrix.
  * @returns {String} String representation of this matrix.
  */
-mat4.str = function str (a)
-{
+mat4.str = function str (a) {
   return ("mat4(" + (a.m00) + ", " + (a.m01) + ", " + (a.m02) + ", " + (a.m03) + ", " + (a.m04) + ", " + (a.m05) + ", " + (a.m06) + ", " + (a.m07) + ", " + (a.m08) + ", " + (a.m09) + ", " + (a.m10) + ", " + (a.m11) + ", " + (a.m12) + ", " + (a.m13) + ", " + (a.m14) + ", " + (a.m15) + ")");
 };
 
@@ -10557,26 +10222,25 @@ mat4.str = function str (a)
  * @param {mat4} m - The matrix.
  * @returns {Array} out.
  */
-mat4.array = function array (out, m)
-{
-out[0] = m.m00;
-out[1] = m.m01;
-out[2] = m.m02;
-out[3] = m.m03;
-out[4] = m.m04;
-out[5] = m.m05;
-out[6] = m.m06;
-out[7] = m.m07;
-out[8] = m.m08;
-out[9] = m.m09;
-out[10] = m.m10;
-out[11] = m.m11;
-out[12] = m.m12;
-out[13] = m.m13;
-out[14] = m.m14;
-out[15] = m.m15;
+mat4.array = function array (out, m) {
+  out[0] = m.m00;
+  out[1] = m.m01;
+  out[2] = m.m02;
+  out[3] = m.m03;
+  out[4] = m.m04;
+  out[5] = m.m05;
+  out[6] = m.m06;
+  out[7] = m.m07;
+  out[8] = m.m08;
+  out[9] = m.m09;
+  out[10] = m.m10;
+  out[11] = m.m11;
+  out[12] = m.m12;
+  out[13] = m.m13;
+  out[14] = m.m14;
+  out[15] = m.m15;
 
-return out;
+  return out;
 };
 
 /**
@@ -10585,9 +10249,8 @@ return out;
  * @param {mat4} a - Matrix to calculate Frobenius norm of.
  * @returns {Number} - The frobenius norm.
  */
-mat4.frob = function frob (a)
-{
-return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2) + Math.pow(a.m04, 2) + Math.pow(a.m05, 2) + Math.pow(a.m06, 2) + Math.pow(a.m07, 2) + Math.pow(a.m08, 2) + Math.pow(a.m09, 2) + Math.pow(a.m10, 2) + Math.pow(a.m11, 2) + Math.pow(a.m12, 2) + Math.pow(a.m13, 2) + Math.pow(a.m14, 2) + Math.pow(a.m15, 2)))
+mat4.frob = function frob (a) {
+  return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) + Math.pow(a.m03, 2) + Math.pow(a.m04, 2) + Math.pow(a.m05, 2) + Math.pow(a.m06, 2) + Math.pow(a.m07, 2) + Math.pow(a.m08, 2) + Math.pow(a.m09, 2) + Math.pow(a.m10, 2) + Math.pow(a.m11, 2) + Math.pow(a.m12, 2) + Math.pow(a.m13, 2) + Math.pow(a.m14, 2) + Math.pow(a.m15, 2)))
 };
 
 /**
@@ -10598,25 +10261,24 @@ return (Math.sqrt(Math.pow(a.m00, 2) + Math.pow(a.m01, 2) + Math.pow(a.m02, 2) +
  * @param {mat4} b - The second operand.
  * @returns {mat4} out.
  */
-mat4.add = function add (out, a, b)
-{
-out.m00 = a.m00 + b.m00;
-out.m01 = a.m01 + b.m01;
-out.m02 = a.m02 + b.m02;
-out.m03 = a.m03 + b.m03;
-out.m04 = a.m04 + b.m04;
-out.m05 = a.m05 + b.m05;
-out.m06 = a.m06 + b.m06;
-out.m07 = a.m07 + b.m07;
-out.m08 = a.m08 + b.m08;
-out.m09 = a.m09 + b.m09;
-out.m10 = a.m10 + b.m10;
-out.m11 = a.m11 + b.m11;
-out.m12 = a.m12 + b.m12;
-out.m13 = a.m13 + b.m13;
-out.m14 = a.m14 + b.m14;
-out.m15 = a.m15 + b.m15;
-return out;
+mat4.add = function add (out, a, b) {
+  out.m00 = a.m00 + b.m00;
+  out.m01 = a.m01 + b.m01;
+  out.m02 = a.m02 + b.m02;
+  out.m03 = a.m03 + b.m03;
+  out.m04 = a.m04 + b.m04;
+  out.m05 = a.m05 + b.m05;
+  out.m06 = a.m06 + b.m06;
+  out.m07 = a.m07 + b.m07;
+  out.m08 = a.m08 + b.m08;
+  out.m09 = a.m09 + b.m09;
+  out.m10 = a.m10 + b.m10;
+  out.m11 = a.m11 + b.m11;
+  out.m12 = a.m12 + b.m12;
+  out.m13 = a.m13 + b.m13;
+  out.m14 = a.m14 + b.m14;
+  out.m15 = a.m15 + b.m15;
+  return out;
 };
 
 /**
@@ -10627,33 +10289,31 @@ return out;
  * @param {mat4} b - The second operand.
  * @returns {mat4} out.
  */
-mat4.subtract = function subtract (out, a, b)
-{
-out.m00 = a.m00 - b.m00;
-out.m01 = a.m01 - b.m01;
-out.m02 = a.m02 - b.m02;
-out.m03 = a.m03 - b.m03;
-out.m04 = a.m04 - b.m04;
-out.m05 = a.m05 - b.m05;
-out.m06 = a.m06 - b.m06;
-out.m07 = a.m07 - b.m07;
-out.m08 = a.m08 - b.m08;
-out.m09 = a.m09 - b.m09;
-out.m10 = a.m10 - b.m10;
-out.m11 = a.m11 - b.m11;
-out.m12 = a.m12 - b.m12;
-out.m13 = a.m13 - b.m13;
-out.m14 = a.m14 - b.m14;
-out.m15 = a.m15 - b.m15;
-return out;
+mat4.subtract = function subtract (out, a, b) {
+  out.m00 = a.m00 - b.m00;
+  out.m01 = a.m01 - b.m01;
+  out.m02 = a.m02 - b.m02;
+  out.m03 = a.m03 - b.m03;
+  out.m04 = a.m04 - b.m04;
+  out.m05 = a.m05 - b.m05;
+  out.m06 = a.m06 - b.m06;
+  out.m07 = a.m07 - b.m07;
+  out.m08 = a.m08 - b.m08;
+  out.m09 = a.m09 - b.m09;
+  out.m10 = a.m10 - b.m10;
+  out.m11 = a.m11 - b.m11;
+  out.m12 = a.m12 - b.m12;
+  out.m13 = a.m13 - b.m13;
+  out.m14 = a.m14 - b.m14;
+  out.m15 = a.m15 - b.m15;
+  return out;
 };
 
 /**
  * Alias of {@link mat4.subtract}.
  */
-mat4.sub = function sub (out, a, b)
-{
-return mat4.subtract(out, a, b);
+mat4.sub = function sub (out, a, b) {
+  return mat4.subtract(out, a, b);
 };
 
 /**
@@ -10664,25 +10324,24 @@ return mat4.subtract(out, a, b);
  * @param {Number} b - The scale number.
  * @returns {mat4} out.
  */
-mat4.multiplyScalar = function multiplyScalar (out, a, b)
-{
-out.m00 = a.m00 * b;
-out.m01 = a.m01 * b;
-out.m02 = a.m02 * b;
-out.m03 = a.m03 * b;
-out.m04 = a.m04 * b;
-out.m05 = a.m05 * b;
-out.m06 = a.m06 * b;
-out.m07 = a.m07 * b;
-out.m08 = a.m08 * b;
-out.m09 = a.m09 * b;
-out.m10 = a.m10 * b;
-out.m11 = a.m11 * b;
-out.m12 = a.m12 * b;
-out.m13 = a.m13 * b;
-out.m14 = a.m14 * b;
-out.m15 = a.m15 * b;
-return out;
+mat4.multiplyScalar = function multiplyScalar (out, a, b) {
+  out.m00 = a.m00 * b;
+  out.m01 = a.m01 * b;
+  out.m02 = a.m02 * b;
+  out.m03 = a.m03 * b;
+  out.m04 = a.m04 * b;
+  out.m05 = a.m05 * b;
+  out.m06 = a.m06 * b;
+  out.m07 = a.m07 * b;
+  out.m08 = a.m08 * b;
+  out.m09 = a.m09 * b;
+  out.m10 = a.m10 * b;
+  out.m11 = a.m11 * b;
+  out.m12 = a.m12 * b;
+  out.m13 = a.m13 * b;
+  out.m14 = a.m14 * b;
+  out.m15 = a.m15 * b;
+  return out;
 };
 
 /**
@@ -10694,25 +10353,24 @@ return out;
  * @param {Number} scale - The scale number.
  * @returns {mat4} out.
  */
-mat4.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale)
-{
-out.m00 = a.m00 + (b.m00 * scale);
-out.m01 = a.m01 + (b.m01 * scale);
-out.m02 = a.m02 + (b.m02 * scale);
-out.m03 = a.m03 + (b.m03 * scale);
-out.m04 = a.m04 + (b.m04 * scale);
-out.m05 = a.m05 + (b.m05 * scale);
-out.m06 = a.m06 + (b.m06 * scale);
-out.m07 = a.m07 + (b.m07 * scale);
-out.m08 = a.m08 + (b.m08 * scale);
-out.m09 = a.m09 + (b.m09 * scale);
-out.m10 = a.m10 + (b.m10 * scale);
-out.m11 = a.m11 + (b.m11 * scale);
-out.m12 = a.m12 + (b.m12 * scale);
-out.m13 = a.m13 + (b.m13 * scale);
-out.m14 = a.m14 + (b.m14 * scale);
-out.m15 = a.m15 + (b.m15 * scale);
-return out;
+mat4.multiplyScalarAndAdd = function multiplyScalarAndAdd (out, a, b, scale) {
+  out.m00 = a.m00 + (b.m00 * scale);
+  out.m01 = a.m01 + (b.m01 * scale);
+  out.m02 = a.m02 + (b.m02 * scale);
+  out.m03 = a.m03 + (b.m03 * scale);
+  out.m04 = a.m04 + (b.m04 * scale);
+  out.m05 = a.m05 + (b.m05 * scale);
+  out.m06 = a.m06 + (b.m06 * scale);
+  out.m07 = a.m07 + (b.m07 * scale);
+  out.m08 = a.m08 + (b.m08 * scale);
+  out.m09 = a.m09 + (b.m09 * scale);
+  out.m10 = a.m10 + (b.m10 * scale);
+  out.m11 = a.m11 + (b.m11 * scale);
+  out.m12 = a.m12 + (b.m12 * scale);
+  out.m13 = a.m13 + (b.m13 * scale);
+  out.m14 = a.m14 + (b.m14 * scale);
+  out.m15 = a.m15 + (b.m15 * scale);
+  return out;
 };
 
 /**
@@ -10722,12 +10380,11 @@ return out;
  * @param {mat4} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat4.exactEquals = function exactEquals (a, b)
-{
-return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03 &&
-  a.m04 === b.m04 && a.m05 === b.m05 && a.m06 === b.m06 && a.m07 === b.m07 &&
-  a.m08 === b.m08 && a.m09 === b.m09 && a.m10 === b.m10 && a.m11 === b.m11 &&
-  a.m12 === b.m12 && a.m13 === b.m13 && a.m14 === b.m14 && a.m15 === b.m15;
+mat4.exactEquals = function exactEquals (a, b) {
+  return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03 &&
+    a.m04 === b.m04 && a.m05 === b.m05 && a.m06 === b.m06 && a.m07 === b.m07 &&
+    a.m08 === b.m08 && a.m09 === b.m09 && a.m10 === b.m10 && a.m11 === b.m11 &&
+    a.m12 === b.m12 && a.m13 === b.m13 && a.m14 === b.m14 && a.m15 === b.m15;
 };
 
 /**
@@ -10737,55 +10394,55 @@ return a.m00 === b.m00 && a.m01 === b.m01 && a.m02 === b.m02 && a.m03 === b.m03 
  * @param {mat4} b - The second matrix.
  * @returns {Boolean} True if the matrices are equal, false otherwise.
  */
-mat4.equals = function equals$$1 (a, b)
-{
-var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03,
+mat4.equals = function equals$$1 (a, b) {
+  var a0 = a.m00, a1 = a.m01, a2 = a.m02, a3 = a.m03,
     a4 = a.m04, a5 = a.m05, a6 = a.m06, a7 = a.m07,
     a8 = a.m08, a9 = a.m09, a10 = a.m10, a11 = a.m11,
     a12 = a.m12, a13 = a.m13, a14 = a.m14, a15 = a.m15;
 
-var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03,
+  var b0 = b.m00, b1 = b.m01, b2 = b.m02, b3 = b.m03,
     b4 = b.m04, b5 = b.m05, b6 = b.m06, b7 = b.m07,
     b8 = b.m08, b9 = b.m09, b10 = b.m10, b11 = b.m11,
     b12 = b.m12, b13 = b.m13, b14 = b.m14, b15 = b.m15;
 
-return (
-  Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-  Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-  Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-  Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-  Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
-  Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
-  Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
-  Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
-  Math.abs(a8 - b8) <= EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) &&
-  Math.abs(a9 - b9) <= EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) &&
-  Math.abs(a10 - b10) <= EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) &&
-  Math.abs(a11 - b11) <= EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) &&
-  Math.abs(a12 - b12) <= EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) &&
-  Math.abs(a13 - b13) <= EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) &&
-  Math.abs(a14 - b14) <= EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) &&
-  Math.abs(a15 - b15) <= EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15))
-);
+  return (
+    Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+    Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+    Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+    Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+    Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+    Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
+    Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
+    Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
+    Math.abs(a8 - b8) <= EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) &&
+    Math.abs(a9 - b9) <= EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) &&
+    Math.abs(a10 - b10) <= EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) &&
+    Math.abs(a11 - b11) <= EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) &&
+    Math.abs(a12 - b12) <= EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) &&
+    Math.abs(a13 - b13) <= EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) &&
+    Math.abs(a14 - b14) <= EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) &&
+    Math.abs(a15 - b15) <= EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15))
+  );
 };
 
-var color3 = function color3(r, g, b)
-{
-/**
- * The r component.
- * @type {number}
- * */
-this.r = r;
-/**
- * The g component.
- * @type {number}
- * */
-this.g = g;
-/**
- * The b component.
- * @type {number}
- * */
-this.b = b;
+var color3 = function color3(r, g, b) {
+  /**
+   * The r component.
+   * @type {number}
+   * */
+  this.r = r;
+
+  /**
+   * The g component.
+   * @type {number}
+   * */
+  this.g = g;
+
+  /**
+   * The b component.
+   * @type {number}
+   * */
+  this.b = b;
 };
 
 /**
@@ -10796,9 +10453,8 @@ this.b = b;
  * @param {number} b - Value assigned to b component.
  * @return {color3} The newly created color.
  */
-color3.new = function new$1 (r, g, b)
-{
-return new color3(r, g, b);
+color3.new = function new$1 (r, g, b) {
+  return new color3(r, g, b);
 };
 
 /**
@@ -10806,9 +10462,8 @@ return new color3(r, g, b);
  *
  * @return {color3} The newly created color.
  */
-color3.create = function create ()
-{
-return new color3(1, 1, 1);
+color3.create = function create () {
+  return new color3(1, 1, 1);
 };
 
 /**
@@ -10817,8 +10472,7 @@ return new color3(1, 1, 1);
  * @param {color3} a - Color to clone.
  * @returns {color3} The newly created color.
  */
-color3.clone = function clone (a)
-{
+color3.clone = function clone (a) {
   return new color3(a.r, a.g, a.b);
 };
 
@@ -10829,12 +10483,11 @@ color3.clone = function clone (a)
  * @param {color3} a - The specified color.
  * @returns {color3} out.
  */
-color3.copy = function copy (out, a)
-{
-out.r = a.r;
-out.g = a.g;
-out.b = a.b;
-return out;
+color3.copy = function copy (out, a) {
+  out.r = a.r;
+  out.g = a.g;
+  out.b = a.b;
+  return out;
 };
 
 /**
@@ -10846,8 +10499,7 @@ return out;
  * @param {number} b - Value assigned to b component.
  * @returns {color3} out.
  */
-color3.set = function set (out, r, g, b)
-{
+color3.set = function set (out, r, g, b) {
   out.r = r;
   out.g = g;
   out.b = b;
@@ -10862,16 +10514,15 @@ color3.set = function set (out, r, g, b)
  * @returns {color3} out.
  * @function
  */
-color3.fromHex = function fromHex (out, hex)
-{
-var r = ((hex >> 16)) / 255.0;
-var g = ((hex >> 8) & 0xff) / 255.0;
-var b = ((hex) & 0xff) / 255.0;
+color3.fromHex = function fromHex (out, hex) {
+  var r = ((hex >> 16)) / 255.0;
+  var g = ((hex >> 8) & 0xff) / 255.0;
+  var b = ((hex) & 0xff) / 255.0;
 
-out.r = r;
-out.g = g;
-out.b = b;
-return out;
+  out.r = r;
+  out.g = g;
+  out.b = b;
+  return out;
 };
 
 /**
@@ -10882,12 +10533,11 @@ return out;
  * @param {color3} b - The second operand.
  * @returns {color3} out.
  */
-color3.add = function add (out, a, b)
-{
-out.r = a.r + b.r;
-out.g = a.g + b.g;
-out.b = a.b + b.b;
-return out;
+color3.add = function add (out, a, b) {
+  out.r = a.r + b.r;
+  out.g = a.g + b.g;
+  out.b = a.b + b.b;
+  return out;
 };
 
 /**
@@ -10898,20 +10548,18 @@ return out;
  * @param {color3} b - The b.
  * @returns {color3} out.
  */
-color3.subtract = function subtract (out, a, b)
-{
-out.r = a.r - b.r;
-out.g = a.g - b.g;
-out.b = a.b - b.b;
-return out;
+color3.subtract = function subtract (out, a, b) {
+  out.r = a.r - b.r;
+  out.g = a.g - b.g;
+  out.b = a.b - b.b;
+  return out;
 };
 
 /**
  * Alias of {@link color3.subtract}.
  */
-color3.sub = function sub (out, a, b)
-{
-return color3.subtract(out, a, b);
+color3.sub = function sub (out, a, b) {
+  return color3.subtract(out, a, b);
 };
 
 /**
@@ -10922,20 +10570,18 @@ return color3.subtract(out, a, b);
  * @param {color3} b - The second operand.
  * @returns {color3} out.
  */
-color3.multiply = function multiply (out, a, b)
-{
-out.r = a.r * b.r;
-out.g = a.g * b.g;
-out.b = a.b * b.b;
-return out;
+color3.multiply = function multiply (out, a, b) {
+  out.r = a.r * b.r;
+  out.g = a.g * b.g;
+  out.b = a.b * b.b;
+  return out;
 };
 
 /**
  * Alias of {@link color3.multiply}.
  */
-color3.mul = function mul (out, a, b)
-{
-return color3.multiply(out, a, b);
+color3.mul = function mul (out, a, b) {
+  return color3.multiply(out, a, b);
 };
 
 /**
@@ -10946,20 +10592,18 @@ return color3.multiply(out, a, b);
  * @param {color3} b - The second operand.
  * @returns {color3} out.
  */
-color3.divide = function divide (out, a, b)
-{
-out.r = a.r / b.r;
-out.g = a.g / b.g;
-out.b = a.b / b.b;
-return out;
+color3.divide = function divide (out, a, b) {
+  out.r = a.r / b.r;
+  out.g = a.g / b.g;
+  out.b = a.b / b.b;
+  return out;
 };
 
 /**
  * Alias of {@link color3.divide}.
  */
-color3.div = function div (out, a, b)
-{
-return color3.divide(out, a, b);
+color3.div = function div (out, a, b) {
+  return color3.divide(out, a, b);
 };
 
 /**
@@ -10970,12 +10614,11 @@ return color3.divide(out, a, b);
  * @param {number} b - The scale number.
  * @returns {color3} out.
  */
-color3.scale = function scale (out, a, b)
-{
-out.r = a.r * b;
-out.g = a.g * b;
-out.b = a.b * b;
-return out;
+color3.scale = function scale (out, a, b) {
+  out.r = a.r * b;
+  out.g = a.g * b;
+  out.b = a.b * b;
+  return out;
 };
 
 /**
@@ -10987,15 +10630,14 @@ return out;
  * @param {Number} t - The interpolation coefficient.
  * @returns {color3} out.
  */
-color3.lerp = function lerp$$1 (out, a, b, t)
-{
-var ar = a.r,
+color3.lerp = function lerp$$1 (out, a, b, t) {
+  var ar = a.r,
     ag = a.g,
     ab = a.b;
-out.r = ar + t * (b.r - ar);
-out.g = ag + t * (b.g - ag);
-out.b = ab + t * (b.b - ab);
-return out;
+  out.r = ar + t * (b.r - ar);
+  out.g = ag + t * (b.g - ag);
+  out.b = ab + t * (b.b - ab);
+  return out;
 };
 
 /**
@@ -11004,8 +10646,7 @@ return out;
  * @param {color3} a - The color.
  * @returns {String} - String representation of this color.
  */
-color3.str = function str (a)
-{
+color3.str = function str (a) {
   return ("color3(" + (a.r) + ", " + (a.g) + ", " + (a.b) + ")");
 };
 
@@ -11016,13 +10657,12 @@ color3.str = function str (a)
  * @param {color3} a - The color.
  * @returns {Array} out.
  */
-color3.array = function array (out, a)
-{
-out[0] = a.r;
-out[1] = a.g;
-out[2] = a.b;
+color3.array = function array (out, a) {
+  out[0] = a.r;
+  out[1] = a.g;
+  out[2] = a.b;
 
-return out;
+  return out;
 };
 
 /**
@@ -11032,9 +10672,8 @@ return out;
  * @param {color3} b - The second color.
  * @returns {Boolean} True if the colors are equal, false otherwise.
  */
-color3.exactEquals = function exactEquals (a, b)
-{
-return a.r === b.r && a.g === b.g && a.b === b.b;
+color3.exactEquals = function exactEquals (a, b) {
+  return a.r === b.r && a.g === b.g && a.b === b.b;
 };
 
 /**
@@ -11044,13 +10683,12 @@ return a.r === b.r && a.g === b.g && a.b === b.b;
  * @param {color3} b - The second color.
  * @returns {Boolean} True if the colors are approximately equal, false otherwise.
  */
-color3.equals = function equals$$1 (a, b)
-{
-var a0 = a.r, a1 = a.g, a2 = a.b;
-var b0 = b.r, b1 = b.g, b2 = b.b;
-return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-  Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-  Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)));
+color3.equals = function equals$$1 (a, b) {
+  var a0 = a.r, a1 = a.g, a2 = a.b;
+  var b0 = b.r, b1 = b.g, b2 = b.b;
+  return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+    Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+    Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)));
 };
 
 /**
@@ -11059,33 +10697,34 @@ return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
  * @param {color3} a - The color.
  * @returns {Number} - The color's hexadecimal formal.
  */
-color3.hex = function hex (a)
-{
-return (a.r * 255) << 16 | (a.g * 255) << 8 | (a.b * 255);
+color3.hex = function hex (a) {
+  return (a.r * 255) << 16 | (a.g * 255) << 8 | (a.b * 255);
 };
 
-var color4 = function color4(r, g, b, a)
-{
-/**
- * The r component.
- * @type {number}
- * */
-this.r = r;
-/**
- * The g component.
- * @type {number}
- * */
-this.g = g;
-/**
- * The b component.
- * @type {number}
- * */
-this.b = b;
-/**
- * The a component.
- * @type {number}
- * */
-this.a = a;
+var color4 = function color4(r, g, b, a) {
+  /**
+   * The r component.
+   * @type {number}
+   * */
+  this.r = r;
+
+  /**
+   * The g component.
+   * @type {number}
+   * */
+  this.g = g;
+
+  /**
+   * The b component.
+   * @type {number}
+   * */
+  this.b = b;
+
+  /**
+   * The a component.
+   * @type {number}
+   * */
+  this.a = a;
 };
 
 /**
@@ -11097,9 +10736,8 @@ this.a = a;
  * @param {number} a - Value assigned to a component.
  * @return {color4} The newly created color.
  */
-color4.new = function new$1 (r, g, b, a)
-{
-return new color4(r, g, b, a);
+color4.new = function new$1 (r, g, b, a) {
+  return new color4(r, g, b, a);
 };
 
 /**
@@ -11107,9 +10745,8 @@ return new color4(r, g, b, a);
  *
  * @return {color4} The newly created color.
  */
-color4.create = function create ()
-{
-return new color4(1, 1, 1, 1);
+color4.create = function create () {
+  return new color4(1, 1, 1, 1);
 };
 
 /**
@@ -11118,8 +10755,7 @@ return new color4(1, 1, 1, 1);
  * @param {color4} a - Color to clone.
  * @returns {color4} The newly created color.
  */
-color4.clone = function clone (a)
-{
+color4.clone = function clone (a) {
   return new color4(a.r, a.g, a.b, a.a);
 };
 
@@ -11130,13 +10766,12 @@ color4.clone = function clone (a)
  * @param {color4} a - The specified color.
  * @returns {color4} out.
  */
-color4.copy = function copy (out, a)
-{
-out.r = a.r;
-out.g = a.g;
-out.b = a.b;
-out.a = a.a;
-return out;
+color4.copy = function copy (out, a) {
+  out.r = a.r;
+  out.g = a.g;
+  out.b = a.b;
+  out.a = a.a;
+  return out;
 };
 
 /**
@@ -11149,8 +10784,7 @@ return out;
  * @param {number} a - Value assigned to a component.
  * @returns {color4} out.
  */
-color4.set = function set (out, r, g, b, a)
-{
+color4.set = function set (out, r, g, b, a) {
   out.r = r;
   out.g = g;
   out.b = b;
@@ -11166,18 +10800,17 @@ color4.set = function set (out, r, g, b, a)
  * @returns {color4} out.
  * @function
  */
-color4.fromHex = function fromHex (out, hex)
-{
-var r = ((hex >> 24)) / 255.0;
-var g = ((hex >> 16) & 0xff) / 255.0;
-var b = ((hex >> 8) & 0xff) / 255.0;
-var a = ((hex) & 0xff) / 255.0;
+color4.fromHex = function fromHex (out, hex) {
+  var r = ((hex >> 24)) / 255.0;
+  var g = ((hex >> 16) & 0xff) / 255.0;
+  var b = ((hex >> 8) & 0xff) / 255.0;
+  var a = ((hex) & 0xff) / 255.0;
 
-out.r = r;
-out.g = g;
-out.b = b;
-out.a = a;
-return out;
+  out.r = r;
+  out.g = g;
+  out.b = b;
+  out.a = a;
+  return out;
 };
 
 /**
@@ -11188,13 +10821,12 @@ return out;
  * @param {color4} b - The second operand.
  * @returns {color4} out.
  */
-color4.add = function add (out, a, b)
-{
-out.r = a.r + b.r;
-out.g = a.g + b.g;
-out.b = a.b + b.b;
-out.a = a.a + b.a;
-return out;
+color4.add = function add (out, a, b) {
+  out.r = a.r + b.r;
+  out.g = a.g + b.g;
+  out.b = a.b + b.b;
+  out.a = a.a + b.a;
+  return out;
 };
 
 /**
@@ -11205,21 +10837,19 @@ return out;
  * @param {color4} b - The b.
  * @returns {color4} out.
  */
-color4.subtract = function subtract (out, a, b)
-{
-out.r = a.r - b.r;
-out.g = a.g - b.g;
-out.b = a.b - b.b;
-out.a = a.a - b.a;
-return out;
+color4.subtract = function subtract (out, a, b) {
+  out.r = a.r - b.r;
+  out.g = a.g - b.g;
+  out.b = a.b - b.b;
+  out.a = a.a - b.a;
+  return out;
 };
 
 /**
  * Alias of {@link color4.subtract}.
  */
-color4.sub = function sub (out, a, b)
-{
-return color4.subtract(out, a, b);
+color4.sub = function sub (out, a, b) {
+  return color4.subtract(out, a, b);
 };
 
 /**
@@ -11230,21 +10860,19 @@ return color4.subtract(out, a, b);
  * @param {color4} b - The second operand.
  * @returns {color4} out.
  */
-color4.multiply = function multiply (out, a, b)
-{
-out.r = a.r * b.r;
-out.g = a.g * b.g;
-out.b = a.b * b.b;
-out.a = a.a * b.a;
-return out;
+color4.multiply = function multiply (out, a, b) {
+  out.r = a.r * b.r;
+  out.g = a.g * b.g;
+  out.b = a.b * b.b;
+  out.a = a.a * b.a;
+  return out;
 };
 
 /**
  * Alias of {@link color4.multiply}.
  */
-color4.mul = function mul (out, a, b)
-{
-return color4.multiply(out, a, b);
+color4.mul = function mul (out, a, b) {
+  return color4.multiply(out, a, b);
 };
 
 /**
@@ -11255,21 +10883,19 @@ return color4.multiply(out, a, b);
  * @param {color4} b - The second operand.
  * @returns {color4} out.
  */
-color4.divide = function divide (out, a, b)
-{
-out.r = a.r / b.r;
-out.g = a.g / b.g;
-out.b = a.b / b.b;
-out.a = a.a / b.a;
-return out;
+color4.divide = function divide (out, a, b) {
+  out.r = a.r / b.r;
+  out.g = a.g / b.g;
+  out.b = a.b / b.b;
+  out.a = a.a / b.a;
+  return out;
 };
 
 /**
  * Alias of {@link color4.divide}.
  */
-color4.div = function div (out, a, b)
-{
-return color4.divide(out, a, b);
+color4.div = function div (out, a, b) {
+  return color4.divide(out, a, b);
 };
 
 /**
@@ -11280,13 +10906,12 @@ return color4.divide(out, a, b);
  * @param {number} b - The scale number.
  * @returns {color4} out.
  */
-color4.scale = function scale (out, a, b)
-{
-out.r = a.r * b;
-out.g = a.g * b;
-out.b = a.b * b;
-out.a = a.a * b;
-return out;
+color4.scale = function scale (out, a, b) {
+  out.r = a.r * b;
+  out.g = a.g * b;
+  out.b = a.b * b;
+  out.a = a.a * b;
+  return out;
 };
 
 /**
@@ -11298,17 +10923,16 @@ return out;
  * @param {Number} t - The interpolation coefficient.
  * @returns {color4} out.
  */
-color4.lerp = function lerp$$1 (out, a, b, t)
-{
-var ar = a.r,
+color4.lerp = function lerp$$1 (out, a, b, t) {
+  var ar = a.r,
     ag = a.g,
     ab = a.b,
     aa = a.a;
-out.r = ar + t * (b.r - ar);
-out.g = ag + t * (b.g - ag);
-out.b = ab + t * (b.b - ab);
-out.a = aa + t * (b.a - aa);
-return out;
+  out.r = ar + t * (b.r - ar);
+  out.g = ag + t * (b.g - ag);
+  out.b = ab + t * (b.b - ab);
+  out.a = aa + t * (b.a - aa);
+  return out;
 };
 
 /**
@@ -11317,8 +10941,7 @@ return out;
  * @param {color4} a - The color.
  * @returns {String} - String representation of this color.
  */
-color4.str = function str (a)
-{
+color4.str = function str (a) {
   return ("color4(" + (a.r) + ", " + (a.g) + ", " + (a.b) + ", " + (a.a) + ")");
 };
 
@@ -11329,14 +10952,13 @@ color4.str = function str (a)
  * @param {color4} a - The color.
  * @returns {Array} out.
  */
-color4.array = function array (out, a)
-{
-out[0] = a.r;
-out[1] = a.g;
-out[2] = a.b;
-out[3] = a.a;
+color4.array = function array (out, a) {
+  out[0] = a.r;
+  out[1] = a.g;
+  out[2] = a.b;
+  out[3] = a.a;
 
-return out;
+  return out;
 };
 
 /**
@@ -11346,9 +10968,8 @@ return out;
  * @param {color4} b - The second color.
  * @returns {Boolean} True if the colors are equal, false otherwise.
  */
-color4.exactEquals = function exactEquals (a, b)
-{
-return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a;
+color4.exactEquals = function exactEquals (a, b) {
+  return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a;
 };
 
 /**
@@ -11358,14 +10979,13 @@ return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a;
  * @param {color4} b - The second color.
  * @returns {Boolean} True if the colors are approximately equal, false otherwise.
  */
-color4.equals = function equals$$1 (a, b)
-{
-var a0 = a.r, a1 = a.g, a2 = a.b, a3 = a.a;
-var b0 = b.r, b1 = b.g, b2 = b.b, b3 = b.a;
-return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-  Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-  Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-  Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)));
+color4.equals = function equals$$1 (a, b) {
+  var a0 = a.r, a1 = a.g, a2 = a.b, a3 = a.a;
+  var b0 = b.r, b1 = b.g, b2 = b.b, b3 = b.a;
+  return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+    Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+    Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+    Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)));
 };
 
 /**
@@ -11374,9 +10994,8 @@ return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
  * @param {color4} a - The color.
  * @returns {Number} - The color's hexadecimal formal.
  */
-color4.hex = function hex (a)
-{
-return ((a.r * 255) << 24 | (a.g * 255) << 16 | (a.b * 255) << 8 | a.a * 255) >>> 0;
+color4.hex = function hex (a) {
+  return ((a.r * 255) << 24 | (a.g * 255) << 16 | (a.b * 255) << 8 | a.a * 255) >>> 0;
 };
 
 var bits = bits_;
@@ -11441,6 +11060,14 @@ var distance = {
   pt_point_plane: pt_point_plane,
 };
 
+/**
+ * ray-plane intersect
+ *
+ * @param {ray} ray
+ * @param {plane} plane
+ * @param {vec3} outPt the intersect point if provide
+ * @return {boolean}
+ */
 var ray_plane = (function () {
   var pt = vec3.zero();
 
@@ -11803,12 +11430,12 @@ var ray_box = (function () {
 })();
 
 var box_point = (function () {
-  var tmp = vec3.zero(), v = vec3.zero();
-  var lessThan = function(a, b) { return a.x < b.x && a.y < b.y && a.z < b.z; };
+  var tmp = vec3.zero(), m3 = mat3.create();
+  var lessThan = function(a, b) { return Math.abs(a.x) < b.x && Math.abs(a.y) < b.y && Math.abs(a.z) < b.z; };
   return function(box, point) {
-    vec3.transformMat3(tmp, point, box.orientation);
-    return lessThan(tmp, vec3.add(v, box.center, box.size)) &&
-      lessThan(vec3.sub(v, box.center, box.size), tmp);
+    vec3.sub(tmp, point, box.center);
+    vec3.transformMat3(tmp, tmp, mat3.transpose(m3, box.orientation));
+    return lessThan(tmp, box.size);
   };
 })();
 
@@ -12044,8 +11671,9 @@ var sphere_frustum = function (sphere, frustum) {
  */
 var sphere_frustum_accurate = (function () {
   var pt = vec3.zero(), map = [1, -1, 1, -1, 1, -1];
+  var p = [], d = [];
   return function (sphere, frustum) {
-    var intersects = false, p = [], d = [];
+    var intersects = false; p.length = 0; d.length = 0;
     for (var i = 0; i < frustum.planes.length; i++) {
       var dot = vec3.dot(frustum.planes[i].n, sphere.c);
       var dist = vec3.magnitude(frustum.planes[i].n);
@@ -12182,24 +11810,17 @@ var intersect = {
   sphere_box: sphere_box,
 };
 
-var _line = function _line(sx, sy, sz, ex, ey, ez) {
+var line = function line(sx, sy, sz, ex, ey, ez) {
   this.s = vec3.new(sx, sy, sz);
   this.e = vec3.new(ex, ey, ez);
 };
-
-/**
- * @class line
- * @name line
- */
-var line = {};
-
 /**
  * create a new line
  *
  * @return {line}
  */
-line.create = function () {
-  return new _line(0, 0, 0, 0, 0, -1);
+line.create = function create () {
+  return new line(0, 0, 0, 0, 0, -1);
 };
 
 /**
@@ -12213,8 +11834,8 @@ line.create = function () {
  * @param {Number} ez end Z component
  * @return {line}
  */
-line.new = function (sx, sy, sz, ex, ey, ez) {
-  return new _line(sx, sy, sz, ex, ey, ez);
+line.new = function new$1 (sx, sy, sz, ex, ey, ez) {
+  return new line(sx, sy, sz, ex, ey, ez);
 };
 
 /**
@@ -12223,8 +11844,8 @@ line.new = function (sx, sy, sz, ex, ey, ez) {
  * @param {line} a line to clone
  * @returns {line} a new line
  */
-line.clone = function (a) {
-  return new _line(
+line.clone = function clone (a) {
+  return new line(
     a.s.x, a.s.y, a.s.z,
     a.e.x, a.e.y, a.e.z
   );
@@ -12237,7 +11858,7 @@ line.clone = function (a) {
  * @param {line} a the source line
  * @returns {line} out
  */
-line.copy = function (out, a) {
+line.copy = function copy (out, a) {
   out.s.x = a.s.x;
   out.s.y = a.s.y;
   out.s.z = a.s.z;
@@ -12260,7 +11881,7 @@ line.copy = function (out, a) {
  * @param {Number} ez end Z component
  * @returns {vec3} out
  */
-line.set = function (out, sx, sy, sz, ex, ey, ez) {
+line.set = function set (out, sx, sy, sz, ex, ey, ez) {
   out.s.x = sx;
   out.s.y = sy;
   out.s.z = sz;
@@ -12276,30 +11897,30 @@ line.set = function (out, sx, sy, sz, ex, ey, ez) {
  *
  * @param {line} line
  * @returns {number}
- * @function
  */
-line.length = function (line) {
+line.magnitude = function magnitude (line) {
   return vec3.distance(line.s, line.e);
 };
 
-var _plane = function _plane(nx, ny, nz, d) {
+/**
+ *Alias of {@link line.magnitude}.
+ */
+line.mag = function mag (line) {
+  return line.magnitude(line);
+};
+
+var plane = function plane(nx, ny, nz, d) {
   this.n = vec3.new(nx, ny, nz);
   this.d = d;
 };
-
-/**
- * @class plane
- * @name plane
- */
-var plane = {};
 
 /**
  * create a new plane
  *
  * @return {plane}
  */
-plane.create = function () {
-  return new _plane(0, 1, 0, 0);
+plane.create = function create () {
+  return new plane(0, 1, 0, 0);
 };
 
 /**
@@ -12311,8 +11932,8 @@ plane.create = function () {
  * @param {Number} d the constant d
  * @return {plane}
  */
-plane.new = function (nx, ny, nz, d) {
-  return new _plane(nx, ny, nz, d);
+plane.new = function new$1 (nx, ny, nz, d) {
+  return new plane(nx, ny, nz, d);
 };
 
 /**
@@ -12321,8 +11942,8 @@ plane.new = function (nx, ny, nz, d) {
  * @param {plane} p a the source plane
  * @return {plane}
  */
-plane.clone = function (p) {
-  return new _plane(p.n.x, p.n.y, p.n.z, p.d);
+plane.clone = function clone (p) {
+  return new plane(p.n.x, p.n.y, p.n.z, p.d);
 };
 
 /**
@@ -12332,7 +11953,7 @@ plane.clone = function (p) {
  * @param {plane} p the source plane
  * @return {plane}
  */
-plane.copy = function (out, p) {
+plane.copy = function copy (out, p) {
   out.n.x = p.n.x;
   out.n.y = p.n.y;
   out.n.z = p.n.z;
@@ -12352,7 +11973,7 @@ plane.copy = function (out, p) {
  * @returns {plane} out
  * @function
  */
-plane.set = function (out, nx, ny, nz, d) {
+plane.set = function set (out, nx, ny, nz, d) {
   out.n.x = nx;
   out.n.y = ny;
   out.n.z = nz;
@@ -12370,10 +11991,26 @@ plane.set = function (out, nx, ny, nz, d) {
  * @returns {plane} out
  * @function
  */
-plane.fromNormalAndPoint = function (out, normal, point) {
+plane.fromNormalAndPoint = function fromNormalAndPoint (out, normal, point) {
   vec3.copy(out.n, normal);
   out.d = vec3.dot(normal, point);
 
+  return out;
+};
+
+/**
+ * normalize a plane
+ *
+ * @param {plane} out the receiving plane
+ * @param {plane} a plane to normalize
+ * @returns {plane} out
+ */
+plane.normalize = function normalize (out, a) {
+  var len = vec3.magnitude(a.n);
+  vec3.normalize(out.n, a.n);
+  if (len > 0) {
+    out.d = a.d / len;
+  }
   return out;
 };
 
@@ -12402,40 +12039,18 @@ plane.fromPoints = (function () {
   };
 })();
 
-/**
- * normalize a plane
- *
- * @param {plane} out the receiving plane
- * @param {plane} a plane to normalize
- * @returns {plane} out
- */
-plane.normalize = function (out, a) {
-  var len = vec3.magnitude(a.n);
-  vec3.normalize(out.n, a.n);
-  if (len > 0) {
-    out.d = a.d / len;
-  }
-  return out;
-};
-
-var _ray = function _ray(ox, oy, oz, dx, dy, dz) {
+var ray = function ray(ox, oy, oz, dx, dy, dz) {
   this.o = vec3.new(ox, oy, oz);
   this.d = vec3.new(dx, dy, dz);
 };
-
-/**
- * @class ray
- * @name ray
- */
-var ray = {};
 
 /**
  * create a new ray
  *
  * @return {ray}
  */
-ray.create = function () {
-  return new _ray(0, 0, 0, 0, 0, -1);
+ray.create = function create () {
+  return new ray(0, 0, 0, 0, 0, -1);
 };
 
 /**
@@ -12449,8 +12064,8 @@ ray.create = function () {
  * @param {Number} dz dir Z component
  * @return {ray}
  */
-ray.new = function (ox, oy, oz, dx, dy, dz) {
-  return new _ray(ox, oy, oz, dx, dy, dz);
+ray.new = function new$1 (ox, oy, oz, dx, dy, dz) {
+  return new ray(ox, oy, oz, dx, dy, dz);
 };
 
 /**
@@ -12459,8 +12074,8 @@ ray.new = function (ox, oy, oz, dx, dy, dz) {
  * @param {ray} a ray to clone
  * @returns {ray} a new ray
  */
-ray.clone = function (a) {
-  return new _ray(
+ray.clone = function clone (a) {
+  return new ray(
     a.o.x, a.o.y, a.o.z,
     a.d.x, a.d.y, a.d.z
   );
@@ -12473,7 +12088,7 @@ ray.clone = function (a) {
  * @param {ray} a the source ray
  * @returns {ray} out
  */
-ray.copy = function (out, a) {
+ray.copy = function copy (out, a) {
   out.o.x = a.o.x;
   out.o.y = a.o.y;
   out.o.z = a.o.z;
@@ -12496,7 +12111,7 @@ ray.copy = function (out, a) {
  * @param {Number} dz dir Z component
  * @returns {vec3} out
  */
-ray.set = function (out, ox, oy, oz, dx, dy, dz) {
+ray.set = function set (out, ox, oy, oz, dx, dy, dz) {
   out.o.x = ox;
   out.o.y = oy;
   out.o.z = oz;
@@ -12516,32 +12131,26 @@ ray.set = function (out, ox, oy, oz, dx, dy, dz) {
  * @returns {ray} out
  * @function
  */
-ray.fromPoints = function (out, origin, lookAt) {
+ray.fromPoints = function fromPoints (out, origin, lookAt) {
   vec3.copy(out.o, origin);
   vec3.normalize(out.d, vec3.sub(out.d, lookAt, origin));
 
   return out;
 };
 
-var _triangle = function _triangle(ax, ay, az, bx, by, bz, cx, cy, cz) {
+var triangle = function triangle(ax, ay, az, bx, by, bz, cx, cy, cz) {
   this.a = vec3.new(ax, ay, az);
   this.b = vec3.new(bx, by, bz);
   this.c = vec3.new(cx, cy, cz);
 };
 
 /**
- * @class triangle
- * @name triangle
- */
-var triangle = {};
-
-/**
  * create a new triangle
  *
  * @return {triangle}
  */
-triangle.create = function () {
-  return new _triangle(
+triangle.create = function create () {
+  return new triangle(
     0, 0, 0,
     1, 0, 0,
     0, 1, 0
@@ -12562,8 +12171,8 @@ triangle.create = function () {
  * @param {Number} cz
  * @return {triangle}
  */
-triangle.new = function (ax, ay, az, bx, by, bz, cx, cy, cz) {
-  return new _triangle(
+triangle.new = function new$1 (ax, ay, az, bx, by, bz, cx, cy, cz) {
+  return new triangle(
     ax, ay, az,
     bx, by, bz,
     cx, cy, cz
@@ -12576,8 +12185,8 @@ triangle.new = function (ax, ay, az, bx, by, bz, cx, cy, cz) {
  * @param {triangle} t the source plane
  * @return {triangle}
  */
-triangle.clone = function (t) {
-  return new _triangle(
+triangle.clone = function clone (t) {
+  return new triangle(
     t.a.x, t.a.y, t.a.z,
     t.b.x, t.b.y, t.b.z,
     t.c.x, t.c.y, t.c.z
@@ -12591,7 +12200,7 @@ triangle.clone = function (t) {
  * @param {triangle} t the source triangle
  * @return {triangle}
  */
-triangle.copy = function (out, t) {
+triangle.copy = function copy (out, t) {
   out.a.x = t.a.x;
   out.a.y = t.a.y;
   out.a.z = t.a.z;
@@ -12623,7 +12232,7 @@ triangle.copy = function (out, t) {
  * @returns {plane} out
  * @function
  */
-triangle.set = function (out, ax, ay, az, bx, by, bz, cx, cy, cz) {
+triangle.set = function set (out, ax, ay, az, bx, by, bz, cx, cy, cz) {
   out.a.x = ax;
   out.a.y = ay;
   out.a.z = az;
@@ -12639,24 +12248,18 @@ triangle.set = function (out, ax, ay, az, bx, by, bz, cx, cy, cz) {
   return out;
 };
 
-var _sphere = function _sphere(cx, cy, cz, r) {
+var sphere = function sphere(cx, cy, cz, r) {
   this.c = vec3.new(cx, cy, cz);
   this.r = r;
 };
-
-/**
- * @class sphere
- * @name sphere
- */
-var sphere = {};
 
 /**
  * create a new sphere
  *
  * @return {plane}
  */
-sphere.create = function () {
-  return new _sphere(0, 0, 0, 1);
+sphere.create = function create () {
+  return new sphere(0, 0, 0, 1);
 };
 
 /**
@@ -12668,8 +12271,8 @@ sphere.create = function () {
  * @param {Number} r the radius r
  * @return {sphere}
  */
-sphere.new = function (cx, cy, cz, r) {
-  return new _sphere(cx, cy, cz, r);
+sphere.new = function new$1 (cx, cy, cz, r) {
+  return new sphere(cx, cy, cz, r);
 };
 
 /**
@@ -12678,8 +12281,8 @@ sphere.new = function (cx, cy, cz, r) {
  * @param {sphere} p the source sphere
  * @return {sphere}
  */
-sphere.clone = function (p) {
-  return new _sphere(p.c.x, p.c.y, p.c.z, p.r);
+sphere.clone = function clone (p) {
+  return new sphere(p.c.x, p.c.y, p.c.z, p.r);
 };
 
 /**
@@ -12689,7 +12292,7 @@ sphere.clone = function (p) {
  * @param {sphere} p the source sphere
  * @return {sphere}
  */
-sphere.copy = function (out, p) {
+sphere.copy = function copy (out, p) {
   out.c.x = p.c.x;
   out.c.y = p.c.y;
   out.c.z = p.c.z;
@@ -12709,7 +12312,7 @@ sphere.copy = function (out, p) {
  * @returns {sphere} out
  * @function
  */
-sphere.set = function (out, cx, cy, cz, r) {
+sphere.set = function set (out, cx, cy, cz, r) {
   out.c.x = cx;
   out.c.y = cy;
   out.c.z = cz;
@@ -12718,25 +12321,19 @@ sphere.set = function (out, cx, cy, cz, r) {
   return out;
 };
 
-var _box = function _box(px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3) {
+var box = function box(px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3) {
   this.center = vec3.new(px, py, pz);
-  this.size =vec3.new(w, h, l);
+  this.size = vec3.new(w, h, l);
   this.orientation = mat3.new(ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3);
 };
-
-/**
- * @class box
- * @name box
- */
-var box = {};
 
 /**
  * create a new box
  *
  * @return {plane}
  */
-box.create = function () {
-  return new _box(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+box.create = function create () {
+  return new box(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1);
 };
 
 /**
@@ -12759,45 +12356,30 @@ box.create = function () {
  * @param {Number} oz_3 the orientation vector coordinates
  * @return {box}
  */
-box.new = function (px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3) {
-  return new _box(px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3);
+box.new = function new$1 (px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3) {
+  return new box(px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3);
 };
-
-/**
- * create a new axis-aligned box from two corner points
- *
- * @param {vec3} minPos lower corner position of the box
- * @param {vec3} maxPos upper corner position of the box
- * @return {box}
- */
-box.fromPoints = (function () {
-  var center = vec3.zero();
-  var halfSize = vec3.zero();
-  return function (minPos, maxPos) {
-    vec3.scale(center, vec3.add(center, minPos, maxPos), 0.5);
-    vec3.scale(halfSize, vec3.sub(halfSize, maxPos, minPos), 0.5);
-    return new _box(center.x, center.y, center.z, 
-      halfSize.x, halfSize.y, halfSize.z, 
-      1, 0, 0, 0, 1, 0, 0, 0, 1);
-  };
-})();
 
 /**
  * Set the transform information of the box
  *
  * @param {box} out the receiving box
- * @param {mat4} mat transform matrix
+ * @param {vec3} pos the surrounding object world coordinates
+ * @param {vec3} rot the surrounding object world spins
+ * @param {vec3} scale the surrounding object world zooms
  * @param {box} parent parent box transform to apply
  * @return {box}
  */
-box.setTransform = function (out, mat, parent) {
-  if ( parent === void 0 ) parent = null;
+box.setTransform = function setTransform (out, pos, rot, scale, parent) {
+    if ( parent === void 0 ) parent = null;
 
-  mat3.fromMat4(out.orientation, mat);
-  mat4.getTranslation(out.center, mat);
+  vec3.copy(out.center, pos);
+  mat3.fromQuat(out.orientation, rot);
+  vec3.copy(out.size, scale);
   if (parent) {
-    mat3.mul(out.orientation, out.orientation, parent.orientation);
     vec3.add(out.center, out.center, parent.center);
+    mat3.mul(out.orientation, out.orientation, parent.orientation);
+    vec3.mul(out.size, out.size, parent.size);
   }
   return out;
 };
@@ -12808,9 +12390,9 @@ box.setTransform = function (out, mat, parent) {
  * @param {box} a the source box
  * @return {box}
  */
-box.clone = function (a) {
-  return new _box(a.center.x, a.center.y, a.center.z, 
-    a.size.x, a.size.y, a.size.z, 
+box.clone = function clone (a) {
+  return new box(a.center.x, a.center.y, a.center.z,
+    a.size.x, a.size.y, a.size.z,
     a.orientation.m00, a.orientation.m01, a.orientation.m02,
     a.orientation.m03, a.orientation.m04, a.orientation.m05,
     a.orientation.m06, a.orientation.m07, a.orientation.m08);
@@ -12823,7 +12405,7 @@ box.clone = function (a) {
  * @param {box} a the source box
  * @return {box}
  */
-box.copy = function (out, a) {
+box.copy = function copy (out, a) {
   out.center = a.center;
   out.size = a.size;
   out.orientation = a.orientation;
@@ -12853,12 +12435,31 @@ box.copy = function (out, a) {
  * @returns {box} out
  * @function
  */
-box.set = function (out, px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3) {
+box.set = function set (out, px, py, pz, w, h, l, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3) {
   vec3.set(out.center, px, py, pz);
   vec3.set(out.size, w, h, l);
   mat3.set(out.orientation, ox_1, ox_2, ox_3, oy_1, oy_2, oy_3, oz_1, oz_2, oz_3);
   return out;
 };
+
+/**
+ * create a new axis-aligned box from two corner points
+ *
+ * @param {vec3} minPos lower corner position of the box
+ * @param {vec3} maxPos upper corner position of the box
+ * @return {box}
+ */
+box.fromPoints = (function () {
+  var center = vec3.zero();
+  var halfSize = vec3.zero();
+  return function (minPos, maxPos) {
+    vec3.scale(center, vec3.add(center, minPos, maxPos), 0.5);
+    vec3.scale(halfSize, vec3.sub(halfSize, maxPos, minPos), 0.5);
+    return new box(center.x, center.y, center.z,
+      halfSize.x, halfSize.y, halfSize.z,
+      1, 0, 0, 0, 1, 0, 0, 0, 1);
+  };
+})();
 
 var Keyframe = function Keyframe () {};
 
@@ -16191,9 +15792,9 @@ Node.prototype.getWorldRS = function getWorldRS (out) {
 /**
  * @method _getWorldPosAndRot
  * @param {vec3} opos
- * @param {vec3} orot
+ * @param {quat} orot
  *
- * Calculate and return world position
+ * Calculate and return world position and rotation
  */
 Node.prototype._getWorldPosAndRot = function _getWorldPosAndRot (opos, orot) {
   vec3.copy(opos, this.lpos);
@@ -16212,6 +15813,38 @@ Node.prototype._getWorldPosAndRot = function _getWorldPosAndRot (opos, orot) {
 
     // orot = lrot * orot
     quat.mul(orot, cur.lrot, orot);
+
+    cur = cur._parent;
+  }
+};
+
+/**
+ * Calculate and return world position, rotation and scale
+ * @param {vec3} opos
+ * @param {quat} orot
+ * @param {vec3} osca
+ */
+Node.prototype._getWorldPRS = function _getWorldPRS (opos, orot, osca) {
+  vec3.copy(opos, this.lpos);
+  quat.copy(orot, this.lrot);
+  vec3.copy(osca, this.lscale);
+
+  var cur = this._parent;
+  while (cur) {
+    // opos = parent_lscale * lpos
+    vec3.mul(opos, opos, cur.lscale);
+
+    // opos = parent_lrot * opos
+    vec3.transformQuat(opos, opos, cur.lrot);
+
+    // opos = opos + lpos
+    vec3.add(opos, opos, cur.lpos);
+
+    // orot = lrot * orot
+    quat.mul(orot, cur.lrot, orot);
+
+    // osca = lsca * osca
+    vec3.mul(osca, cur.lscale, osca);
 
     cur = cur._parent;
   }
@@ -16902,11 +16535,11 @@ var shaderChunks = {
   'common.frag': '\n#define PI 3.14159265359\n#define PI2 6.28318530718\n#define EPSILON 1e-6\n#define LOG2 1.442695\n#define saturate(a) clamp( a, 0.0, 1.0 )',
   'gamma-correction.frag': '\nvec3 gammaToLinearSpaceRGB(vec3 sRGB) { \n  return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);\n}\nvec3 linearToGammaSpaceRGB(vec3 RGB) { \n  vec3 S1 = sqrt(RGB);\n  vec3 S2 = sqrt(S1);\n  vec3 S3 = sqrt(S2);\n  return 0.585122381 * S1 + 0.783140355 * S2 - 0.368262736 * S3;\n}\nvec4 gammaToLinearSpaceRGBA(vec4 sRGBA) {\n  return vec4(gammaToLinearSpaceRGB(sRGBA.rgb), sRGBA.a);\n}\nvec4 linearToGammaSpaceRGBA(vec4 RGBA) {\n  return vec4(linearToGammaSpaceRGB(RGBA.rgb), RGBA.a);\n}\nfloat gammaToLinearSpaceExact(float val) {\n  if (val <= 0.04045) {\n    return val / 12.92;\n  } else if (val < 1.0) {\n    return pow((val + 0.055) / 1.055, 2.4);\n  } else {\n    return pow(val, 2.2);\n  }\n}\nfloat linearToGammaSpaceExact(float val) {\n  if (val <= 0.0) {\n    return 0.0;\n  } else if (val <= 0.0031308) {\n    return 12.92 * val;\n  } else if (val < 1.0) {\n    return 1.055 * pow(val, 0.4166667) - 0.055;\n  } else {\n    return pow(val, 0.45454545);\n  }\n}',
   'packing.frag': '\nvec4 packDepthToRGBA(float depth) {\n  vec4 ret = vec4(1.0, 255.0, 65025.0, 160581375.0) * depth;\n  ret = fract(ret);\n  ret -= ret.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n  return ret;\n}\nfloat unpackRGBAToDepth(vec4 color) {\n  return dot(color, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0));\n}',
-  'pbr-lighting.frag': '\nstruct LightInfo {\n  vec3 lightDir;\n  vec3 radiance;\n};\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform vec2 spot_light{id}_spot;\n    uniform float spot_light{id}_range;\n  #pragma endFor\n#endif\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor\n) {\n  LightInfo ret;\n  ret.lightDir = -normalize(lightDirection);\n  ret.radiance = lightColor;\n  return ret;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightColor,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation;\n  return ret;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec2 lightSpot,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  float cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation * cosConeAngle;\n  return ret;\n}',
+  'pbr-lighting.frag': '\nstruct LightInfo {\n  vec3 lightDir;\n  vec3 radiance;\n};\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform vec2 spot_light{id}_spot;\n    uniform float spot_light{id}_range;\n  #pragma endFor\n#endif\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor\n) {\n  LightInfo ret;\n  ret.lightDir = -normalize(lightDirection);\n  ret.radiance = lightColor;\n  return ret;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightColor,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0.0, 1.0 - length(lightDir) / lightRange);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation;\n  return ret;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec2 lightSpot,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  float cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation * cosConeAngle;\n  return ret;\n}',
   'phong-lighting.frag': '\nstruct LightInfo {\n  vec3 diffuse;\n  vec3 specular;\n};\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec3 normal,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = -normalize(lightDirection);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh;\n  return lightingResult;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 lightColor,\n  float lightRange,\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = vec3(0, 0, 0);\n  float attenuation = 1.0;\n  lightDir = lightPosition - positionW;\n  attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  lightDir = normalize(lightDir);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl * attenuation;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh * attenuation;\n  return lightingResult;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 lightDirection,\n  vec3 lightColor,\n  float lightRange,\n  vec2 lightSpot,\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = vec3(0, 0, 0);\n  float attenuation = 1.0;\n  float cosConeAngle = 1.0;\n  lightDir = lightPosition - positionW;\n  attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  lightDir = normalize(lightDir);\n  cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl * attenuation * cosConeAngle;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh * attenuation * cosConeAngle;\n  return lightingResult;\n}\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform float spot_light{id}_range;\n    uniform vec2 spot_light{id}_spot;\n  #pragma endFor\n#endif\nLightInfo getPhongLighting(\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo result;\n  result.diffuse = vec3(0, 0, 0);\n  result.specular = vec3(0, 0, 0);\n  LightInfo dirLighting;\n  #if NUM_DIR_LIGHTS > 0\n    #pragma for id in range(0, NUM_DIR_LIGHTS)\n      dirLighting = computeDirectionalLighting(dir_light{id}_direction,dir_light{id}_color,normal, viewDirection, glossiness);\n      result.diffuse += dirLighting.diffuse;\n      result.specular += dirLighting.specular;\n    #pragma endFor\n  #endif\n  LightInfo pointLighting;\n  #if NUM_POINT_LIGHTS > 0\n    #pragma for id in range(0, NUM_POINT_LIGHTS)\n      pointLighting = computePointLighting(point_light{id}_position, point_light{id}_color, point_light{id}_range,\n                                          normal, positionW, viewDirection, glossiness);\n      result.diffuse += pointLighting.diffuse;\n      result.specular += pointLighting.specular;\n    #pragma endFor\n  #endif\n  LightInfo spotLighting;\n  #if NUM_SPOT_LIGHTS > 0\n    #pragma for id in range(0, NUM_SPOT_LIGHTS)\n      spotLighting = computeSpotLighting(spot_light{id}_position, spot_light{id}_direction, spot_light{id}_color,\n                      spot_light{id}_range, spot_light{id}_spot,normal, positionW, viewDirection, glossiness);\n      result.diffuse += spotLighting.diffuse;\n      result.specular += spotLighting.specular;\n    #pragma endFor\n  #endif\n  return result;\n}\n',
   'shadow-mapping.frag': '\n#if NUM_SHADOW_LIGHTS > 0\n  #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n    uniform sampler2D shadowMap_{id};\n    uniform float darkness_{id};\n    uniform float depthScale_{id};\n    uniform float frustumEdgeFalloff_{id};\n    uniform float bias_{id};\n    uniform vec2 texelSize_{id};\n    varying vec4 pos_lightspace_{id};\n    varying float vDepth_{id};\n  #pragma endFor\n#endif\nfloat computeShadow(sampler2D shadowMap, vec4 pos_lightspace, float bias) {\n  vec3 projCoords = pos_lightspace.xyz / pos_lightspace.w;\n  projCoords = projCoords * 0.5 + 0.5;\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, projCoords.xy));\n  float currentDepth = projCoords.z;\n  float shadow = (currentDepth - bias > closestDepth) ? 0.0 : 1.0;\n  return shadow;\n}\nfloat computeFallOff(float esm, vec2 coords, float frustumEdgeFalloff) {\n  float mask = smoothstep(1.0 - frustumEdgeFalloff, 1.0, clamp(dot(coords, coords), 0.0, 1.0));\n  return mix(esm, 1.0, mask);\n}\nfloat computeShadowESM(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float depthScale, float darkness, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, shadowUV));\n  \n  float esm = clamp(exp(-depthScale * (currentDepth - closestDepth)), 1.0 - darkness, 1.0);\n  return computeFallOff(esm, projCoords, frustumEdgeFalloff);\n}\nfloat computeShadowPCF(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float darkness, vec2 texelSize, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float visibility = 1.0;\n  vec2 poissonDisk[4];\n  poissonDisk[0] = vec2(-0.94201624, -0.39906216);\n  poissonDisk[1] = vec2(0.94558609, -0.76890725);\n  poissonDisk[2] = vec2(-0.094184101, -0.92938870);\n  poissonDisk[3] = vec2(0.34495938, 0.29387760);\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[0] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[1] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[2] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[3] * texelSize)) < currentDepth) visibility -= 0.25;\n  return computeFallOff(min(1.0, visibility + 1.0 - darkness), projCoords, frustumEdgeFalloff);\n}',
   'skinning.vert': '\nattribute vec4 a_weights;\nattribute vec4 a_joints;\nuniform sampler2D u_jointsTexture;\nuniform float u_jointsTextureSize;\nmat4 getBoneMatrix(const in float i) {\n  float size = u_jointsTextureSize;\n  float j = i * 4.0;\n  float x = mod(j, size);\n  float y = floor(j / size);\n  float dx = 1.0 / size;\n  float dy = 1.0 / size;\n  y = dy * (y + 0.5);\n  vec4 v1 = texture2D(u_jointsTexture, vec2(dx * (x + 0.5), y));\n  vec4 v2 = texture2D(u_jointsTexture, vec2(dx * (x + 1.5), y));\n  vec4 v3 = texture2D(u_jointsTexture, vec2(dx * (x + 2.5), y));\n  vec4 v4 = texture2D(u_jointsTexture, vec2(dx * (x + 3.5), y));\n  return mat4(v1, v2, v3, v4);\n}\nmat4 skinMatrix() {\n  return\n    getBoneMatrix(a_joints.x) * a_weights.x +\n    getBoneMatrix(a_joints.y) * a_weights.y +\n    getBoneMatrix(a_joints.z) * a_weights.z +\n    getBoneMatrix(a_joints.w) * a_weights.w\n    ;\n}',
-  'unpack-normal.frag': '\nvec3 unpackNormal(vec4 nmap) {\n  return nmap.xyz * 2.0 - 1.0;\n}',
+  'unpack.frag': '\nvec3 unpackNormal(vec4 nmap) {\n  return nmap.xyz * 2.0 - 1.0;\n}\nvec3 unpackRGBE(vec4 rgbe) {\n    return rgbe.rgb * pow(2.0, rgbe.a * 255.0 - 128.0);\n}',
 };
 
 var shaderTemplates = [
@@ -17000,7 +16633,7 @@ var shaderTemplates = [
   {
     name: 'pbr',
     vert: '\nattribute vec3 a_position;\nattribute vec3 a_normal;\nvarying vec3 pos_w;\nvarying vec3 normal_w;\nuniform mat4 model;\nuniform mat4 viewProj;\nuniform mat3 normalMatrix;\n#if USE_NORMAL_TEXTURE || USE_ALBEDO_TEXTURE || USE_MRA_TEXTURE || USE_METALLIC_TEXTURE || USE_ROUGHNESS_TEXTURE || USE_AO_TEXTURE || USE_EMISSIVE_TEXTURE\n  attribute vec2 a_uv0;\n  uniform vec2 mainTiling;\n  uniform vec2 mainOffset;\n  varying vec2 uv0;\n#endif\n#if USE_SKINNING\n  \nattribute vec4 a_weights;\nattribute vec4 a_joints;\nuniform sampler2D u_jointsTexture;\nuniform float u_jointsTextureSize;\nmat4 getBoneMatrix(const in float i) {\n  float size = u_jointsTextureSize;\n  float j = i * 4.0;\n  float x = mod(j, size);\n  float y = floor(j / size);\n  float dx = 1.0 / size;\n  float dy = 1.0 / size;\n  y = dy * (y + 0.5);\n  vec4 v1 = texture2D(u_jointsTexture, vec2(dx * (x + 0.5), y));\n  vec4 v2 = texture2D(u_jointsTexture, vec2(dx * (x + 1.5), y));\n  vec4 v3 = texture2D(u_jointsTexture, vec2(dx * (x + 2.5), y));\n  vec4 v4 = texture2D(u_jointsTexture, vec2(dx * (x + 3.5), y));\n  return mat4(v1, v2, v3, v4);\n}\nmat4 skinMatrix() {\n  return\n    getBoneMatrix(a_joints.x) * a_weights.x +\n    getBoneMatrix(a_joints.y) * a_weights.y +\n    getBoneMatrix(a_joints.z) * a_weights.z +\n    getBoneMatrix(a_joints.w) * a_weights.w\n    ;\n}\n#endif\n#if USE_SHADOW_MAP\n  #if NUM_SHADOW_LIGHTS > 0\n    #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n      uniform mat4 lightViewProjMatrix_{id};\n      uniform float minDepth_{id};\n      uniform float maxDepth_{id};\n      varying vec4 pos_lightspace_{id};\n      varying float vDepth_{id};\n    #pragma endFor\n  #endif\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if USE_SKINNING\n    mat4 skinMat = skinMatrix();\n    pos = skinMat * pos;\n  #endif\n  pos_w = (model * pos).xyz;\n  pos = viewProj * model * pos;\n  #if USE_NORMAL_TEXTURE || USE_ALBEDO_TEXTURE || USE_MRA_TEXTURE || USE_METALLIC_TEXTURE || USE_ROUGHNESS_TEXTURE || USE_AO_TEXTURE || USE_EMISSIVE_TEXTURE\n    uv0 = a_uv0 * mainTiling + mainOffset;\n  #endif\n  vec4 normal = vec4(a_normal, 0);\n  #if USE_SKINNING\n    normal = skinMat * normal;\n  #endif\n  normal_w = normalMatrix * normal.xyz;\n  #if USE_SHADOW_MAP\n    #if NUM_SHADOW_LIGHTS > 0\n      #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n        pos_lightspace_{id} = lightViewProjMatrix_{id} * vec4(pos_w, 1.0);\n        vDepth_{id} = (pos_lightspace_{id}.z + minDepth_{id}) / (minDepth_{id} + maxDepth_{id});\n      #pragma endFor\n    #endif\n  #endif\n  gl_Position = pos;\n}',
-    frag: '\n#if USE_NORMAL_TEXTURE\n#extension GL_OES_standard_derivatives : enable\n#endif\n#if USE_TEX_LOD\n#extension GL_EXT_shader_texture_lod: enable\n#endif\n\n#define PI 3.14159265359\n#define PI2 6.28318530718\n#define EPSILON 1e-6\n#define LOG2 1.442695\n#define saturate(a) clamp( a, 0.0, 1.0 )\n\nvec3 gammaToLinearSpaceRGB(vec3 sRGB) { \n  return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);\n}\nvec3 linearToGammaSpaceRGB(vec3 RGB) { \n  vec3 S1 = sqrt(RGB);\n  vec3 S2 = sqrt(S1);\n  vec3 S3 = sqrt(S2);\n  return 0.585122381 * S1 + 0.783140355 * S2 - 0.368262736 * S3;\n}\nvec4 gammaToLinearSpaceRGBA(vec4 sRGBA) {\n  return vec4(gammaToLinearSpaceRGB(sRGBA.rgb), sRGBA.a);\n}\nvec4 linearToGammaSpaceRGBA(vec4 RGBA) {\n  return vec4(linearToGammaSpaceRGB(RGBA.rgb), RGBA.a);\n}\nfloat gammaToLinearSpaceExact(float val) {\n  if (val <= 0.04045) {\n    return val / 12.92;\n  } else if (val < 1.0) {\n    return pow((val + 0.055) / 1.055, 2.4);\n  } else {\n    return pow(val, 2.2);\n  }\n}\nfloat linearToGammaSpaceExact(float val) {\n  if (val <= 0.0) {\n    return 0.0;\n  } else if (val <= 0.0031308) {\n    return 12.92 * val;\n  } else if (val < 1.0) {\n    return 1.055 * pow(val, 0.4166667) - 0.055;\n  } else {\n    return pow(val, 0.45454545);\n  }\n}\n\nstruct LightInfo {\n  vec3 lightDir;\n  vec3 radiance;\n};\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform vec2 spot_light{id}_spot;\n    uniform float spot_light{id}_range;\n  #pragma endFor\n#endif\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor\n) {\n  LightInfo ret;\n  ret.lightDir = -normalize(lightDirection);\n  ret.radiance = lightColor;\n  return ret;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightColor,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation;\n  return ret;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec2 lightSpot,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  float cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation * cosConeAngle;\n  return ret;\n}\n#if USE_SHADOW_MAP\n  \nvec4 packDepthToRGBA(float depth) {\n  vec4 ret = vec4(1.0, 255.0, 65025.0, 160581375.0) * depth;\n  ret = fract(ret);\n  ret -= ret.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n  return ret;\n}\nfloat unpackRGBAToDepth(vec4 color) {\n  return dot(color, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0));\n}\n  \n#if NUM_SHADOW_LIGHTS > 0\n  #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n    uniform sampler2D shadowMap_{id};\n    uniform float darkness_{id};\n    uniform float depthScale_{id};\n    uniform float frustumEdgeFalloff_{id};\n    uniform float bias_{id};\n    uniform vec2 texelSize_{id};\n    varying vec4 pos_lightspace_{id};\n    varying float vDepth_{id};\n  #pragma endFor\n#endif\nfloat computeShadow(sampler2D shadowMap, vec4 pos_lightspace, float bias) {\n  vec3 projCoords = pos_lightspace.xyz / pos_lightspace.w;\n  projCoords = projCoords * 0.5 + 0.5;\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, projCoords.xy));\n  float currentDepth = projCoords.z;\n  float shadow = (currentDepth - bias > closestDepth) ? 0.0 : 1.0;\n  return shadow;\n}\nfloat computeFallOff(float esm, vec2 coords, float frustumEdgeFalloff) {\n  float mask = smoothstep(1.0 - frustumEdgeFalloff, 1.0, clamp(dot(coords, coords), 0.0, 1.0));\n  return mix(esm, 1.0, mask);\n}\nfloat computeShadowESM(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float depthScale, float darkness, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, shadowUV));\n  \n  float esm = clamp(exp(-depthScale * (currentDepth - closestDepth)), 1.0 - darkness, 1.0);\n  return computeFallOff(esm, projCoords, frustumEdgeFalloff);\n}\nfloat computeShadowPCF(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float darkness, vec2 texelSize, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float visibility = 1.0;\n  vec2 poissonDisk[4];\n  poissonDisk[0] = vec2(-0.94201624, -0.39906216);\n  poissonDisk[1] = vec2(0.94558609, -0.76890725);\n  poissonDisk[2] = vec2(-0.094184101, -0.92938870);\n  poissonDisk[3] = vec2(0.34495938, 0.29387760);\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[0] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[1] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[2] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[3] * texelSize)) < currentDepth) visibility -= 0.25;\n  return computeFallOff(min(1.0, visibility + 1.0 - darkness), projCoords, frustumEdgeFalloff);\n}\n#endif\nuniform vec3 eye;\nvarying vec3 pos_w;\nvarying vec3 normal_w;\n#if USE_NORMAL_TEXTURE || USE_ALBEDO_TEXTURE || USE_MRA_TEXTURE || USE_METALLIC_TEXTURE || USE_ROUGHNESS_TEXTURE || USE_AO_TEXTURE || USE_EMISSIVE_TEXTURE\n  varying vec2 uv0;\n#endif\n#if USE_IBL\n  uniform samplerCube diffuseEnvTexture;\n  uniform samplerCube specularEnvTexture;\n  uniform sampler2D brdfLUT;\n  #if USE_TEX_LOD\n    uniform float maxReflectionLod;\n  #endif\n#endif\nuniform vec4 albedo;\n#if USE_ALBEDO_TEXTURE\n  uniform sampler2D albedo_texture;\n#endif\n#if USE_MRA_TEXTURE\n  uniform vec2 sampler2D mra_texture;\n#endif\nuniform float metallic;\n#if USE_METALLIC_TEXTURE\n  uniform sampler2D metallic_texture;\n#endif\nuniform float roughness;\n#if USE_ROUGHNESS_TEXTURE\n  uniform sampler2D roughness_texture;\n#endif\nuniform float ao;\n#if USE_AO_TEXTURE\n  uniform sampler2D ao_texture;\n#endif\n#if USE_EMISSIVE\n  uniform vec3 emissive;\n  #if USE_EMISSIVE_TEXTURE\n    uniform sampler2D emissive_texture;\n  #endif\n#endif\n#if USE_ALPHA_TEST\n  uniform float alphaTestThreshold;\n#endif\n#if USE_NORMAL_TEXTURE\n  uniform sampler2D normal_texture;\n  \n  vec3 getNormalFromTexture() {\n    vec3 tangentNormal = texture2D(normal_texture, uv0).rgb * 2.0 - 1.0;\n    vec3 q1  = dFdx(pos_w);\n    vec3 q2  = dFdy(pos_w);\n    vec2 st1 = dFdx(uv0);\n    vec2 st2 = dFdy(uv0);\n    vec3 N   = normalize(normal_w);\n    vec3 T   = normalize(q1*st2.t - q2*st1.t);\n    vec3 B   = -normalize(cross(N, T));\n    mat3 TBN = mat3(T, B, N);\n    return normalize(TBN * tangentNormal);\n  }\n#endif\nfloat distributionGGX(vec3 N, vec3 H, float roughness) {\n  float a = roughness * roughness;\n  float a2 = a * a;\n  float NdotH = max(dot(N, H), 0.0);\n  float NdotH2 = NdotH * NdotH;\n  float nom   = a2;\n  float denom = (NdotH2 * (a2 - 1.0) + 1.0);\n  denom = PI * denom * denom;\n  return nom / denom;\n}\nfloat geometrySchlickGGX(float NdotV, float roughness) {\n  float r = (roughness + 1.0);\n  float k = (r * r) / 8.0;\n  float nom   = NdotV;\n  float denom = NdotV * (1.0 - k) + k;\n  return nom / denom;\n}\nfloat geometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {\n  float NdotV = max(dot(N, V), 0.0);\n  float NdotL = max(dot(N, L), 0.0);\n  float ggx2 = geometrySchlickGGX(NdotV, roughness);\n  float ggx1 = geometrySchlickGGX(NdotL, roughness);\n  return ggx1 * ggx2;\n}\nvec3 fresnelSchlick(float cosTheta, vec3 F0) {\n  float fresnel = exp2((-5.55473 * cosTheta - 6.98316) * cosTheta);\n  return F0 + (1.0 - F0) * fresnel;\n}\nvec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness) {\n  float fresnel = exp2((-5.55473 * cosTheta - 6.98316) * cosTheta);\n  return F0 + (max(vec3(1.0 - roughness), F0) - F0) * fresnel;\n}\nvec3 brdf(LightInfo lightInfo, vec3 N, vec3 V, vec3 F0, vec3 albedo, float metallic, float roughness) {\n  vec3 H = normalize(V + lightInfo.lightDir);\n  float NDF = distributionGGX(N, H, roughness);\n  float G   = geometrySmith(N, V, lightInfo.lightDir, roughness);\n  vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);\n  vec3 nominator    = NDF * G * F;\n  float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, lightInfo.lightDir), 0.0) + 0.001; \n  vec3 specular = nominator / denominator;\n  \n  vec3 kS = F;\n  \n  \n  \n  vec3 kD = vec3(1.0) - kS;\n  \n  \n  \n  kD *= 1.0 - metallic;\n  float NdotL = max(dot(N, lightInfo.lightDir), 0.0);\n  return (kD * albedo / PI + specular) * lightInfo.radiance * NdotL;\n}\nvoid main() {\n  float opacity = 1.0;\n  #if USE_ALBEDO_TEXTURE\n    vec4 baseColor = gammaToLinearSpaceRGBA(albedo * texture2D(albedo_texture, uv0).rgba);\n    vec3 albedo    = baseColor.rgb;\n    opacity = baseColor.a;\n  #else\n    vec4 baseColor = gammaToLinearSpaceRGBA(albedo);\n    vec3 albedo    = baseColor.rgb;\n    opacity = baseColor.a;\n  #endif\n  #if USE_ALPHA_TEST\n    if(opacity < alphaTestThreshold) discard;\n  #endif\n  #if USE_MRA_TEXTURE\n    vec3 metalRoughness = texture2D(mra_texture, uv0).rgb;\n    float metallic = metalRoughness.r;\n    float roughness = metalRoughness.g;\n    float ao = metalRoughness.b;\n  #else\n    #if USE_METALLIC_TEXTURE\n      float metallic  = texture2D(metallic_texture, uv0).r;\n    #endif\n    #if USE_ROUGHNESS_TEXTURE\n      float roughness  = texture2D(roughness_texture, uv0).r;\n    #endif\n    #if USE_AO_TEXTURE\n      float ao  = texture2D(ao_texture, uv0).r;\n    #endif\n  #endif\n  vec3 N = normalize(normal_w);\n  #if USE_NORMAL_TEXTURE\n    N = getNormalFromTexture();\n  #endif\n  vec3 V = normalize(eye - pos_w);\n  \n  \n  vec3 F0 = vec3(0.04);\n  F0 = mix(F0, albedo, metallic);\n  \n  vec3 Lo = vec3(0.0);\n  \n  #if NUM_POINT_LIGHTS > 0\n    #pragma for id in range(0, NUM_POINT_LIGHTS)\n      LightInfo pointLight{id};\n      pointLight{id} = computePointLighting(point_light{id}_position, pos_w, point_light{id}_color, point_light{id}_range);\n      Lo += brdf(pointLight{id}, N, V, F0, albedo, metallic, roughness);\n    #pragma endFor\n  #endif\n  #if NUM_DIR_LIGHTS > 0\n    #pragma for id in range(0, NUM_DIR_LIGHTS)\n      LightInfo directionalLight{id};\n      directionalLight{id} = computeDirectionalLighting(dir_light{id}_direction, dir_light{id}_color);\n      Lo += brdf(directionalLight{id}, N, V, F0, albedo, metallic, roughness);\n    #pragma endFor\n  #endif\n  #if NUM_SPOT_LIGHTS > 0\n    #pragma for id in range(0, NUM_SPOT_LIGHTS)\n      LightInfo spotLight{id};\n      spotLight{id} = computeSpotLighting(spot_light{id}_position, pos_w, spot_light{id}_direction, spot_light{id}_color, spot_light{id}_spot, spot_light{id}_range);\n      Lo += brdf(spotLight{id}, N, V, F0, albedo, metallic, roughness);\n    #pragma endFor\n  #endif\n  #if USE_EMISSIVE\n    vec3 emissiveColor = gammaToLinearSpaceRGB(emissive);\n    #if USE_EMISSIVE_TEXTURE\n      emissiveColor *= gammaToLinearSpaceRGB(texture2D(emissive_texture, uv0).rgb);\n    #endif\n    Lo += emissiveColor;\n  #endif\n  \n  vec3 ambient = vec3(0.03) * albedo * ao;\n  #if USE_IBL\n    \n    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);\n    vec3 kS = F;\n    vec3 kD = vec3(1.0) - kS;\n    kD *= 1.0 - metallic;\n    vec3 diffuseEnv = textureCube(diffuseEnvTexture, N).rgb;\n    vec3 diffuse = diffuseEnv * albedo;\n    \n    vec3 R = reflect(-V, N);\n    #if USE_TEX_LOD\n      vec3 specularEnv = textureCubeLodEXT(specularEnvTexture, R, roughness * maxReflectionLod).rgb;\n    #else\n      vec3 specularEnv = textureCube(specularEnvTexture, R).rgb;\n    #endif\n    vec2 brdf  = texture2D(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;\n    vec3 specular = specularEnv * (F * brdf.x + brdf.y);\n    ambient = (kD * diffuse + specular) * ao;\n  #endif\n  #if USE_SHADOW_MAP\n    float shadow = 1.0;\n    #if NUM_SHADOW_LIGHTS > 0\n      #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n        shadow *= computeShadowESM(shadowMap_{id}, pos_lightspace_{id}, vDepth_{id}, depthScale_{id}, darkness_{id}, frustumEdgeFalloff_{id});\n      #pragma endFor\n    #endif\n    vec3 color = (ambient + Lo) * shadow;\n  #else\n    vec3 color = ambient + Lo;\n  #endif\n  \n  color = color / (color + vec3(1.0));\n  \n  vec4 finalColor = vec4(color, opacity);\n  gl_FragColor = linearToGammaSpaceRGBA(finalColor);\n}',
+    frag: '\n#if USE_NORMAL_TEXTURE\n#extension GL_OES_standard_derivatives : enable\n#endif\n#if USE_TEX_LOD\n#extension GL_EXT_shader_texture_lod: enable\n#endif\n\n#define PI 3.14159265359\n#define PI2 6.28318530718\n#define EPSILON 1e-6\n#define LOG2 1.442695\n#define saturate(a) clamp( a, 0.0, 1.0 )\n\nvec3 gammaToLinearSpaceRGB(vec3 sRGB) { \n  return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);\n}\nvec3 linearToGammaSpaceRGB(vec3 RGB) { \n  vec3 S1 = sqrt(RGB);\n  vec3 S2 = sqrt(S1);\n  vec3 S3 = sqrt(S2);\n  return 0.585122381 * S1 + 0.783140355 * S2 - 0.368262736 * S3;\n}\nvec4 gammaToLinearSpaceRGBA(vec4 sRGBA) {\n  return vec4(gammaToLinearSpaceRGB(sRGBA.rgb), sRGBA.a);\n}\nvec4 linearToGammaSpaceRGBA(vec4 RGBA) {\n  return vec4(linearToGammaSpaceRGB(RGBA.rgb), RGBA.a);\n}\nfloat gammaToLinearSpaceExact(float val) {\n  if (val <= 0.04045) {\n    return val / 12.92;\n  } else if (val < 1.0) {\n    return pow((val + 0.055) / 1.055, 2.4);\n  } else {\n    return pow(val, 2.2);\n  }\n}\nfloat linearToGammaSpaceExact(float val) {\n  if (val <= 0.0) {\n    return 0.0;\n  } else if (val <= 0.0031308) {\n    return 12.92 * val;\n  } else if (val < 1.0) {\n    return 1.055 * pow(val, 0.4166667) - 0.055;\n  } else {\n    return pow(val, 0.45454545);\n  }\n}\n\nstruct LightInfo {\n  vec3 lightDir;\n  vec3 radiance;\n};\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform vec2 spot_light{id}_spot;\n    uniform float spot_light{id}_range;\n  #pragma endFor\n#endif\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor\n) {\n  LightInfo ret;\n  ret.lightDir = -normalize(lightDirection);\n  ret.radiance = lightColor;\n  return ret;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightColor,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0.0, 1.0 - length(lightDir) / lightRange);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation;\n  return ret;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 positionW,\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec2 lightSpot,\n  float lightRange\n) {\n  LightInfo ret;\n  vec3 lightDir = lightPosition - positionW;\n  float attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  float cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ret.lightDir = normalize(lightDir);\n  ret.radiance = lightColor * attenuation * cosConeAngle;\n  return ret;\n}\n\nvec3 unpackNormal(vec4 nmap) {\n  return nmap.xyz * 2.0 - 1.0;\n}\nvec3 unpackRGBE(vec4 rgbe) {\n    return rgbe.rgb * pow(2.0, rgbe.a * 255.0 - 128.0);\n}\n#if USE_SHADOW_MAP\n  \nvec4 packDepthToRGBA(float depth) {\n  vec4 ret = vec4(1.0, 255.0, 65025.0, 160581375.0) * depth;\n  ret = fract(ret);\n  ret -= ret.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n  return ret;\n}\nfloat unpackRGBAToDepth(vec4 color) {\n  return dot(color, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0));\n}\n  \n#if NUM_SHADOW_LIGHTS > 0\n  #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n    uniform sampler2D shadowMap_{id};\n    uniform float darkness_{id};\n    uniform float depthScale_{id};\n    uniform float frustumEdgeFalloff_{id};\n    uniform float bias_{id};\n    uniform vec2 texelSize_{id};\n    varying vec4 pos_lightspace_{id};\n    varying float vDepth_{id};\n  #pragma endFor\n#endif\nfloat computeShadow(sampler2D shadowMap, vec4 pos_lightspace, float bias) {\n  vec3 projCoords = pos_lightspace.xyz / pos_lightspace.w;\n  projCoords = projCoords * 0.5 + 0.5;\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, projCoords.xy));\n  float currentDepth = projCoords.z;\n  float shadow = (currentDepth - bias > closestDepth) ? 0.0 : 1.0;\n  return shadow;\n}\nfloat computeFallOff(float esm, vec2 coords, float frustumEdgeFalloff) {\n  float mask = smoothstep(1.0 - frustumEdgeFalloff, 1.0, clamp(dot(coords, coords), 0.0, 1.0));\n  return mix(esm, 1.0, mask);\n}\nfloat computeShadowESM(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float depthScale, float darkness, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, shadowUV));\n  \n  float esm = clamp(exp(-depthScale * (currentDepth - closestDepth)), 1.0 - darkness, 1.0);\n  return computeFallOff(esm, projCoords, frustumEdgeFalloff);\n}\nfloat computeShadowPCF(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float darkness, vec2 texelSize, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float visibility = 1.0;\n  vec2 poissonDisk[4];\n  poissonDisk[0] = vec2(-0.94201624, -0.39906216);\n  poissonDisk[1] = vec2(0.94558609, -0.76890725);\n  poissonDisk[2] = vec2(-0.094184101, -0.92938870);\n  poissonDisk[3] = vec2(0.34495938, 0.29387760);\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[0] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[1] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[2] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[3] * texelSize)) < currentDepth) visibility -= 0.25;\n  return computeFallOff(min(1.0, visibility + 1.0 - darkness), projCoords, frustumEdgeFalloff);\n}\n#endif\nuniform vec3 eye;\nvarying vec3 pos_w;\nvarying vec3 normal_w;\n#if USE_NORMAL_TEXTURE || USE_ALBEDO_TEXTURE || USE_MRA_TEXTURE || USE_METALLIC_TEXTURE || USE_ROUGHNESS_TEXTURE || USE_AO_TEXTURE || USE_EMISSIVE_TEXTURE\n  varying vec2 uv0;\n#endif\n#if USE_IBL\n  uniform samplerCube diffuseEnvTexture;\n  uniform samplerCube specularEnvTexture;\n  uniform sampler2D brdfLUT;\n  #if USE_TEX_LOD\n    uniform float maxReflectionLod;\n  #endif\n#endif\nuniform vec4 albedo;\n#if USE_ALBEDO_TEXTURE\n  uniform sampler2D albedo_texture;\n#endif\n#if USE_MRA_TEXTURE\n  uniform vec2 sampler2D mra_texture;\n#endif\nuniform float metallic;\n#if USE_METALLIC_TEXTURE\n  uniform sampler2D metallic_texture;\n#endif\nuniform float roughness;\n#if USE_ROUGHNESS_TEXTURE\n  uniform sampler2D roughness_texture;\n#endif\nuniform float ao;\n#if USE_AO_TEXTURE\n  uniform sampler2D ao_texture;\n#endif\n#if USE_EMISSIVE\n  uniform vec3 emissive;\n  #if USE_EMISSIVE_TEXTURE\n    uniform sampler2D emissive_texture;\n  #endif\n#endif\n#if USE_ALPHA_TEST\n  uniform float alphaTestThreshold;\n#endif\n#if USE_NORMAL_TEXTURE\n  uniform sampler2D normal_texture;\n  \n  vec3 getNormalFromTexture() {\n    vec3 tangentNormal = texture2D(normal_texture, uv0).rgb * 2.0 - 1.0;\n    vec3 q1  = dFdx(pos_w);\n    vec3 q2  = dFdy(pos_w);\n    vec2 st1 = dFdx(uv0);\n    vec2 st2 = dFdy(uv0);\n    vec3 N   = normalize(normal_w);\n    vec3 T   = normalize(q1*st2.t - q2*st1.t);\n    vec3 B   = -normalize(cross(N, T));\n    mat3 TBN = mat3(T, B, N);\n    return normalize(TBN * tangentNormal);\n  }\n#endif\nfloat distributionGGX(vec3 N, vec3 H, float roughness) {\n  float a = roughness * roughness;\n  float a2 = a * a;\n  float NdotH = max(dot(N, H), 0.0);\n  float NdotH2 = NdotH * NdotH;\n  float nom   = a2;\n  float denom = (NdotH2 * (a2 - 1.0) + 1.0);\n  denom = PI * denom * denom;\n  return nom / denom;\n}\nfloat geometrySchlickGGX(float NdotV, float roughness) {\n  float r = (roughness + 1.0);\n  float k = (r * r) / 8.0;\n  float nom   = NdotV;\n  float denom = NdotV * (1.0 - k) + k;\n  return nom / denom;\n}\nfloat geometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {\n  float NdotV = max(dot(N, V), 0.0);\n  float NdotL = max(dot(N, L), 0.0);\n  float ggx2 = geometrySchlickGGX(NdotV, roughness);\n  float ggx1 = geometrySchlickGGX(NdotL, roughness);\n  return ggx1 * ggx2;\n}\nvec3 fresnelSchlick(float cosTheta, vec3 F0) {\n  float fresnel = exp2((-5.55473 * cosTheta - 6.98316) * cosTheta);\n  return F0 + (1.0 - F0) * fresnel;\n}\nvec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness) {\n  float fresnel = exp2((-5.55473 * cosTheta - 6.98316) * cosTheta);\n  return F0 + (max(vec3(1.0 - roughness), F0) - F0) * fresnel;\n}\nvec3 brdf(LightInfo lightInfo, vec3 N, vec3 V, vec3 F0, vec3 albedo, float metallic, float roughness) {\n  vec3 H = normalize(V + lightInfo.lightDir);\n  float NDF = distributionGGX(N, H, roughness);\n  float G   = geometrySmith(N, V, lightInfo.lightDir, roughness);\n  vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);\n  vec3 nominator    = NDF * G * F;\n  float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, lightInfo.lightDir), 0.0) + 0.001; \n  vec3 specular = nominator / denominator;\n  \n  vec3 kS = F;\n  \n  \n  \n  vec3 kD = vec3(1.0) - kS;\n  \n  \n  \n  kD *= 1.0 - metallic;\n  float NdotL = max(dot(N, lightInfo.lightDir), 0.0);\n  return (kD * albedo / PI + specular) * lightInfo.radiance * NdotL;\n}\nvoid main() {\n  float opacity = 1.0;\n  #if USE_ALBEDO_TEXTURE\n    vec4 baseColor = albedo * gammaToLinearSpaceRGBA(texture2D(albedo_texture, uv0));\n    vec3 albedo = baseColor.rgb;\n    opacity = baseColor.a;\n  #else\n    opacity = albedo.a;\n    vec3 albedo = albedo.rgb;\n  #endif\n  #if USE_ALPHA_TEST\n    if(opacity < alphaTestThreshold) discard;\n  #endif\n  #if USE_MRA_TEXTURE\n    vec3 metalRoughness = texture2D(mra_texture, uv0).rgb;\n    float metallic = metalRoughness.r;\n    float roughness = metalRoughness.g;\n    float ao = metalRoughness.b;\n  #else\n    #if USE_METALLIC_TEXTURE\n      float metallic  = texture2D(metallic_texture, uv0).r;\n    #endif\n    #if USE_ROUGHNESS_TEXTURE\n      float roughness  = texture2D(roughness_texture, uv0).r;\n    #endif\n    #if USE_AO_TEXTURE\n      float ao  = texture2D(ao_texture, uv0).r;\n    #endif\n  #endif\n  vec3 N = normalize(normal_w);\n  #if USE_NORMAL_TEXTURE\n    N = getNormalFromTexture();\n  #endif\n  vec3 V = normalize(eye - pos_w);\n  \n  \n  vec3 F0 = vec3(0.04);\n  F0 = mix(F0, albedo, metallic);\n  \n  vec3 Lo = vec3(0.0);\n  \n  #if NUM_POINT_LIGHTS > 0\n    #pragma for id in range(0, NUM_POINT_LIGHTS)\n      LightInfo pointLight{id};\n      pointLight{id} = computePointLighting(point_light{id}_position, pos_w, point_light{id}_color, point_light{id}_range);\n      Lo += brdf(pointLight{id}, N, V, F0, albedo, metallic, roughness);\n    #pragma endFor\n  #endif\n  #if NUM_DIR_LIGHTS > 0\n    #pragma for id in range(0, NUM_DIR_LIGHTS)\n      LightInfo directionalLight{id};\n      directionalLight{id} = computeDirectionalLighting(dir_light{id}_direction, dir_light{id}_color);\n      Lo += brdf(directionalLight{id}, N, V, F0, albedo, metallic, roughness);\n    #pragma endFor\n  #endif\n  #if NUM_SPOT_LIGHTS > 0\n    #pragma for id in range(0, NUM_SPOT_LIGHTS)\n      LightInfo spotLight{id};\n      spotLight{id} = computeSpotLighting(spot_light{id}_position, pos_w, spot_light{id}_direction, spot_light{id}_color, spot_light{id}_spot, spot_light{id}_range);\n      Lo += brdf(spotLight{id}, N, V, F0, albedo, metallic, roughness);\n    #pragma endFor\n  #endif\n  #if USE_EMISSIVE\n    vec3 emissiveColor = gammaToLinearSpaceRGB(emissive);\n    #if USE_EMISSIVE_TEXTURE\n      emissiveColor *= gammaToLinearSpaceRGB(texture2D(emissive_texture, uv0).rgb);\n    #endif\n    Lo += emissiveColor;\n  #endif\n  \n  vec3 ambient = vec3(0.03) * albedo * ao;\n  #if USE_IBL\n    \n    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);\n    vec3 kS = F;\n    vec3 kD = vec3(1.0) - kS;\n    kD *= 1.0 - metallic;\n    #if USE_RGBE_HDR_IBL_DIFFUSE\n      vec3 diffuseEnv = unpackRGBE(textureCube(diffuseEnvTexture, N));\n    #else\n      vec3 diffuseEnv = textureCube(diffuseEnvTexture, N).rgb;\n    #endif\n    vec3 diffuse = diffuseEnv * albedo;\n    \n    vec3 R = reflect(-V, N);\n    #if USE_TEX_LOD\n      #if USE_RGBE_HDR_IBL_SPECULAR\n        vec3 specularEnv = unpackRGBE(textureCubeLodEXT(specularEnvTexture, R, roughness * maxReflectionLod));\n      #else\n        vec3 specularEnv = textureCubeLodEXT(specularEnvTexture, R, roughness * maxReflectionLod).rgb;\n      #endif\n    #else\n      #if USE_RGBE_HDR_IBL_SPECULAR\n        vec3 specularEnv = unpackRGBE(textureCube(specularEnvTexture, R));\n      #else\n        vec3 specularEnv = textureCube(specularEnvTexture, R).rgb;\n      #endif\n    #endif\n    vec2 brdf  = texture2D(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;\n    vec3 specular = specularEnv * (F * brdf.x + brdf.y);\n    ambient = (kD * diffuse + specular) * ao;\n  #endif\n  #if USE_SHADOW_MAP\n    float shadow = 1.0;\n    #if NUM_SHADOW_LIGHTS > 0\n      #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n        shadow *= computeShadowESM(shadowMap_{id}, pos_lightspace_{id}, vDepth_{id}, depthScale_{id}, darkness_{id}, frustumEdgeFalloff_{id});\n      #pragma endFor\n    #endif\n    vec3 color = (ambient + Lo) * shadow;\n  #else\n    vec3 color = ambient + Lo;\n  #endif\n  \n  color = color / (color + vec3(1.0));\n  \n  vec4 finalColor = vec4(color, opacity);\n  gl_FragColor = linearToGammaSpaceRGBA(finalColor);\n}',
     defines: [
       { name: 'USE_NORMAL_TEXTURE', },
       { name: 'USE_ALBEDO_TEXTURE', },
@@ -17023,7 +16656,7 @@ var shaderTemplates = [
   {
     name: 'phong',
     vert: '\nattribute vec3 a_position;\nattribute vec3 a_normal;\nuniform mat4 model;\nuniform mat4 viewProj;\nuniform mat3 normalMatrix;\nvarying vec3 normal_w;\nvarying vec3 pos_w;\n#if USE_NORMAL_TEXTURE || USE_DIFFUSE_TEXTURE || USE_EMISSIVE_TEXTURE\n  attribute vec2 a_uv0;\n  uniform vec2 mainTiling;\n  uniform vec2 mainOffset;\n  varying vec2 uv0;\n#endif\n#if USE_SKINNING\n  \nattribute vec4 a_weights;\nattribute vec4 a_joints;\nuniform sampler2D u_jointsTexture;\nuniform float u_jointsTextureSize;\nmat4 getBoneMatrix(const in float i) {\n  float size = u_jointsTextureSize;\n  float j = i * 4.0;\n  float x = mod(j, size);\n  float y = floor(j / size);\n  float dx = 1.0 / size;\n  float dy = 1.0 / size;\n  y = dy * (y + 0.5);\n  vec4 v1 = texture2D(u_jointsTexture, vec2(dx * (x + 0.5), y));\n  vec4 v2 = texture2D(u_jointsTexture, vec2(dx * (x + 1.5), y));\n  vec4 v3 = texture2D(u_jointsTexture, vec2(dx * (x + 2.5), y));\n  vec4 v4 = texture2D(u_jointsTexture, vec2(dx * (x + 3.5), y));\n  return mat4(v1, v2, v3, v4);\n}\nmat4 skinMatrix() {\n  return\n    getBoneMatrix(a_joints.x) * a_weights.x +\n    getBoneMatrix(a_joints.y) * a_weights.y +\n    getBoneMatrix(a_joints.z) * a_weights.z +\n    getBoneMatrix(a_joints.w) * a_weights.w\n    ;\n}\n#endif\n#if USE_SHADOW_MAP\n  #if NUM_SHADOW_LIGHTS > 0\n    #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n      uniform mat4 lightViewProjMatrix_{id};\n      uniform float minDepth_{id};\n      uniform float maxDepth_{id};\n      varying vec4 pos_lightspace_{id};\n      varying float vDepth_{id};\n    #pragma endFor\n  #endif\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if USE_SKINNING\n    mat4 skinMat = skinMatrix();\n    pos = skinMat * pos;\n  #endif\n  pos_w = (model * pos).xyz;\n  pos = viewProj * model * pos;\n  #if USE_NORMAL_TEXTURE || USE_DIFFUSE_TEXTURE || USE_EMISSIVE_TEXTURE\n    uv0 = a_uv0 * mainTiling + mainOffset;\n  #endif\n  vec4 normal = vec4(a_normal, 0);\n  #if USE_SKINNING\n    normal = skinMat * normal;\n  #endif\n  normal_w = normalMatrix * normal.xyz;\n  #if USE_SHADOW_MAP\n    #if NUM_SHADOW_LIGHTS > 0\n      #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n        pos_lightspace_{id} = lightViewProjMatrix_{id} * vec4(pos_w, 1.0);\n        vDepth_{id} = (pos_lightspace_{id}.z + minDepth_{id}) / (minDepth_{id} + maxDepth_{id});\n      #pragma endFor\n    #endif\n  #endif\n  gl_Position = pos;\n}',
-    frag: '\n#if USE_NORMAL_TEXTURE\n#extension GL_OES_standard_derivatives : enable\n#endif\n\n#define PI 3.14159265359\n#define PI2 6.28318530718\n#define EPSILON 1e-6\n#define LOG2 1.442695\n#define saturate(a) clamp( a, 0.0, 1.0 )\n\nvec3 gammaToLinearSpaceRGB(vec3 sRGB) { \n  return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);\n}\nvec3 linearToGammaSpaceRGB(vec3 RGB) { \n  vec3 S1 = sqrt(RGB);\n  vec3 S2 = sqrt(S1);\n  vec3 S3 = sqrt(S2);\n  return 0.585122381 * S1 + 0.783140355 * S2 - 0.368262736 * S3;\n}\nvec4 gammaToLinearSpaceRGBA(vec4 sRGBA) {\n  return vec4(gammaToLinearSpaceRGB(sRGBA.rgb), sRGBA.a);\n}\nvec4 linearToGammaSpaceRGBA(vec4 RGBA) {\n  return vec4(linearToGammaSpaceRGB(RGBA.rgb), RGBA.a);\n}\nfloat gammaToLinearSpaceExact(float val) {\n  if (val <= 0.04045) {\n    return val / 12.92;\n  } else if (val < 1.0) {\n    return pow((val + 0.055) / 1.055, 2.4);\n  } else {\n    return pow(val, 2.2);\n  }\n}\nfloat linearToGammaSpaceExact(float val) {\n  if (val <= 0.0) {\n    return 0.0;\n  } else if (val <= 0.0031308) {\n    return 12.92 * val;\n  } else if (val < 1.0) {\n    return 1.055 * pow(val, 0.4166667) - 0.055;\n  } else {\n    return pow(val, 0.45454545);\n  }\n}\n\nstruct LightInfo {\n  vec3 diffuse;\n  vec3 specular;\n};\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec3 normal,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = -normalize(lightDirection);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh;\n  return lightingResult;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 lightColor,\n  float lightRange,\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = vec3(0, 0, 0);\n  float attenuation = 1.0;\n  lightDir = lightPosition - positionW;\n  attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  lightDir = normalize(lightDir);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl * attenuation;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh * attenuation;\n  return lightingResult;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 lightDirection,\n  vec3 lightColor,\n  float lightRange,\n  vec2 lightSpot,\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = vec3(0, 0, 0);\n  float attenuation = 1.0;\n  float cosConeAngle = 1.0;\n  lightDir = lightPosition - positionW;\n  attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  lightDir = normalize(lightDir);\n  cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl * attenuation * cosConeAngle;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh * attenuation * cosConeAngle;\n  return lightingResult;\n}\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform float spot_light{id}_range;\n    uniform vec2 spot_light{id}_spot;\n  #pragma endFor\n#endif\nLightInfo getPhongLighting(\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo result;\n  result.diffuse = vec3(0, 0, 0);\n  result.specular = vec3(0, 0, 0);\n  LightInfo dirLighting;\n  #if NUM_DIR_LIGHTS > 0\n    #pragma for id in range(0, NUM_DIR_LIGHTS)\n      dirLighting = computeDirectionalLighting(dir_light{id}_direction,dir_light{id}_color,normal, viewDirection, glossiness);\n      result.diffuse += dirLighting.diffuse;\n      result.specular += dirLighting.specular;\n    #pragma endFor\n  #endif\n  LightInfo pointLighting;\n  #if NUM_POINT_LIGHTS > 0\n    #pragma for id in range(0, NUM_POINT_LIGHTS)\n      pointLighting = computePointLighting(point_light{id}_position, point_light{id}_color, point_light{id}_range,\n                                          normal, positionW, viewDirection, glossiness);\n      result.diffuse += pointLighting.diffuse;\n      result.specular += pointLighting.specular;\n    #pragma endFor\n  #endif\n  LightInfo spotLighting;\n  #if NUM_SPOT_LIGHTS > 0\n    #pragma for id in range(0, NUM_SPOT_LIGHTS)\n      spotLighting = computeSpotLighting(spot_light{id}_position, spot_light{id}_direction, spot_light{id}_color,\n                      spot_light{id}_range, spot_light{id}_spot,normal, positionW, viewDirection, glossiness);\n      result.diffuse += spotLighting.diffuse;\n      result.specular += spotLighting.specular;\n    #pragma endFor\n  #endif\n  return result;\n}\n\n#if USE_SHADOW_MAP\n  \nvec4 packDepthToRGBA(float depth) {\n  vec4 ret = vec4(1.0, 255.0, 65025.0, 160581375.0) * depth;\n  ret = fract(ret);\n  ret -= ret.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n  return ret;\n}\nfloat unpackRGBAToDepth(vec4 color) {\n  return dot(color, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0));\n}\n  \n#if NUM_SHADOW_LIGHTS > 0\n  #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n    uniform sampler2D shadowMap_{id};\n    uniform float darkness_{id};\n    uniform float depthScale_{id};\n    uniform float frustumEdgeFalloff_{id};\n    uniform float bias_{id};\n    uniform vec2 texelSize_{id};\n    varying vec4 pos_lightspace_{id};\n    varying float vDepth_{id};\n  #pragma endFor\n#endif\nfloat computeShadow(sampler2D shadowMap, vec4 pos_lightspace, float bias) {\n  vec3 projCoords = pos_lightspace.xyz / pos_lightspace.w;\n  projCoords = projCoords * 0.5 + 0.5;\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, projCoords.xy));\n  float currentDepth = projCoords.z;\n  float shadow = (currentDepth - bias > closestDepth) ? 0.0 : 1.0;\n  return shadow;\n}\nfloat computeFallOff(float esm, vec2 coords, float frustumEdgeFalloff) {\n  float mask = smoothstep(1.0 - frustumEdgeFalloff, 1.0, clamp(dot(coords, coords), 0.0, 1.0));\n  return mix(esm, 1.0, mask);\n}\nfloat computeShadowESM(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float depthScale, float darkness, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, shadowUV));\n  \n  float esm = clamp(exp(-depthScale * (currentDepth - closestDepth)), 1.0 - darkness, 1.0);\n  return computeFallOff(esm, projCoords, frustumEdgeFalloff);\n}\nfloat computeShadowPCF(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float darkness, vec2 texelSize, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float visibility = 1.0;\n  vec2 poissonDisk[4];\n  poissonDisk[0] = vec2(-0.94201624, -0.39906216);\n  poissonDisk[1] = vec2(0.94558609, -0.76890725);\n  poissonDisk[2] = vec2(-0.094184101, -0.92938870);\n  poissonDisk[3] = vec2(0.34495938, 0.29387760);\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[0] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[1] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[2] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[3] * texelSize)) < currentDepth) visibility -= 0.25;\n  return computeFallOff(min(1.0, visibility + 1.0 - darkness), projCoords, frustumEdgeFalloff);\n}\n#endif\nuniform vec3 eye;\nuniform vec3 sceneAmbient;\nvarying vec3 normal_w;\nvarying vec3 pos_w;\n#if USE_NORMAL_TEXTURE || USE_DIFFUSE_TEXTURE || USE_EMISSIVE_TEXTURE\n  varying vec2 uv0;\n#endif\nstruct phongMaterial\n{\n  vec3 diffuse;\n  vec3 emissive;\n  vec3 specular;\n  float glossiness;\n  float opacity;\n};\nuniform vec4 diffuseColor;\n#if USE_DIFFUSE_TEXTURE\n  uniform sampler2D diffuse_texture;\n#endif\n#if USE_EMISSIVE\n  uniform vec3 emissiveColor;\n  #if USE_EMISSIVE_TEXTURE\n    uniform sampler2D emissive_texture;\n  #endif\n#endif\n#if USE_SPECULAR\n  uniform vec3 specularColor;\n  uniform float glossiness;\n  #if USE_SPECULAR_TEXTURE\n    uniform sampler2D specular_texture;\n  #endif\n#endif\n#if USE_NORMAL_TEXTURE\n  uniform sampler2D normal_texture;\n  uniform float normalScale;  \n  vec3 getNormal(vec3 pos, vec3 normal) {\n    vec3 q0 = vec3( dFdx( pos.x ), dFdx( pos.y ), dFdx( pos.z ) );\n    vec3 q1 = vec3( dFdy( pos.x ), dFdy( pos.y ), dFdy( pos.z ) );\n    vec2 st0 = dFdx( uv0.st );\n    vec2 st1 = dFdy( uv0.st );\n    vec3 S = normalize( q0 * st1.t - q1 * st0.t );\n    vec3 T = normalize( -q0 * st1.s + q1 * st0.s );\n    vec3 N = normal;\n    vec3 mapN = texture2D(normal_texture, uv0).rgb * 2.0 - 1.0;\n    mapN.xy = 1.0 * mapN.xy;\n    mat3 tsn = mat3( S, T, N );\n    return normalize( tsn * mapN );\n  }\n#endif\n#if USE_ALPHA_TEST\n  uniform float alphaTestThreshold;\n#endif\nphongMaterial getPhongMaterial() {\n  phongMaterial result;\n  #if USE_DIFFUSE_TEXTURE\n    vec4 baseColor = gammaToLinearSpaceRGBA(diffuseColor * texture2D(diffuse_texture, uv0).rgba);\n    result.diffuse = baseColor.rgb;\n    result.opacity = baseColor.a;\n  #else\n    vec4 baseColor = gammaToLinearSpaceRGBA(diffuseColor);\n    result.diffuse = baseColor.rgb;\n    result.opacity = baseColor.a;\n  #endif\n  #if USE_EMISSIVE\n    result.emissive = gammaToLinearSpaceRGB(emissiveColor);\n    #if USE_EMISSIVE_TEXTURE\n      result.emissive *= gammaToLinearSpaceRGB(texture2D(emissive_texture, uv0).rgb);\n    #endif\n  #endif\n  #if USE_SPECULAR\n    result.specular = gammaToLinearSpaceRGB(specularColor);\n    #if USE_SPECULAR_TEXTURE\n      result.specular = gammaToLinearSpaceRGB(texture2D(specular_texture, uv0).rgb);\n    #endif\n    result.glossiness = glossiness;\n  #endif\n  return result;\n}\nvec4 composePhongShading(LightInfo lighting, phongMaterial mtl, float shadow)\n{\n  vec4 o = vec4(0.0, 0.0, 0.0, 1.0);\n  \n  o.xyz = lighting.diffuse * mtl.diffuse;\n  #if USE_EMISSIVE\n    o.xyz += mtl.emissive;\n  #endif\n  #if USE_SPECULAR\n    o.xyz += lighting.specular * mtl.specular;\n  #endif\n  o.xyz *= shadow;\n  o.w = mtl.opacity;\n  return o;\n}\nvoid main () {\n  vec4 o = vec4(0);\n  #if USE_DIFFUSE_TEXTURE\n    o = texture2D(diffuse_texture, uv0);\n  #endif\n  gl_FragColor = o * o * diffuseColor;\n}',
+    frag: '\n#if USE_NORMAL_TEXTURE\n#extension GL_OES_standard_derivatives : enable\n#endif\n\n#define PI 3.14159265359\n#define PI2 6.28318530718\n#define EPSILON 1e-6\n#define LOG2 1.442695\n#define saturate(a) clamp( a, 0.0, 1.0 )\n\nvec3 gammaToLinearSpaceRGB(vec3 sRGB) { \n  return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);\n}\nvec3 linearToGammaSpaceRGB(vec3 RGB) { \n  vec3 S1 = sqrt(RGB);\n  vec3 S2 = sqrt(S1);\n  vec3 S3 = sqrt(S2);\n  return 0.585122381 * S1 + 0.783140355 * S2 - 0.368262736 * S3;\n}\nvec4 gammaToLinearSpaceRGBA(vec4 sRGBA) {\n  return vec4(gammaToLinearSpaceRGB(sRGBA.rgb), sRGBA.a);\n}\nvec4 linearToGammaSpaceRGBA(vec4 RGBA) {\n  return vec4(linearToGammaSpaceRGB(RGBA.rgb), RGBA.a);\n}\nfloat gammaToLinearSpaceExact(float val) {\n  if (val <= 0.04045) {\n    return val / 12.92;\n  } else if (val < 1.0) {\n    return pow((val + 0.055) / 1.055, 2.4);\n  } else {\n    return pow(val, 2.2);\n  }\n}\nfloat linearToGammaSpaceExact(float val) {\n  if (val <= 0.0) {\n    return 0.0;\n  } else if (val <= 0.0031308) {\n    return 12.92 * val;\n  } else if (val < 1.0) {\n    return 1.055 * pow(val, 0.4166667) - 0.055;\n  } else {\n    return pow(val, 0.45454545);\n  }\n}\n\nstruct LightInfo {\n  vec3 diffuse;\n  vec3 specular;\n};\nLightInfo computeDirectionalLighting(\n  vec3 lightDirection,\n  vec3 lightColor,\n  vec3 normal,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = -normalize(lightDirection);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh;\n  return lightingResult;\n}\nLightInfo computePointLighting(\n  vec3 lightPosition,\n  vec3 lightColor,\n  float lightRange,\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = vec3(0, 0, 0);\n  float attenuation = 1.0;\n  lightDir = lightPosition - positionW;\n  attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  lightDir = normalize(lightDir);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl * attenuation;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh * attenuation;\n  return lightingResult;\n}\nLightInfo computeSpotLighting(\n  vec3 lightPosition,\n  vec3 lightDirection,\n  vec3 lightColor,\n  float lightRange,\n  vec2 lightSpot,\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo lightingResult;\n  float ndl = 0.0;\n  float ndh = 0.0;\n  vec3 lightDir = vec3(0, 0, 0);\n  float attenuation = 1.0;\n  float cosConeAngle = 1.0;\n  lightDir = lightPosition - positionW;\n  attenuation = max(0., 1.0 - length(lightDir) / lightRange);\n  lightDir = normalize(lightDir);\n  cosConeAngle = max(0., dot(lightDirection, -lightDir));\n  cosConeAngle = cosConeAngle < lightSpot.x ? 0.0 : cosConeAngle;\n  cosConeAngle = pow(cosConeAngle,lightSpot.y);\n  ndl = max(0.0, dot(normal, lightDir));\n  lightingResult.diffuse = lightColor * ndl * attenuation * cosConeAngle;\n  vec3 dirH = normalize(viewDirection + lightDir);\n  ndh = max(0.0, dot(normal, dirH));\n  ndh = (ndl == 0.0) ? 0.0: ndh;\n  ndh = pow(ndh, max(1.0, glossiness * 128.0));\n  lightingResult.specular = lightColor * ndh * attenuation * cosConeAngle;\n  return lightingResult;\n}\n#if NUM_DIR_LIGHTS > 0\n  #pragma for id in range(0, NUM_DIR_LIGHTS)\n    uniform vec3 dir_light{id}_direction;\n    uniform vec3 dir_light{id}_color;\n  #pragma endFor\n#endif\n#if NUM_POINT_LIGHTS > 0\n  #pragma for id in range(0, NUM_POINT_LIGHTS)\n    uniform vec3 point_light{id}_position;\n    uniform vec3 point_light{id}_color;\n    uniform float point_light{id}_range;\n  #pragma endFor\n#endif\n#if NUM_SPOT_LIGHTS > 0\n  #pragma for id in range(0, NUM_SPOT_LIGHTS)\n    uniform vec3 spot_light{id}_position;\n    uniform vec3 spot_light{id}_direction;\n    uniform vec3 spot_light{id}_color;\n    uniform float spot_light{id}_range;\n    uniform vec2 spot_light{id}_spot;\n  #pragma endFor\n#endif\nLightInfo getPhongLighting(\n  vec3 normal,\n  vec3 positionW,\n  vec3 viewDirection,\n  float glossiness\n) {\n  LightInfo result;\n  result.diffuse = vec3(0, 0, 0);\n  result.specular = vec3(0, 0, 0);\n  LightInfo dirLighting;\n  #if NUM_DIR_LIGHTS > 0\n    #pragma for id in range(0, NUM_DIR_LIGHTS)\n      dirLighting = computeDirectionalLighting(dir_light{id}_direction,dir_light{id}_color,normal, viewDirection, glossiness);\n      result.diffuse += dirLighting.diffuse;\n      result.specular += dirLighting.specular;\n    #pragma endFor\n  #endif\n  LightInfo pointLighting;\n  #if NUM_POINT_LIGHTS > 0\n    #pragma for id in range(0, NUM_POINT_LIGHTS)\n      pointLighting = computePointLighting(point_light{id}_position, point_light{id}_color, point_light{id}_range,\n                                          normal, positionW, viewDirection, glossiness);\n      result.diffuse += pointLighting.diffuse;\n      result.specular += pointLighting.specular;\n    #pragma endFor\n  #endif\n  LightInfo spotLighting;\n  #if NUM_SPOT_LIGHTS > 0\n    #pragma for id in range(0, NUM_SPOT_LIGHTS)\n      spotLighting = computeSpotLighting(spot_light{id}_position, spot_light{id}_direction, spot_light{id}_color,\n                      spot_light{id}_range, spot_light{id}_spot,normal, positionW, viewDirection, glossiness);\n      result.diffuse += spotLighting.diffuse;\n      result.specular += spotLighting.specular;\n    #pragma endFor\n  #endif\n  return result;\n}\n\n#if USE_SHADOW_MAP\n  \nvec4 packDepthToRGBA(float depth) {\n  vec4 ret = vec4(1.0, 255.0, 65025.0, 160581375.0) * depth;\n  ret = fract(ret);\n  ret -= ret.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n  return ret;\n}\nfloat unpackRGBAToDepth(vec4 color) {\n  return dot(color, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 160581375.0));\n}\n  \n#if NUM_SHADOW_LIGHTS > 0\n  #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n    uniform sampler2D shadowMap_{id};\n    uniform float darkness_{id};\n    uniform float depthScale_{id};\n    uniform float frustumEdgeFalloff_{id};\n    uniform float bias_{id};\n    uniform vec2 texelSize_{id};\n    varying vec4 pos_lightspace_{id};\n    varying float vDepth_{id};\n  #pragma endFor\n#endif\nfloat computeShadow(sampler2D shadowMap, vec4 pos_lightspace, float bias) {\n  vec3 projCoords = pos_lightspace.xyz / pos_lightspace.w;\n  projCoords = projCoords * 0.5 + 0.5;\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, projCoords.xy));\n  float currentDepth = projCoords.z;\n  float shadow = (currentDepth - bias > closestDepth) ? 0.0 : 1.0;\n  return shadow;\n}\nfloat computeFallOff(float esm, vec2 coords, float frustumEdgeFalloff) {\n  float mask = smoothstep(1.0 - frustumEdgeFalloff, 1.0, clamp(dot(coords, coords), 0.0, 1.0));\n  return mix(esm, 1.0, mask);\n}\nfloat computeShadowESM(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float depthScale, float darkness, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float closestDepth = unpackRGBAToDepth(texture2D(shadowMap, shadowUV));\n  \n  float esm = clamp(exp(-depthScale * (currentDepth - closestDepth)), 1.0 - darkness, 1.0);\n  return computeFallOff(esm, projCoords, frustumEdgeFalloff);\n}\nfloat computeShadowPCF(sampler2D shadowMap, vec4 pos_lightspace, float vDepth, float darkness, vec2 texelSize, float frustumEdgeFalloff) {\n  vec2 projCoords = pos_lightspace.xy / pos_lightspace.w;\n  vec2 shadowUV = projCoords * 0.5 + vec2(0.5);\n  if (shadowUV.x < 0.0 || shadowUV.x > 1.0 || shadowUV.y < 0.0 || shadowUV.y > 1.0) {\n    return 1.0;\n  }\n  float currentDepth = clamp(vDepth, 0.0, 1.0);\n  float visibility = 1.0;\n  vec2 poissonDisk[4];\n  poissonDisk[0] = vec2(-0.94201624, -0.39906216);\n  poissonDisk[1] = vec2(0.94558609, -0.76890725);\n  poissonDisk[2] = vec2(-0.094184101, -0.92938870);\n  poissonDisk[3] = vec2(0.34495938, 0.29387760);\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[0] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[1] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[2] * texelSize)) < currentDepth) visibility -= 0.25;\n  if (unpackRGBAToDepth(texture2D(shadowMap, shadowUV + poissonDisk[3] * texelSize)) < currentDepth) visibility -= 0.25;\n  return computeFallOff(min(1.0, visibility + 1.0 - darkness), projCoords, frustumEdgeFalloff);\n}\n#endif\nuniform vec3 eye;\nuniform vec3 sceneAmbient;\nvarying vec3 normal_w;\nvarying vec3 pos_w;\n#if USE_NORMAL_TEXTURE || USE_DIFFUSE_TEXTURE || USE_EMISSIVE_TEXTURE\n  varying vec2 uv0;\n#endif\nstruct phongMaterial\n{\n  vec3 diffuse;\n  vec3 emissive;\n  vec3 specular;\n  float glossiness;\n  float opacity;\n};\nuniform vec4 diffuseColor;\n#if USE_DIFFUSE_TEXTURE\n  uniform sampler2D diffuse_texture;\n#endif\n#if USE_EMISSIVE\n  uniform vec3 emissiveColor;\n  #if USE_EMISSIVE_TEXTURE\n    uniform sampler2D emissive_texture;\n  #endif\n#endif\n#if USE_SPECULAR\n  uniform vec3 specularColor;\n  uniform float glossiness;\n  #if USE_SPECULAR_TEXTURE\n    uniform sampler2D specular_texture;\n  #endif\n#endif\n#if USE_NORMAL_TEXTURE\n  uniform sampler2D normal_texture;\n  uniform float normalScale;  \n  vec3 getNormal(vec3 pos, vec3 normal) {\n    vec3 q0 = vec3( dFdx( pos.x ), dFdx( pos.y ), dFdx( pos.z ) );\n    vec3 q1 = vec3( dFdy( pos.x ), dFdy( pos.y ), dFdy( pos.z ) );\n    vec2 st0 = dFdx( uv0.st );\n    vec2 st1 = dFdy( uv0.st );\n    vec3 S = normalize( q0 * st1.t - q1 * st0.t );\n    vec3 T = normalize( -q0 * st1.s + q1 * st0.s );\n    vec3 N = normal;\n    vec3 mapN = texture2D(normal_texture, uv0).rgb * 2.0 - 1.0;\n    mapN.xy = 1.0 * mapN.xy;\n    mat3 tsn = mat3( S, T, N );\n    return normalize( tsn * mapN );\n  }\n#endif\n#if USE_ALPHA_TEST\n  uniform float alphaTestThreshold;\n#endif\nphongMaterial getPhongMaterial() {\n  phongMaterial result;\n  #if USE_DIFFUSE_TEXTURE\n    vec4 baseColor = diffuseColor * gammaToLinearSpaceRGBA(texture2D(diffuse_texture, uv0));\n    result.diffuse = baseColor.rgb;\n    result.opacity = baseColor.a;\n  #else\n    result.diffuse = diffuseColor.rgb;\n    result.opacity = diffuseColor.a;\n  #endif\n  #if USE_EMISSIVE\n    result.emissive = gammaToLinearSpaceRGB(emissiveColor);\n    #if USE_EMISSIVE_TEXTURE\n      result.emissive *= gammaToLinearSpaceRGB(texture2D(emissive_texture, uv0).rgb);\n    #endif\n  #endif\n  #if USE_SPECULAR\n    result.specular = gammaToLinearSpaceRGB(specularColor);\n    #if USE_SPECULAR_TEXTURE\n      result.specular = gammaToLinearSpaceRGB(texture2D(specular_texture, uv0).rgb);\n    #endif\n    result.glossiness = glossiness;\n  #endif\n  return result;\n}\nvec4 composePhongShading(LightInfo lighting, phongMaterial mtl, float shadow)\n{\n  vec4 o = vec4(0.0, 0.0, 0.0, 1.0);\n  \n  o.xyz = lighting.diffuse * mtl.diffuse;\n  #if USE_EMISSIVE\n    o.xyz += mtl.emissive;\n  #endif\n  #if USE_SPECULAR\n    o.xyz += lighting.specular * mtl.specular;\n  #endif\n  o.xyz *= shadow;\n  o.w = mtl.opacity;\n  return o;\n}\nvoid main () {\n  LightInfo phongLighting;\n  vec3 viewDirection = normalize(eye - pos_w);\n  phongMaterial mtl = getPhongMaterial();\n  #if USE_ALPHA_TEST\n    if(mtl.opacity < alphaTestThreshold) discard;\n  #endif\n  vec3 normal = normalize(normal_w);\n  #if USE_NORMAL_TEXTURE\n    normal = getNormal(pos_w, normal);\n  #endif\n  phongLighting = getPhongLighting(normal, pos_w, viewDirection, mtl.glossiness);\n  phongLighting.diffuse += sceneAmbient;\n  #if USE_SHADOW_MAP\n    float shadow = 1.0;\n    #if NUM_SHADOW_LIGHTS > 0\n      #pragma for id in range(0, NUM_SHADOW_LIGHTS)\n        shadow *= computeShadowESM(shadowMap_{id}, pos_lightspace_{id}, vDepth_{id}, depthScale_{id}, darkness_{id}, frustumEdgeFalloff_{id});\n      #pragma endFor\n    #endif\n    vec4 finalColor = composePhongShading(phongLighting, mtl, shadow);\n  #else\n    vec4 finalColor = composePhongShading(phongLighting, mtl, 1.0);\n  #endif\n  gl_FragColor = linearToGammaSpaceRGBA(finalColor);\n}',
     defines: [
       { name: 'USE_NORMAL_TEXTURE', },
       { name: 'USE_DIFFUSE_TEXTURE', },
@@ -17056,8 +16689,8 @@ var shaderTemplates = [
   },
   {
     name: 'skybox',
-    vert: '\nattribute vec3 a_position;\nuniform mat4 view;\nuniform mat4 proj;\nvarying vec3 viewDir;\nvoid main() {\n  mat4 viewNoTrans = view;\n  viewNoTrans[3][0] = viewNoTrans[3][1] = viewNoTrans[3][2] = 0.0;\n  gl_Position = proj * viewNoTrans * vec4(a_position, 1.0);\n  \n  \n  \n  \n  gl_Position.z = gl_Position.w - 0.00001;\n  viewDir = a_position;\n}\n',
-    frag: '\nvarying vec3 viewDir;\nuniform samplerCube cubeMap;\nvoid main() {\n    gl_FragColor = textureCube(cubeMap, viewDir);\n}',
+    vert: '\nattribute vec3 a_position;\nuniform mat4 view;\nuniform mat4 proj;\nvarying vec3 viewDir;\nvoid main() {\n  mat4 rotView = mat4(mat3(view));\n  vec4 clipPos = proj * rotView * vec4(a_position, 1.0);\n  gl_Position = clipPos.xyww;\n  viewDir = a_position;\n}\n',
+    frag: '\nvarying vec3 viewDir;\nuniform samplerCube cubeMap;\n\nvec3 gammaToLinearSpaceRGB(vec3 sRGB) { \n  return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);\n}\nvec3 linearToGammaSpaceRGB(vec3 RGB) { \n  vec3 S1 = sqrt(RGB);\n  vec3 S2 = sqrt(S1);\n  vec3 S3 = sqrt(S2);\n  return 0.585122381 * S1 + 0.783140355 * S2 - 0.368262736 * S3;\n}\nvec4 gammaToLinearSpaceRGBA(vec4 sRGBA) {\n  return vec4(gammaToLinearSpaceRGB(sRGBA.rgb), sRGBA.a);\n}\nvec4 linearToGammaSpaceRGBA(vec4 RGBA) {\n  return vec4(linearToGammaSpaceRGB(RGBA.rgb), RGBA.a);\n}\nfloat gammaToLinearSpaceExact(float val) {\n  if (val <= 0.04045) {\n    return val / 12.92;\n  } else if (val < 1.0) {\n    return pow((val + 0.055) / 1.055, 2.4);\n  } else {\n    return pow(val, 2.2);\n  }\n}\nfloat linearToGammaSpaceExact(float val) {\n  if (val <= 0.0) {\n    return 0.0;\n  } else if (val <= 0.0031308) {\n    return 12.92 * val;\n  } else if (val < 1.0) {\n    return 1.055 * pow(val, 0.4166667) - 0.055;\n  } else {\n    return pow(val, 0.45454545);\n  }\n}\n\nvec3 unpackNormal(vec4 nmap) {\n  return nmap.xyz * 2.0 - 1.0;\n}\nvec3 unpackRGBE(vec4 rgbe) {\n    return rgbe.rgb * pow(2.0, rgbe.a * 255.0 - 128.0);\n}\nvoid main() {\n#if USE_RGBE_HDR\n    vec3 c = unpackRGBE(textureCube(cubeMap, viewDir));\n    c = linearToGammaSpaceRGB(c / (1.0 + c));\n    gl_FragColor = vec4(c, 1.0);\n#else\n    gl_FragColor = textureCube(cubeMap, viewDir);\n#endif\n}',
     defines: [],
   },
   {
@@ -17069,7 +16702,7 @@ var shaderTemplates = [
   {
     name: 'unlit',
     vert: '\nattribute vec3 a_position;\nuniform mat4 model;\nuniform mat4 viewProj;\n#if USE_TEXTURE\n  attribute vec2 a_uv0;\n  uniform vec2 mainTiling;\n  uniform vec2 mainOffset;\n  varying vec2 uv0;\n#endif\n#if USE_SKINNING\n  \nattribute vec4 a_weights;\nattribute vec4 a_joints;\nuniform sampler2D u_jointsTexture;\nuniform float u_jointsTextureSize;\nmat4 getBoneMatrix(const in float i) {\n  float size = u_jointsTextureSize;\n  float j = i * 4.0;\n  float x = mod(j, size);\n  float y = floor(j / size);\n  float dx = 1.0 / size;\n  float dy = 1.0 / size;\n  y = dy * (y + 0.5);\n  vec4 v1 = texture2D(u_jointsTexture, vec2(dx * (x + 0.5), y));\n  vec4 v2 = texture2D(u_jointsTexture, vec2(dx * (x + 1.5), y));\n  vec4 v3 = texture2D(u_jointsTexture, vec2(dx * (x + 2.5), y));\n  vec4 v4 = texture2D(u_jointsTexture, vec2(dx * (x + 3.5), y));\n  return mat4(v1, v2, v3, v4);\n}\nmat4 skinMatrix() {\n  return\n    getBoneMatrix(a_joints.x) * a_weights.x +\n    getBoneMatrix(a_joints.y) * a_weights.y +\n    getBoneMatrix(a_joints.z) * a_weights.z +\n    getBoneMatrix(a_joints.w) * a_weights.w\n    ;\n}\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if USE_SKINNING\n    pos = skinMatrix() * pos;\n  #endif\n  pos = viewProj * model * pos;\n  #if USE_TEXTURE\n    uv0 = a_uv0 * mainTiling + mainOffset;\n  #endif\n  gl_Position = pos;\n}',
-    frag: '\n#if USE_TEXTURE\n  uniform sampler2D mainTexture;\n  varying vec2 uv0;\n#endif\n#if USE_COLOR\n  uniform vec4 color;\n#endif\nvoid main () {\n  vec4 o = vec4(0);\n  #if USE_TEXTURE\n  vec2 uv = uv0 - floor(uv0);\n  if (any(lessThan(vec4(uv, 0.95, 0.95), vec4(0.05, 0.05, uv))))\n    o = vec4(1);\n  \n  \n  #endif\n  #if USE_COLOR\n    o *= color;\n  #endif\n  gl_FragColor = o;\n}\n',
+    frag: '\n#if USE_TEXTURE\n  uniform sampler2D mainTexture;\n  varying vec2 uv0;\n#endif\n#if USE_COLOR\n  uniform vec4 color;\n#endif\nvoid main () {\n  vec4 o = vec4(1, 1, 1, 1);\n  #if USE_TEXTURE\n    o *= texture2D(mainTexture, uv0);\n  #endif\n  #if USE_COLOR\n    o *= color;\n  #endif\n  gl_FragColor = o;\n}',
     defines: [
       { name: 'USE_TEXTURE', },
       { name: 'USE_COLOR', },
@@ -17219,6 +16852,15 @@ ProgramLib.prototype.define = function define (name, vert, frag, defines) {
 };
 
 /**
+ * Does this library has the specified program?
+ * @param {string} name
+ * @returns {boolean}
+ */
+ProgramLib.prototype.hasProgram = function hasProgram (name) {
+  return this._templates[name] !== undefined;
+};
+
+/**
  * @param {string} name
  * @param {Object} defines
  */
@@ -17272,6 +16914,9 @@ ProgramLib.prototype.getProgram = function getProgram (name, defines, dependenci
 
 var _m3_tmp$1 = mat3.create();
 var _m4_tmp$2 = mat4.create();
+var _v3_tmp = vec3.zero();
+var _v3_tmp2 = vec3.zero();
+var _qt_tmp = quat.create();
 
 var _stageInfos = new RecyclePool(function () {
   return {
@@ -17648,8 +17293,8 @@ BaseRenderer.prototype._render = function _render (view, scene) {
 
     // frustum culling
     if (model._boundingBox !== null) { // if model does not have boundingBox, skip culling.
-      model._node.getWorldMatrix(_m4_tmp$2);
-      box.setTransform(model._boundingBox, _m4_tmp$2, model._bbModelSpace);
+      model._node._getWorldPRS(_v3_tmp, _qt_tmp, _v3_tmp2);
+      box.setTransform(model._boundingBox, _v3_tmp, _qt_tmp, _v3_tmp2, model._bbModelSpace);
       if (!this$1.frustum_test_func(model._boundingBox, view._frustum)) {
         // console.log('model is not in view frustum.');
         continue;
@@ -18622,15 +18267,21 @@ var renderer = {
 };
 Object.assign(renderer, enums$1);
 
-var KEY_NONE = 0;
-var KEY_DOWN = 1;
-var KEY_PRESSING = 2;
-var KEY_UP = 3;
+var enums$2 = {
+  KEY_NONE: 0,
+  KEY_DOWN: 1,
+  KEY_PRESSING: 2,
+  KEY_UP: 3,
 
-var TOUCH_START = 0;
-var TOUCH_PRESSING = 1;
-var TOUCH_END = 2;
-var TOUCH_CANCEL = 3;
+  TOUCH_START: 0,
+  TOUCH_PRESSING: 1,
+  TOUCH_END: 2,
+  TOUCH_CANCEL: 3,
+
+  LOCK_NEVER: 0,
+  LOCK_WHEN_PRESSED: 1,
+  LOCK_ALWAYS: 2,
+};
 
 var _dragMask = null;
 var _phases = [
@@ -18664,6 +18315,8 @@ var Input = function Input(element, opts) {
   }
 
   this._element = element || document.body;
+  this._element.requestPointerLock = this._element.requestPointerLock || this._element.mozRequestPointerLock;
+  this._element.exitPointerLock = this._element.exitPointerLock || this._element.mozExitPointerLock;
 
   // setup options
 
@@ -18672,7 +18325,7 @@ var Input = function Input(element, opts) {
     this._enabled = opts.enabled;
   }
 
-  this._lock = false;
+  this._lock = enums$2.LOCK_NEVER;
   if (opts.lock !== undefined) {
     this._lock = opts.lock;
   }
@@ -18719,9 +18372,9 @@ var Input = function Input(element, opts) {
     scrollY: 0,
 
     // buttons
-    left: KEY_NONE,
-    right: KEY_NONE,
-    middle: KEY_NONE,
+    left: enums$2.KEY_NONE,
+    right: enums$2.KEY_NONE,
+    middle: enums$2.KEY_NONE,
   };
 
   // the keyboard state
@@ -18813,24 +18466,24 @@ var Input = function Input(element, opts) {
       // left mouse down
       case 0:
         // NOTE: do not reset KEY_DOWN when it already pressed
-        if (this$1._mouse.left !== KEY_PRESSING) {
-          this$1._mouse.left = KEY_DOWN;
+        if (this$1._mouse.left !== enums$2.KEY_PRESSING) {
+          this$1._mouse.left = enums$2.KEY_DOWN;
         }
         break;
 
       // middle mouse down
       case 1:
         // NOTE: do not reset KEY_DOWN when it already pressed
-        if (this$1._mouse.middle !== KEY_PRESSING) {
-          this$1._mouse.middle = KEY_DOWN;
+        if (this$1._mouse.middle !== enums$2.KEY_PRESSING) {
+          this$1._mouse.middle = enums$2.KEY_DOWN;
         }
         break;
 
       // right mouse down
       case 2:
         // NOTE: do not reset KEY_DOWN when it already pressed
-        if (this$1._mouse.right !== KEY_PRESSING) {
-          this$1._mouse.right = KEY_DOWN;
+        if (this$1._mouse.right !== enums$2.KEY_PRESSING) {
+          this$1._mouse.right = enums$2.KEY_DOWN;
         }
         break;
     }
@@ -18851,17 +18504,17 @@ var Input = function Input(element, opts) {
     switch (event.button) {
       // left mouse up
       case 0:
-        this$1._mouse.left = KEY_UP;
+        this$1._mouse.left = enums$2.KEY_UP;
         break;
 
       // middle mouse up
       case 1:
-        this$1._mouse.middle = KEY_UP;
+        this$1._mouse.middle = enums$2.KEY_UP;
         break;
 
       // right mouse up
       case 2:
-        this$1._mouse.right = KEY_UP;
+        this$1._mouse.right = enums$2.KEY_UP;
         break;
     }
   };
@@ -18907,7 +18560,7 @@ var Input = function Input(element, opts) {
     }
 
     // NOTE: do not reset KEY_DOWN when it already pressed
-    if (iter && iter._state === KEY_PRESSING) {
+    if (iter && iter._state === enums$2.KEY_PRESSING) {
       return;
     }
 
@@ -18915,7 +18568,7 @@ var Input = function Input(element, opts) {
       iter = this$1._keys.add();
     }
     iter.key = event.key;
-    iter._state = KEY_DOWN;
+    iter._state = enums$2.KEY_DOWN;
   };
 
   // keyup
@@ -18936,7 +18589,7 @@ var Input = function Input(element, opts) {
 
     iter = this$1._keys.add();
     iter.key = event.key;
-    iter._state = KEY_UP;
+    iter._state = enums$2.KEY_UP;
   };
 
   // touchstart
@@ -18948,7 +18601,7 @@ var Input = function Input(element, opts) {
       var touch = this$1._touches.add();
 
       touch.id = changedTouch.identifier;
-      touch._phase = TOUCH_START;
+      touch._phase = enums$2.TOUCH_START;
       touch.x = this$1._calcOffsetX(changedTouch.clientX);
       touch.y = this$1._calcOffsetY(changedTouch.clientY);
       touch.dx = 0;
@@ -18968,7 +18621,7 @@ var Input = function Input(element, opts) {
         var changedTouch = event.changedTouches[j];
 
         if (touch.id === changedTouch.identifier) {
-          touch._phase = TOUCH_PRESSING;
+          touch._phase = enums$2.TOUCH_PRESSING;
           touch.x = this$1._calcOffsetX(changedTouch.clientX);
           touch.y = this$1._calcOffsetY(changedTouch.clientY);
           touch.dx = touch.x - touch.prevX;
@@ -18988,7 +18641,7 @@ var Input = function Input(element, opts) {
         var changedTouch = event.changedTouches[j];
 
         if (touch.id === changedTouch.identifier) {
-          touch._phase = TOUCH_END;
+          touch._phase = enums$2.TOUCH_END;
           touch.prevX = touch.x = this$1._calcOffsetX(changedTouch.clientX);
           touch.prevY = touch.y = this$1._calcOffsetY(changedTouch.clientY);
           touch.dx = 0;
@@ -19008,7 +18661,7 @@ var Input = function Input(element, opts) {
         var changedTouch = event.changedTouches[j];
 
         if (touch.id === changedTouch.identifier) {
-          touch._phase = TOUCH_CANCEL;
+          touch._phase = enums$2.TOUCH_CANCEL;
           touch.prevX = touch.x = this$1._calcOffsetX(changedTouch.clientX);
           touch.prevY = touch.y = this$1._calcOffsetY(changedTouch.clientY);
           touch.dx = 0;
@@ -19022,6 +18675,15 @@ var Input = function Input(element, opts) {
   this._contextmenuHandle = function (event) {
     event.preventDefault();
     event.stopPropagation();
+  };
+
+  this._lockChangeHandle = function () {
+    if(document.pointerLockElement === this$1._element ||
+    document.mozPointerLockElement === this$1._element) {
+      this$1._pointerLocked = true;
+    } else {
+      this$1._pointerLocked = false;
+    }
   };
 
   if (this._enabled) {
@@ -19060,6 +18722,7 @@ Input.prototype.destroy = function destroy () {
   this._element.removeEventListener('touchmove', this._touchmoveHandle);
 
   this._element.removeEventListener('contextmenu', this._contextmenuHandle);
+  document.removeEventListener('pointerlockchange', this._lockChangeHandle);
 
   this._uninstallGlobalEvents();
 };
@@ -19078,6 +18741,7 @@ Input.prototype._registerEvents = function _registerEvents () {
   this._element.addEventListener('touchmove', this._touchmoveHandle, false);
 
   this._element.addEventListener('contextmenu', this._contextmenuHandle);
+  document.addEventListener('pointerlockchange', this._lockChangeHandle, false);
 };
 
 Input.prototype._installGlobalEvents = function _installGlobalEvents () {
@@ -19104,15 +18768,17 @@ Input.prototype._uninstallGlobalEvents = function _uninstallGlobalEvents () {
 
   // if we have mouse key pressed, skip it
   if (
-    (this._mouse.left !== KEY_NONE && this._mouse.left !== KEY_UP) ||
-    (this._mouse.right !== KEY_NONE && this._mouse.right !== KEY_UP) ||
-    (this._mouse.middle !== KEY_NONE && this._mouse.middle !== KEY_UP)
+    (this._mouse.left !== enums$2.KEY_NONE && this._mouse.left !== enums$2.KEY_UP) ||
+    (this._mouse.right !== enums$2.KEY_NONE && this._mouse.right !== enums$2.KEY_UP) ||
+    (this._mouse.middle !== enums$2.KEY_NONE && this._mouse.middle !== enums$2.KEY_UP)
   ) {
     return;
   }
 
   // unlock mouse here
-  this._lockPointer(false);
+  if (this._lock === enums$2.LOCK_WHEN_PRESSED) {
+    this._lockPointer(false);
+  }
 
   // if we are grabbing mouse, skip it
   if (this._mouseGrabbed) {
@@ -19258,17 +18924,17 @@ prototypeAccessors$14.mouseButtons.get = function () {
   var buttons = 0;
 
   var btn = this._mouse.left;
-  if (btn === KEY_DOWN || btn === KEY_PRESSING) {
+  if (btn === enums$2.KEY_DOWN || btn === enums$2.KEY_PRESSING) {
     buttons |= 1;
   }
 
   btn = this._mouse.right;
-  if (btn === KEY_DOWN || btn === KEY_PRESSING) {
+  if (btn === enums$2.KEY_DOWN || btn === enums$2.KEY_PRESSING) {
     buttons |= 2;
   }
 
   btn = this._mouse.middle;
-  if (btn === KEY_DOWN || btn === KEY_PRESSING) {
+  if (btn === enums$2.KEY_DOWN || btn === enums$2.KEY_PRESSING) {
     buttons |= 4;
   }
 
@@ -19288,7 +18954,7 @@ prototypeAccessors$14.touchCount.get = function () {
 prototypeAccessors$14.hasKeyDown.get = function () {
   var iter = this._keys.head;
   while (iter) {
-    if (iter._state === KEY_DOWN) {
+    if (iter._state === enums$2.KEY_DOWN) {
       return true;
     }
   }
@@ -19301,7 +18967,7 @@ prototypeAccessors$14.hasKeyDown.get = function () {
 prototypeAccessors$14.hasKeyUp.get = function () {
   var iter = this._keys.head;
   while (iter) {
-    if (iter._state === KEY_UP) {
+    if (iter._state === enums$2.KEY_UP) {
       return true;
     }
   }
@@ -19313,9 +18979,9 @@ prototypeAccessors$14.hasKeyUp.get = function () {
  */
 prototypeAccessors$14.hasMouseDown.get = function () {
   if (
-    this._mouse.left === KEY_DOWN ||
-    this._mouse.middle === KEY_DOWN ||
-    this._mouse.right === KEY_DOWN
+    this._mouse.left === enums$2.KEY_DOWN ||
+    this._mouse.middle === enums$2.KEY_DOWN ||
+    this._mouse.right === enums$2.KEY_DOWN
   ) {
     return true;
   }
@@ -19328,9 +18994,9 @@ prototypeAccessors$14.hasMouseDown.get = function () {
  */
 prototypeAccessors$14.hasMouseUp.get = function () {
   if (
-    this._mouse.left === KEY_UP ||
-    this._mouse.middle === KEY_UP ||
-    this._mouse.right === KEY_UP
+    this._mouse.left === enums$2.KEY_UP ||
+    this._mouse.middle === enums$2.KEY_UP ||
+    this._mouse.right === enums$2.KEY_UP
   ) {
     return true;
   }
@@ -19369,22 +19035,22 @@ Input.prototype.reset = function reset () {
   this._mouse.scrollX = 0;
   this._mouse.scrollY = 0;
 
-  if (this._mouse.left === KEY_DOWN) {
-    this._mouse.left = KEY_PRESSING;
-  } else if (this._mouse.left === KEY_UP) {
-    this._mouse.left = KEY_NONE;
+  if (this._mouse.left === enums$2.KEY_DOWN) {
+    this._mouse.left = enums$2.KEY_PRESSING;
+  } else if (this._mouse.left === enums$2.KEY_UP) {
+    this._mouse.left = enums$2.KEY_NONE;
   }
 
-  if (this._mouse.middle === KEY_DOWN) {
-    this._mouse.middle = KEY_PRESSING;
-  } else if (this._mouse.middle === KEY_UP) {
-    this._mouse.middle = KEY_NONE;
+  if (this._mouse.middle === enums$2.KEY_DOWN) {
+    this._mouse.middle = enums$2.KEY_PRESSING;
+  } else if (this._mouse.middle === enums$2.KEY_UP) {
+    this._mouse.middle = enums$2.KEY_NONE;
   }
 
-  if (this._mouse.right === KEY_DOWN) {
-    this._mouse.right = KEY_PRESSING;
-  } else if (this._mouse.right === KEY_UP) {
-    this._mouse.right = KEY_NONE;
+  if (this._mouse.right === enums$2.KEY_DOWN) {
+    this._mouse.right = enums$2.KEY_PRESSING;
+  } else if (this._mouse.right === enums$2.KEY_UP) {
+    this._mouse.right = enums$2.KEY_NONE;
   }
 
   // update keyboard states
@@ -19394,9 +19060,9 @@ Input.prototype.reset = function reset () {
     iter = next;
     next = iter._next;
 
-    if (iter._state === KEY_DOWN) {
-      iter._state = KEY_PRESSING;
-    } else if (iter._state === KEY_UP) {
+    if (iter._state === enums$2.KEY_DOWN) {
+      iter._state = enums$2.KEY_PRESSING;
+    } else if (iter._state === enums$2.KEY_UP) {
       this$1._keys.remove(iter);
     }
   }
@@ -19407,10 +19073,10 @@ Input.prototype.reset = function reset () {
     this$1._touches.data[i].prevY = this$1._touches.data[i].y;
     this$1._touches.data[i].dx = 0;
     this$1._touches.data[i].dy = 0;
-    if (this$1._touches.data[i]._phase === TOUCH_START) {
-      this$1._touches.data[i]._phase = TOUCH_PRESSING;
+    if (this$1._touches.data[i]._phase === enums$2.TOUCH_START) {
+      this$1._touches.data[i]._phase = enums$2.TOUCH_PRESSING;
     }
-    if (this$1._touches.data[i]._phase === TOUCH_END || this$1._touches.data[i]._phase === TOUCH_CANCEL) {
+    if (this$1._touches.data[i]._phase === enums$2.TOUCH_END || this$1._touches.data[i]._phase === enums$2.TOUCH_CANCEL) {
       this$1._touches.remove(i);
     }
   }
@@ -19456,7 +19122,7 @@ Input.prototype.grabMouse = function grabMouse (grabbed) {
 Input.prototype.mousedown = function mousedown (name) {
   var btn = this._mouse[name];
   if (btn !== undefined) {
-    return btn === KEY_DOWN;
+    return btn === enums$2.KEY_DOWN;
   }
 
   return false;
@@ -19469,7 +19135,7 @@ Input.prototype.mousedown = function mousedown (name) {
 Input.prototype.mousepress = function mousepress (name) {
   var btn = this._mouse[name];
   if (btn !== undefined) {
-    return btn === KEY_DOWN || btn === KEY_PRESSING;
+    return btn === enums$2.KEY_DOWN || btn === enums$2.KEY_PRESSING;
   }
 
   return false;
@@ -19482,7 +19148,7 @@ Input.prototype.mousepress = function mousepress (name) {
 Input.prototype.mouseup = function mouseup (name) {
   var btn = this._mouse[name];
   if (btn !== undefined) {
-    return btn === KEY_UP;
+    return btn === enums$2.KEY_UP;
   }
 
   return false;
@@ -19495,7 +19161,7 @@ Input.prototype.mouseup = function mouseup (name) {
 Input.prototype.keydown = function keydown (name) {
   var iter = this._keys.head;
   while (iter) {
-    if (iter.key === name && iter._state === KEY_DOWN) {
+    if (iter.key === name && iter._state === enums$2.KEY_DOWN) {
       return true;
     }
     iter = iter._next;
@@ -19511,7 +19177,7 @@ Input.prototype.keydown = function keydown (name) {
 Input.prototype.keyup = function keyup (name) {
   var iter = this._keys.head;
   while (iter) {
-    if (iter.key === name && iter._state === KEY_UP) {
+    if (iter.key === name && iter._state === enums$2.KEY_UP) {
       return true;
     }
     iter = iter._next;
@@ -19528,7 +19194,7 @@ Input.prototype.keypress = function keypress (name) {
   var iter = this._keys.head;
   while (iter) {
     if (iter.key === name &&
-      (iter._state === KEY_DOWN || iter._state === KEY_PRESSING)
+      (iter._state === enums$2.KEY_DOWN || iter._state === enums$2.KEY_PRESSING)
     ) {
       return true;
     }
@@ -19539,6 +19205,8 @@ Input.prototype.keypress = function keypress (name) {
 };
 
 Object.defineProperties( Input.prototype, prototypeAccessors$14 );
+
+Object.assign(Input, enums$2);
 
 /**
  * @class Event
@@ -23555,8 +23223,8 @@ var primitives = Object.freeze({
 var _right = vec3.new(1, 0, 0);
 var _up = vec3.new(0, 1, 0);
 var _forward$1 = vec3.new(0, 0, 1);
-var _v3_tmp = vec3.zero();
-var _v3_tmp2 = vec3.zero();
+var _v3_tmp$1 = vec3.zero();
+var _v3_tmp2$1 = vec3.zero();
 var _c3_tmp = color3.create();
 
 var DrawMng = function DrawMng(app) {
@@ -23749,23 +23417,23 @@ DrawMng.prototype.tick = function tick () {
     }
 
     this$1._lineBatchModel2D.addLine(
-      vec3.set(_v3_tmp, item.x, item.y, 0.0),
-      vec3.set(_v3_tmp2, item.x, item.y + item.h, 0.0),
+      vec3.set(_v3_tmp$1, item.x, item.y, 0.0),
+      vec3.set(_v3_tmp2$1, item.x, item.y + item.h, 0.0),
       item.color
     );
     this$1._lineBatchModel2D.addLine(
-      vec3.set(_v3_tmp, item.x, item.y + item.h, 0.0),
-      vec3.set(_v3_tmp2, item.x + item.w, item.y + item.h, 0.0),
+      vec3.set(_v3_tmp$1, item.x, item.y + item.h, 0.0),
+      vec3.set(_v3_tmp2$1, item.x + item.w, item.y + item.h, 0.0),
       item.color
     );
     this$1._lineBatchModel2D.addLine(
-      vec3.set(_v3_tmp, item.x + item.w, item.y + item.h, 0.0),
-      vec3.set(_v3_tmp2, item.x + item.w, item.y, 0.0),
+      vec3.set(_v3_tmp$1, item.x + item.w, item.y + item.h, 0.0),
+      vec3.set(_v3_tmp2$1, item.x + item.w, item.y, 0.0),
       item.color
     );
     this$1._lineBatchModel2D.addLine(
-      vec3.set(_v3_tmp, item.x + item.w, item.y, 0.0),
-      vec3.set(_v3_tmp2, item.x, item.y, 0.0),
+      vec3.set(_v3_tmp$1, item.x + item.w, item.y, 0.0),
+      vec3.set(_v3_tmp2$1, item.x, item.y, 0.0),
       item.color
     );
 
@@ -23853,14 +23521,14 @@ DrawMng.prototype.addAxes = function addAxes (pos, rotation, scale, duration, de
 
   vec3.copy(axes.pos, pos);
 
-  vec3.transformQuat(_v3_tmp, _right, rotation);
-  vec3.scaleAndAdd(_v3_tmp, pos, _v3_tmp, scale), vec3.copy(axes.right, _v3_tmp);
+  vec3.transformQuat(_v3_tmp$1, _right, rotation);
+  vec3.scaleAndAdd(_v3_tmp$1, pos, _v3_tmp$1, scale), vec3.copy(axes.right, _v3_tmp$1);
 
-  vec3.transformQuat(_v3_tmp, _up, rotation);
-  vec3.scaleAndAdd(_v3_tmp, pos, _v3_tmp, scale), vec3.copy(axes.up, _v3_tmp);
+  vec3.transformQuat(_v3_tmp$1, _up, rotation);
+  vec3.scaleAndAdd(_v3_tmp$1, pos, _v3_tmp$1, scale), vec3.copy(axes.up, _v3_tmp$1);
 
-  vec3.transformQuat(_v3_tmp, _forward$1, rotation);
-  vec3.scaleAndAdd(_v3_tmp, pos, _v3_tmp, scale), vec3.copy(axes.forward, _v3_tmp);
+  vec3.transformQuat(_v3_tmp$1, _forward$1, rotation);
+  vec3.scaleAndAdd(_v3_tmp$1, pos, _v3_tmp$1, scale), vec3.copy(axes.forward, _v3_tmp$1);
 
   axes.duration = duration;
   axes.depthTest = depthTest;
@@ -23940,7 +23608,7 @@ var Debugger = function Debugger(app) {
   this._app = app;
   this._drawMng = new DrawMng(app);
   this._debugInput = new Input(app._canvas, {
-    lock: true,
+    lock: Input.LOCK_WHEN_PRESSED,
     invertY: true,
     enabled: false,
   });
@@ -24737,7 +24405,7 @@ var effectJsons = [
     name: 'pbr',
     techniques: [{"stages":["opaque"],"params":[{"name":"albedo","type":9,"value":[1,1,1,1]},{"name":"mainTiling","type":5,"value":[1,1]},{"name":"mainOffset","type":5,"value":[0,0]},{"name":"albedo_texture","type":13,"value":null},{"name":"metallic","type":4,"value":1},{"name":"metallic_texture","type":13,"value":null},{"name":"roughness","type":4,"value":0.5},{"name":"roughness_texture","type":13,"value":null},{"name":"ao","type":4,"value":0.2},{"name":"ao_texture","type":13,"value":null},{"name":"emissive","type":8,"value":[0,0,0]},{"name":"emissive_texture","type":13,"value":null},{"name":"normal_texture","type":13,"value":null},{"name":"diffuseEnvTexture","type":14,"value":null},{"name":"specularEnvTexture","type":14,"value":null},{"name":"brdfLUT","type":13,"value":null},{"name":"maxReflectionLod","type":4,"value":9},{"name":"alphaTestThreshold","type":4,"value":0}],"passes":[{"program":"pbr","cullMode":1029,"depthTest":true,"depthWrite":true}],"layer":0},{"stages":["shadowcast"],"params":[],"passes":[{"program":"shadow-depth","cullMode":1029,"blendMode":0,"depthTest":true,"depthWrite":true}],"layer":0}],
     properties: {},
-    defines: [{"name":"USE_NORMAL_TEXTURE","value":false},{"name":"USE_ALBEDO_TEXTURE","value":false},{"name":"USE_MRA_TEXTURE","value":false},{"name":"USE_METALLIC_TEXTURE","value":false},{"name":"USE_ROUGHNESS_TEXTURE","value":false},{"name":"USE_AO_TEXTURE","value":false},{"name":"USE_EMISSIVE","value":false},{"name":"USE_EMISSIVE_TEXTURE","value":false},{"name":"USE_IBL","value":false},{"name":"USE_TEX_LOD","value":false},{"name":"USE_ALPHA_TEST","value":false},{"name":"USE_SHADOW_MAP","value":false},{"name":"USE_SKINNING","value":false},{"name":"NUM_DIR_LIGHTS","value":0},{"name":"NUM_POINT_LIGHTS","value":0},{"name":"NUM_SPOT_LIGHTS","value":0},{"name":"NUM_SHADOW_LIGHTS","value":0}],
+    defines: [{"name":"USE_NORMAL_TEXTURE","value":false},{"name":"USE_ALBEDO_TEXTURE","value":false},{"name":"USE_MRA_TEXTURE","value":false},{"name":"USE_METALLIC_TEXTURE","value":false},{"name":"USE_ROUGHNESS_TEXTURE","value":false},{"name":"USE_AO_TEXTURE","value":false},{"name":"USE_EMISSIVE","value":false},{"name":"USE_EMISSIVE_TEXTURE","value":false},{"name":"USE_IBL","value":false},{"name":"USE_TEX_LOD","value":false},{"name":"USE_ALPHA_TEST","value":false},{"name":"USE_SHADOW_MAP","value":false},{"name":"USE_SKINNING","value":false},{"name":"NUM_DIR_LIGHTS","value":0},{"name":"NUM_POINT_LIGHTS","value":0},{"name":"NUM_SPOT_LIGHTS","value":0},{"name":"NUM_SHADOW_LIGHTS","value":0},{"name":"USE_RGBE_HDR_IBL_SPECULAR","value":false},{"name":"USE_RGBE_HDR_IBL_DIFFUSE","value":false}],
     dependencies: [{"define":"USE_NORMAL_TEXTURE","extension":"OES_standard_derivatives"},{"define":"USE_TEX_LOD","extension":"EXT_shader_texture_lod"}]
   },
   {
@@ -24765,7 +24433,7 @@ var effectJsons = [
     name: 'skybox',
     techniques: [{"stages":["opaque"],"params":[{"name":"cubeMap","type":14,"value":null}],"passes":[{"program":"skybox","cullMode":0}],"layer":-1}],
     properties: {},
-    defines: [],
+    defines: [{"name":"USE_RGBE_HDR","value":false}],
     dependencies: undefined
   },
   {
@@ -24786,7 +24454,7 @@ var effectJsons = [
     name: 'unlit',
     techniques: [{"stages":["opaque"],"params":[{"name":"color","type":9,"value":[1,1,1,1]},{"name":"mainTiling","type":5,"value":[1,1]},{"name":"mainOffset","type":5,"value":[0,0]},{"name":"mainTexture","type":13,"value":null}],"passes":[{"program":"unlit","cullMode":1029,"depthTest":true,"depthWrite":true}],"layer":0}],
     properties: {},
-    defines: [{"name":"USE_TEXTURE","value":false},{"name":"USE_COLOR","value":true},{"name":"USE_SKINNING","value":false}],
+    defines: [{"name":"USE_TEXTURE","value":false},{"name":"USE_COLOR","value":false},{"name":"USE_SKINNING","value":false}],
     dependencies: undefined
   },
   {
@@ -25535,7 +25203,7 @@ function createNodes(gltfNodes) {
     var gltfNode$1 = gltfNodes[i$1];
     var node$1 = nodes[i$1];
 
-    if ( gltfNode$1.children ) {
+    if (gltfNode$1.children) {
       for (var j = 0; j < gltfNode$1.children.length; ++j) {
         var index = gltfNode$1.children[j];
         node$1.append(nodes[index]);
@@ -25592,7 +25260,7 @@ function createEntities(app, gltfNodes) {
     var gltfNode$1 = gltfNodes[i$1];
     var node$1 = nodes[i$1];
 
-    if ( gltfNode$1.children ) {
+    if (gltfNode$1.children) {
       for (var j = 0; j < gltfNode$1.children.length; ++j) {
         var index = gltfNode$1.children[j];
         node$1.append(nodes[index]);
@@ -25610,7 +25278,7 @@ function createEntities(app, gltfNodes) {
  * @param {number} index
  */
 function createMesh$1(app, gltf, bin, index) {
-  if ( index >= gltf.meshes.length ) {
+  if (index >= gltf.meshes.length) {
     return null;
   }
 
@@ -25649,29 +25317,29 @@ function createMesh$1(app, gltf, bin, index) {
     vfmt.push({ name: gfx.ATTR_TANGENT, type: acc$2.componentType, num: _type2size[acc$2.type] });
   }
 
+  if (attributes.COLOR_0 !== undefined) {
+    var acc$3 = accessors[attributes.COLOR_0];
+    vfmt.push({ name: gfx.ATTR_COLOR0, type: acc$3.componentType, num: _type2size[acc$3.type] });
+  }
+
   if (attributes.TEXCOORD_0 !== undefined) {
-    var acc$3 = accessors[attributes.TEXCOORD_0];
-    vfmt.push({ name: gfx.ATTR_UV0, type: acc$3.componentType, num: _type2size[acc$3.type] });
+    var acc$4 = accessors[attributes.TEXCOORD_0];
+    vfmt.push({ name: gfx.ATTR_UV0, type: acc$4.componentType, num: _type2size[acc$4.type] });
   }
 
   if (attributes.TEXCOORD_1 !== undefined) {
-    var acc$4 = accessors[attributes.TEXCOORD_1];
-    vfmt.push({ name: gfx.ATTR_UV1, type: acc$4.componentType, num: _type2size[acc$4.type] });
+    var acc$5 = accessors[attributes.TEXCOORD_1];
+    vfmt.push({ name: gfx.ATTR_UV1, type: acc$5.componentType, num: _type2size[acc$5.type] });
   }
 
   if (attributes.TEXCOORD_2 !== undefined) {
-    var acc$5 = accessors[attributes.TEXCOORD_2];
-    vfmt.push({ name: gfx.ATTR_UV2, type: acc$5.componentType, num: _type2size[acc$5.type] });
+    var acc$6 = accessors[attributes.TEXCOORD_2];
+    vfmt.push({ name: gfx.ATTR_UV2, type: acc$6.componentType, num: _type2size[acc$6.type] });
   }
 
   if (attributes.TEXCOORD_3 !== undefined) {
-    var acc$6 = accessors[attributes.TEXCOORD_3];
-    vfmt.push({ name: gfx.ATTR_UV3, type: acc$6.componentType, num: _type2size[acc$6.type] });
-  }
-
-  if (attributes.COLOR_0 !== undefined) {
-    var acc$7 = accessors[attributes.COLOR_0];
-    vfmt.push({ name: gfx.ATTR_COLOR0, type: acc$7.componentType, num: _type2size[acc$7.type] });
+    var acc$7 = accessors[attributes.TEXCOORD_3];
+    vfmt.push({ name: gfx.ATTR_UV3, type: acc$7.componentType, num: _type2size[acc$7.type] });
   }
 
   if (attributes.JOINTS_0 !== undefined) {
@@ -25734,7 +25402,7 @@ function createMesh$1(app, gltf, bin, index) {
  * @param {number} index
  */
 function createSkinning(gltf, bin, index) {
-  if ( index >= gltf.skins.length ) {
+  if (index >= gltf.skins.length) {
     return null;
   }
 
@@ -25748,9 +25416,9 @@ function createSkinning(gltf, bin, index) {
 
   for (var i = 0; i < accessor.count; ++i) {
     bindposes[i] = mat4.new(
-      data[16 * i + 0 ], data[16 * i + 1 ], data[16 * i + 2 ], data[16 * i + 3 ],
-      data[16 * i + 4 ], data[16 * i + 5 ], data[16 * i + 6 ], data[16 * i + 7 ],
-      data[16 * i + 8 ], data[16 * i + 9 ], data[16 * i + 10], data[16 * i + 11],
+      data[16 * i + 0], data[16 * i + 1], data[16 * i + 2], data[16 * i + 3],
+      data[16 * i + 4], data[16 * i + 5], data[16 * i + 6], data[16 * i + 7],
+      data[16 * i + 8], data[16 * i + 9], data[16 * i + 10], data[16 * i + 11],
       data[16 * i + 12], data[16 * i + 13], data[16 * i + 14], data[16 * i + 15]
     );
   }
@@ -25767,7 +25435,7 @@ function createSkinning(gltf, bin, index) {
  * @param {number} index
  */
 function createAnimationClip(gltf, bin, index) {
-  if ( index >= gltf.animations.length ) {
+  if (index >= gltf.animations.length) {
     return null;
   }
 
@@ -25872,7 +25540,7 @@ function createAnimationClip(gltf, bin, index) {
 /**
  * @param {object} gltf
  */
-function createJoints (gltf) {
+function createJoints(gltf) {
   var joints = new Joints();
   joints._name = gltf.joints[0].name;
   joints._nodes = gltf.joints;
@@ -26787,7 +26455,7 @@ function animationLoader (app, urls, callback) {
   });
 }
 
-var LoadMode = {
+var enums$3 = {
   WEB_AUDIO: 0,
   DOM_AUDIO: 1,
 };
@@ -26804,7 +26472,7 @@ var AudioClip = (function (Asset$$1) {
      * Current load mode, using Web Audio API by default
      * @type {number}
      */
-    this.loadMode = LoadMode.WEB_AUDIO;
+    this.loadMode = enums$3.WEB_AUDIO;
   }
 
   if ( Asset$$1 ) AudioClip.__proto__ = Asset$$1;
@@ -26840,6 +26508,7 @@ var AudioClip = (function (Asset$$1) {
 }(Asset));
 
 EventEmitter.mixin(AudioClip);
+Object.assign(AudioClip, enums$3);
 
 var sys = null;
 
@@ -26906,7 +26575,7 @@ function loadDomAudio (item, callback) {
   var success = function () {
     clearEvent();
     clip.nativeAsset = dom;
-    clip.loadMode = LoadMode.DOM_AUDIO;
+    clip.loadMode = AudioClip.DOM_AUDIO;
     clip.emit('load');
     callback(null, clip);
   };
@@ -39753,6 +39422,146 @@ function otfontLoader (app, urls, callback) {
   });
 }
 
+var _typeMap = {
+  float: renderer.PARAM_FLOAT,
+  float2: renderer.PARAM_FLOAT2,
+  float3: renderer.PARAM_FLOAT3,
+  float4: renderer.PARAM_FLOAT4,
+  color3: renderer.PARAM_COLOR3,
+  color4: renderer.PARAM_COLOR4,
+  texture2d: renderer.PARAM_TEXTURE_2D,
+  textureCube: renderer.PARAM_TEXTURE_CUBE
+};
+
+var _passMap = {
+  back: gfx.CULL_BACK,
+  front: gfx.CULL_FRONT,
+  add: gfx.BLEND_FUNC_ADD,
+  subtract: gfx.BLEND_FUNC_SUBTRACT,
+  reverseSubtract: gfx.BLEND_FUNC_REVERSE_SUBTRACT,
+  zero: gfx.BLEND_ZERO,
+  one: gfx.BLEND_ONE,
+  srcColor: gfx.BLEND_SRC_COLOR,
+  oneMinusSrcColor: gfx.BLEND_ONE_MINUS_SRC_COLOR,
+  dstColor: gfx.BLEND_DST_COLOR,
+  oneMinusDstColor: gfx.BLEND_ONE_MINUS_DST_COLOR,
+  srcAlpha: gfx.BLEND_SRC_ALPHA,
+  oneMinusSrcAlpha: gfx.BLEND_ONE_MINUS_SRC_ALPHA,
+  dstAlpha: gfx.BLEND_DST_ALPHA,
+  oneMinusDstAlpha: gfx.BLEND_ONE_MINUS_DST_ALPHA,
+  constColor: gfx.BLEND_CONSTANT_COLOR,
+  oneMinusConstColor: gfx.BLEND_ONE_MINUS_CONSTANT_COLOR,
+  constAlpha: gfx.BLEND_CONSTANT_ALPHA,
+  oneMinusConstAlpha: gfx.BLEND_ONE_MINUS_CONSTANT_ALPHA,
+  srcAlphaSaturate: gfx.BLEND_SRC_ALPHA_SATURATE
+};
+_passMap[true] = true;
+_passMap[false] = false;
+
+function createEffect(json) {
+  var effectAsset = new Effect$2();
+  effectAsset._name = json.name;
+  effectAsset._uuid = "custom-effect-" + (json.name);
+  effectAsset._loaded = true;
+  for (var i = 0; i < json.techniques.length; ++i) {
+    var jsonTech = json.techniques[i];
+    for (var j = 0; j < jsonTech.params.length; ++j) {
+      var param = jsonTech.params[j];
+      param.type = _typeMap[param.type];
+    }
+    for (var j$1 = 0; j$1 < jsonTech.passes.length; ++j$1) {
+      var jsonPass = jsonTech.passes[j$1];
+      for (var key in jsonPass) {
+        if (key === 'program') {
+          continue;
+        }
+        jsonPass[key] = _passMap[jsonPass[key]];
+      }
+    }
+  }
+  effectAsset.techniques = json.techniques;
+  effectAsset.properties = json.properties;
+  effectAsset.defines = json.defines;
+  effectAsset.dependencies = json.dependencies ? json.dependencies : [];
+  return effectAsset;
+}
+
+function effectLoader (app, urls, callback) {
+  resl({
+    manifest: {
+      json: {
+        type: 'text',
+        parser: JSON.parse,
+        src: urls.json,
+      },
+    },
+
+    onDone: function onDone(data) {
+      var json = data.json;
+      var effectAsset = createEffect(json);
+      callback(null, effectAsset);
+    }
+  });
+}
+
+function unwindIncludes(str, chunks) {
+  var pattern = /#include +<([\w\d\-_.]+)>/gm;
+  function replace(match, include) {
+    var replace = chunks[include];
+    if (replace === undefined) {
+      console.error(("can not resolve #include <" + include + ">"));
+    }
+    return unwindIncludes(replace);
+  }
+  return str.replace(pattern, replace);
+}
+
+function buildTemplates(json, vert, frag, chunks) {
+  vert = unwindIncludes(vert, chunks);
+  frag = unwindIncludes(frag, chunks);
+
+  var defines = [];
+  for (var def in json) {
+    var define = { name: def };
+    if (json[def] && json[def].min !== undefined) {
+      define.min = json[def].min;
+    }
+    if (json[def] && json[def].max !== undefined) {
+      define.max = json[def].max;
+    }
+    defines.push(define);
+  }
+  return defines;
+}
+
+function programLoader (app, urls) {
+  resl({
+    manifest: {
+      json: {
+        type: 'text',
+        parser: JSON.parse,
+        src: urls.json,
+      },
+      vert: {
+        type: 'text',
+        src: urls.vert
+      },
+      frag: {
+        type: 'text',
+        src: urls.frag
+      }
+    },
+
+    onDone: function onDone(data) {
+      var json = data.json;
+      var vert = data.vert;
+      var frag = data.frag;
+      var defines = buildTemplates(json, vert, frag, app._forward._programLib._chunks);
+      app._forward._programLib.define(urls.name, vert, frag, defines);
+    }
+  });
+}
+
 var ScriptComponent = (function (Component) {
   function ScriptComponent() {
     Component.call(this);
@@ -40371,15 +40180,10 @@ var ModelComponent = (function (Component) {
   ModelComponent.prototype._updateReceiveShadow = function _updateReceiveShadow () {
     var this$1 = this;
 
-    if (this._receiveShadows) {
-      for (var i = 0; i < this._models.length; ++i) {
-        var model = this$1._models[i];
-        model._effect.define('USE_SHADOW_MAP', true);
-      }
-    } else {
-      for (var i$1 = 0; i$1 < this._models.length; ++i$1) {
-        var model$1 = this$1._models[i$1];
-        model$1._effect.define('USE_SHADOW_MAP', false);
+    for (var i = 0; i < this._models.length; ++i) {
+      var model = this$1._models[i];
+      if (model._defines['USE_SHADOW_MAP'] != undefined) {
+        model._effect.define('USE_SHADOW_MAP', this$1._receiveShadows);
       }
     }
   };
@@ -40850,7 +40654,7 @@ var AudioSourceComponent = (function (Component) {
     this._bindEnded();
     this._element.play();
 
-    if (!(CC_QQPLAY || CC_WECHATGAME) && this._clip && this._clip.loadMode === LoadMode.DOM_AUDIO && this._element.paused) {
+    if (!(CC_QQPLAY || CC_WECHATGAME) && this._clip && this._clip.loadMode === AudioClip.DOM_AUDIO && this._element.paused) {
       touchPlayList.push({ instance: this, offset: 0, audio: this._element });
     }
 
@@ -40983,7 +40787,7 @@ var AudioSourceComponent = (function (Component) {
 
   AudioSourceComponent.prototype._bindEnded = function _bindEnded (callback) {
     callback = callback || this._onended;
-    if (this._clip && this._clip.loadMode === LoadMode.DOM_AUDIO) {
+    if (this._clip && this._clip.loadMode === AudioClip.DOM_AUDIO) {
       this._element.addEventListener('ended', callback);
     } else {
       this._element.onended = callback;
@@ -40991,7 +40795,7 @@ var AudioSourceComponent = (function (Component) {
   };
 
   AudioSourceComponent.prototype._unbindEnded = function _unbindEnded () {
-    if (this._clip && this._clip.loadMode === LoadMode.DOM_AUDIO) {
+    if (this._clip && this._clip.loadMode === AudioClip.DOM_AUDIO) {
       this._element.removeEventListener('ended', this._onended);
     } else {
       this._element.onended = null;
@@ -41000,7 +40804,7 @@ var AudioSourceComponent = (function (Component) {
 
   AudioSourceComponent.prototype._onLoaded = function _onLoaded () {
     var elem = this._clip.nativeAsset;
-    if (this._clip.loadMode === LoadMode.DOM_AUDIO || CC_QQPLAY || CC_WECHATGAME) {
+    if (this._clip.loadMode === AudioClip.DOM_AUDIO || CC_QQPLAY || CC_WECHATGAME) {
       this._element = elem;
     }
     else {
@@ -43625,10 +43429,6 @@ ScreenComponent.schema = {
     type: 'number',
     default: 0,
     set: function set(val) {
-      if (this._priority === val) {
-        return;
-      }
-
       this._priority = val;
       this._view._priority = val;
     }
@@ -43654,12 +43454,8 @@ ScreenComponent.schema = {
     type: 'number',
     default: 1.0,
     set: function set(val) {
-      if (this._scaleFactor === val) {
-        return;
-      }
-
       this._scaleFactor = val;
-      this._entity.lscale = vec3.new(this._scaleFactor, this._scaleFactor, this._scaleFactor);
+      vec3.set(this._entity.lscale, this._scaleFactor, this._scaleFactor, this._scaleFactor);
     }
   }
 };
@@ -49714,12 +49510,12 @@ var WidgetSystem = (function (System) {
 
       _entities.push(screen._entity);
       utils.walkSibling(screen._entity, function (ent) {
-        if (ent.enabled === false) {
+        if (ent.active === true) {
+          _entities.push(ent);
+          return true;
+        } else {
           return false;
         }
-
-        _entities.push(ent);
-        return true;
       });
     }
 
@@ -50256,7 +50052,8 @@ registry.registerLoader('animation', animationLoader);
 registry.registerLoader('audio', audioLoader);
 registry.registerLoader('bmfont', bmfontLoader);
 registry.registerLoader('otfont', otfontLoader);
-// this.registerLoader('effect', effectLoader);
+registry.registerLoader('effect', effectLoader);
+registry.registerLoader('program', programLoader);
 
 // register builtin types
 for (var name in types) {
@@ -50574,6 +50371,7 @@ var index = {
   utils: utils$1,
   resl: resl,
   path: path,
+  input: Input,
   async: async,
 };
 

@@ -435,6 +435,13 @@ MonoBehaviour:
       floatField: 0
       stringField: 
       objectField: {fileID: 1054530518}
+  - name: maze
+    value:
+      boolField: 0
+      intField: 0
+      floatField: 0
+      stringField: 
+      objectField: {fileID: 1232129602}
 --- !u!23 &367263212
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -507,7 +514,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1346,7 +1353,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 1
-  far clip plane: 250
+  far clip plane: 500
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1395,13 +1402,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: {fileID: 11400000, guid: 0ba7a10129ac52043862af4d5138643e, type: 2}
   properties:
-  - name: speed
+  - name: maze
     value:
       boolField: 0
       intField: 0
       floatField: 0
       stringField: 
-      objectField: {fileID: 0}
+      objectField: {fileID: 1232129602}
 --- !u!114 &1058683792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1562,13 +1569,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 1787522667056414, guid: 63a4a33732023c04b978b7f02c93afcc, type: 2}
-      propertyPath: m_Name
-      value: maze
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 63a4a33732023c04b978b7f02c93afcc, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1232129602 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1787522667056414, guid: 63a4a33732023c04b978b7f02c93afcc,
+    type: 2}
+  m_PrefabInternal: {fileID: 1232129601}
 --- !u!1 &1295944033
 GameObject:
   m_ObjectHideFlags: 0

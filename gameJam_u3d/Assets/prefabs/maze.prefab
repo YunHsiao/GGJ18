@@ -10219,6 +10219,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4257687068349284}
+  - component: {fileID: 114492072978255778}
   m_Layer: 0
   m_Name: maze
   m_TagString: Untagged
@@ -53751,3 +53752,16 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1082535720799426}
   m_Mesh: {fileID: 4301860, guid: 9e4ef3869526cd841b24f5dd15fae111, type: 3}
+--- !u!114 &114492072978255778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1787522667056414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1855345129, guid: 811160af650504197948013397f44a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desc: {fileID: 11400000, guid: 5414fa1ff78e98d449447c5423e84ffe, type: 2}
+  properties: []

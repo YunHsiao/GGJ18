@@ -1,6 +1,3 @@
-import EnterGame from './enterGame';
-import RotateBox from './rotateBox';
-import AddBoxPrefab from './addBoxPrefab';
 import FPCamera from './FPCamera';
 import CollisionDetector from './player/CollisionDetector';
 import Portal from './Portal';
@@ -8,13 +5,10 @@ import Logo from './Logo';
 import Monster from './Monster';
 import Limbo from './Limbo';
 import Hidden from './Hidden';
+import Maze from './Maze';
 
-const { resl } = cc;
-// 'EnterGame' should match to script Comp name
+const { cc } = window;
 let _componentRegitstry = {
-  'game.EnterGame': EnterGame,
-  'game.RotateBox': RotateBox,
-  'game.AddBoxPrefab': AddBoxPrefab,
   'game.FPCamera': FPCamera,
   'player.CollisionDetector':CollisionDetector,
   'game.Portal': Portal,
@@ -22,13 +16,12 @@ let _componentRegitstry = {
   'game.Monster': Monster,
   'game.Limbo': Limbo,
   'game.Hidden': Hidden,
+  'game.Maze': Maze,
 };
 
-let _gameInstance = null;
 class Game extends cc.App {
   constructor(canvas, opts) {
     super(canvas, opts);
-    _gameInstance = this;
   }
 
   init() {

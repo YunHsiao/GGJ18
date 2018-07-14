@@ -16,3 +16,5 @@ MonoBehaviour:
     type: 4
   - name: over
     type: 4
+  - name: maze
+    type: 4

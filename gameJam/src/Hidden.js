@@ -1,3 +1,5 @@
+const { cc } = window;
+
 // always remember to 'apply changes to prefab', or it won't work
 export default class Hidden extends cc.ScriptComponent {
   constructor() {

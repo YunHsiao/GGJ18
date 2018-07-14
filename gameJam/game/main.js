@@ -7,13 +7,13 @@ canvas.classList.add('fit');
 canvas.tabIndex = -1;
 view.appendChild(canvas);
 
-const { resl, path } = cc;
+const { resl, path } = window.cc;
 
 let assetsDir = './assets';
 let assetsFile = 'assets.json';
 
 // init game
-let game = cc.game = new gameJam.Game(canvas);
+let game = window.cc.game = new window.gameJam.Game(canvas);
 game.resize();
 game.init();
 game.run();

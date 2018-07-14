@@ -1,12 +1,11 @@
 {
-  "outputPath": "C:\\Users\\inher\\Desktop\\gameJamTemplate\\gameJam\\game",
+  "outputPath": "..\\gameJam\\game",
   "projectName": "assets",
   "mode": 1,
   "dirsForCollectScenes": [
     "5f35ed3093f824bc5a6d7cdf3f0b2b4b"
   ],
   "scenes": [
-    "a08316e417562438ba98f16b2a0e3374",
     "fcf017a154d04451ba2230231ffcac7d",
     "fb752c42d571e2c4eb7b63132444d2ee",
     "c78d12ce353474a46b88e233d0dc7442"

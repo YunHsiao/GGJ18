@@ -1,14 +1,18 @@
-const { mat4, quat, vec3, color4, randomRange } = cc.math;
+const { cc } = window;
+const { quat, vec3, randomRange } = cc.math;
 const { box, intersect } = cc.geometry;
 
 export default class Monster extends cc.ScriptComponent {
   constructor() {
     super();
-    this.m4 = mat4.create();
+    this.v3 = vec3.zero();
+    this.qt = quat.create();
+    this.v3_2 = vec3.zero();
   }
 
   start() {
     this.model = this._entity.getComp('Model')._models[0];
+    this.gameMaze = this.maze.getComp('game.Maze');
     // engine-TODO: quad unsupported
     this.children = this._entity.getCompsInChildren('Model');
     this.rot = [];
@@ -17,9 +21,9 @@ export default class Monster extends cc.ScriptComponent {
       let m = new cc.Material();
       // exporter-TODO: transparent shader
       // engine-FIX: gl.REPEAT not working? @see unlit.frag
-      m.effect = this._app.assets.get('builtin-effect-phong-transparent');
-      m.setProperty('diffuse_texture', this.children[i].material.effectInst.getProperty('diffuse_texture'));
-      m.define('USE_DIFFUSE_TEXTURE', true);
+      m.effect = this._app.assets.get('builtin-effect-unlit-transparent');
+      m.setProperty('mainTexture', this.children[i].material.effectInst.getProperty('diffuse_texture'));
+      m.define('USE_TEXTURE', true);
 
       this.children[i].material = m;
     }
@@ -43,14 +47,16 @@ export default class Monster extends cc.ScriptComponent {
     this.moveIdx = 0;
     this.speed = 0.3;
     this.pursuitDist = 100;
+    this.time = 0;
+    this.heartBeatInterval = 1.5;
   }
 
   tick() {
     // engine-TODO: stop ticking after load scene, before destroy
     if (this.ended) return;
-    this.model._node.getWorldRT(this.m4);
-    vec3.add(this.model._boundingBox.center, this.model._bbModelSpace.center, this.model._node.lpos);
-    vec3.mul(this.model._boundingBox.size, this.model._bbModelSpace.size, this.model._node.lscale);
+    this.time += this._app.deltaTime;
+    this._entity._getWorldPRS(this.v3, this.qt, this.v3_2);
+    box.setTransform(this.model._boundingBox, this.v3, this.qt, this.v3_2, this.model._bbModelSpace);
     if (intersect.box_point(this.model._boundingBox, this.player.lpos)) {
       if (cc.game.over) {
         this.over.getComp('AudioSource').play();
@@ -62,7 +68,7 @@ export default class Monster extends cc.ScriptComponent {
         cc.game.loadScene('limbo');
         for (let i = 0; i < this.audios.length; i++) {
           this.audios[i].play();
-        } 
+        }
         setTimeout((function(){ this.audio.stop(); }).bind(this), 5000);
       }
       this.ended = true;
@@ -72,10 +78,9 @@ export default class Monster extends cc.ScriptComponent {
     vec3.sub(this.dir, this.player.lpos, this._entity.lpos);
     if (vec3.mag(this.dir) > this.pursuitDist) {
       vec3.sub(this.dir, this.keyPoints[this.moveIdx], this._entity.lpos);
-      if (this.audio.state == 1) this.audio.stop();
+      this.time = this.heartBeatInterval;
     } else {
-      if (this.audio.state != 1) this.audio.play();
-      this.audio.volume = 1 - vec3.mag(this.dir) / this.pursuitDist;
+      this.heartBeat(1 - vec3.mag(this.dir) / this.pursuitDist);
     }
     vec3.scale(this.dir, vec3.normalize(this.dir, this.dir), this.speed);
     vec3.add(this._entity.lpos, this._entity.lpos, this.dir);
@@ -87,6 +92,15 @@ export default class Monster extends cc.ScriptComponent {
     for (let i = 0; i < this.children.length; i++) {
       quat.rotateZ(this.children[i]._entity.lrot, this.children[i]._entity.lrot, this.rot[i]);
     }
+  }
+
+  heartBeat(intensity) {
+    let inforced = intensity * 0.8 + 0.2;
+    this.audio.volume = inforced;
+    if (this.time < this.heartBeatInterval * (1 - intensity * 0.666)) return;
+    this.time = 0;
+    this.audio.stop(); this.audio.play();
+    this.gameMaze.heartBeat(inforced);
   }
 
   lessThan(a, b, c) {
@@ -105,6 +119,10 @@ Monster.schema = {
     default: null
   },
   over: {
+    type: 'entity',
+    default: null
+  },
+  maze: {
     type: 'entity',
     default: null
   }

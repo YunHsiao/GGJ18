@@ -1,3 +1,4 @@
+const { cc } = window;
 const { color4 } = cc.math;
 
 export default class Logo extends cc.ScriptComponent {
@@ -6,14 +7,14 @@ export default class Logo extends cc.ScriptComponent {
   }
 
   start() {
+    this.c = color4.create();
     this.t1 = this.logo.getComp('Image');
     this.t2 = this.intro1.getComp('Image');
     this.t3 = this.intro2.getComp('Image');
-    color4.set(this.t1.color, this.t1.color.r, this.t1.color.g, this.t1.color.b, 0);
-    color4.set(this.t2.color, this.t2.color.r, this.t2.color.g, this.t2.color.b, 0);
-    color4.set(this.t3.color, this.t3.color.r, this.t3.color.g, this.t3.color.b, 0);
+    this.t1.color = color4.set(this.c, this.t1.color.r, this.t1.color.g, this.t1.color.b, 0);
+    this.t2.color = color4.set(this.c, this.t2.color.r, this.t2.color.g, this.t2.color.b, 0);
+    this.t3.color = color4.set(this.c, this.t3.color.r, this.t3.color.g, this.t3.color.b, 0);
     this.a = 0;
-    this.c = color4.create();
   }
 
   tick() {

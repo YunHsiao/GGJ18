@@ -1,14 +1,19 @@
-const { mat4, vec3, color4 } = cc.math;
+const { cc } = window;
+const { quat, vec3, color4 } = cc.math;
 const { box, intersect } = cc.geometry;
 
 export default class Portal extends cc.ScriptComponent {
   constructor() {
     super();
-    this.m4 = mat4.create();
+    this.v3 = vec3.zero();
+    this.qt = quat.create();
+    this.v3_2 = vec3.zero();
   }
 
   start() {
     this.model = this._entity.getComp('Model')._models[0];
+    this.model._node._getWorldPRS(this.v3, this.qt, this.v3_2);
+    box.setTransform(this.model._boundingBox, this.v3, this.qt, this.v3_2, this.model._bbModelSpace);
     this.mst = this.monster.getComp('game.Monster');
     this.color_after_life = color4.new(0.882, 0, 0, 1);
     this.count = 0;
@@ -16,10 +21,6 @@ export default class Portal extends cc.ScriptComponent {
 
   tick() {
     if (this.ended) return;
-    // engine-TODO: bounding box scaling
-    this.model._node.getWorldRT(this.m4);
-    box.setTransform(this.model._boundingBox, this.m4, this.model._bbModelSpace);
-    vec3.mul(this.model._boundingBox.size, this.model._bbModelSpace.size, this.model._node.lscale);
     if (intersect.box_point(this.model._boundingBox, this.player.lpos)) {
       // exporter-TODO: define unlit USE_COLOR
       for (let i = 0; i < this._app.scene._models.length; i++)

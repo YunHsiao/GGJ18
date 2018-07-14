@@ -1,0 +1,47 @@
+{
+  "techniques": [
+    {
+      "stages": ["opaque"],
+      "params": [
+        {
+          "name": "color",
+          "type": "color4",
+          "value": [1, 1, 1, 1]
+        },
+        {
+          "name": "mainTiling",
+          "type": "float2",
+          "value": [1, 1]
+        },
+        {
+          "name": "mainOffset",
+          "type": "float2",
+          "value": [0, 0]
+        },
+        {
+          "name": "border",
+          "type": "float2",
+          "value": [0.05, 0.05]
+        }
+      ],
+      "passes": [
+       {
+         "program": "binary",
+         "cullMode": "back",
+         "depthTest": true,
+         "depthWrite": true
+       }
+      ],
+      "layer": 0
+    }
+  ],
+
+  "properties": {},
+
+  "defines": [
+    {
+      "name": "USE_COLOR",
+      "value": false
+    }
+  ]
+}
