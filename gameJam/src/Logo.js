@@ -19,7 +19,7 @@ export default class Logo extends cc.ScriptComponent {
 
   tick() {
     if (this.ended) return;
-    if (this._app._input.keyup('Enter')) this._end();
+    if (this._app._input.keyup('Enter') || this._app._input.touchCount) this._end();
     if (this.t1.color.a < 1) {
       this.t1.color = color4.set(this.c, this.t1.color.r, this.t1.color.g, this.t1.color.b, this.t1.color.a + 0.01);
     } else if (this.t2.color.a < 1) {

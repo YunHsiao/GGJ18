@@ -16383,9 +16383,10 @@ vn 0.000000 -1.000000 0.000000
 s off
 g zhongji02:migong666_Box001_polySurface7_polySurface6 polySurface205 polySurface207 polySurface210 polySurface212 polySurface214 polySurface215 polySurface217 polySurface219 polySurface221 polySurface224 polySurface226 polySurface228 polySurface230 polySurface232 polySurface234 polySurface236 polySurface238 polySurface240 polySurface242 polySurface244
 f 3939/3946/5065 3940/3947/5066 3937/3944/5067 3938/3945/5068
+f 3940/3947/5077 3939/3946/5078 3942/3954/5079 3941/3955/5080
+g zhongji02:migong666_Box001_polySurface7_polySurface6 polySurface205 polySurface207 polySurface210 polySurface212 polySurface214 polySurface215 polySurface217 polySurface219 polySurface221 polySurface224 polySurface226 polySurface228 polySurface230 polySurface232 polySurface234 polySurface236 polySurface238 polySurface240 polySurface242 polySurface245
 f 3943/3948/5069 3944/3949/5070 3945/3950/5071 3946/3951/5072
 f 3947/3952/5073 3945/3950/5074 3944/3949/5075 3948/3953/5076
-f 3940/3947/5077 3939/3946/5078 3942/3954/5079 3941/3955/5080
 g default
 v 10.000000 20.000000 -150.000000
 v 10.000000 20.000000 -170.000000

@@ -1,5 +1,4 @@
 import FPCamera from './FPCamera';
-import CollisionDetector from './player/CollisionDetector';
 import Portal from './Portal';
 import Logo from './Logo';
 import Monster from './Monster';
@@ -10,7 +9,6 @@ import Maze from './Maze';
 const { cc } = window;
 let _componentRegitstry = {
   'game.FPCamera': FPCamera,
-  'player.CollisionDetector':CollisionDetector,
   'game.Portal': Portal,
   'game.Logo': Logo,
   'game.Monster': Monster,
@@ -28,6 +26,8 @@ class Game extends cc.App {
     for (let key in _componentRegitstry) {
       this.registerClass(key, _componentRegitstry[key]);
     }
+    this.system('physics').world.setGravity(0, -500, 0);
+    this.system('physics').world.defaultContactMaterial.contactEquationRelaxation = 2.2;
   }
 
   loadScene(name) {

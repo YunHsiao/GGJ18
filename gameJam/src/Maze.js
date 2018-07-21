@@ -1,5 +1,12 @@
 const { cc } = window;
-const { vec2, color4 } = cc.math;
+const { vec2, vec3, color4 } = cc.math;
+
+let adjustSize = function(out, v) {
+  out.x = v.x > 0 ? v.x : 1;
+  out.y = v.y > 0 ? v.y : 1;
+  out.z = v.z > 0 ? v.z : 1;
+  return out;
+};
 
 export default class Maze extends cc.ScriptComponent {
   constructor() {
@@ -31,6 +38,10 @@ export default class Maze extends cc.ScriptComponent {
         this.models[i].material = m;
       }
     });
+    let size = vec3.zero();
+    let cols = this._entity.getCompsInChildren('Collider');
+    for (let i = 0; i < cols.length; i++)
+      cols[i].size = adjustSize(size, cols[i].size);
   }
 
   setProperty(name, prop) {
