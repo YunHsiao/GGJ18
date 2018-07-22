@@ -15,14 +15,14 @@ export default class FPCamera extends cc.ScriptComponent {
     super();
     this.id_forward = vec3.new(0, 0, 1);
     this.id_right = vec3.new(1, 0, 0);
-    this.id_up = vec3.new(0, 1, 0);
     this.forward = vec3.new(0, 0, 1);
     this.right = vec3.new(1, 0, 0);
     this.euler = vec3.new(0, 0, 0);
     this.posOff = vec3.zero();
     this.rotOff = vec2.zero();
-    this.counter = 0;
     this.speed = 1;
+    this.lastTime = 0;
+    this.id_up = vec3.new(0, this.speed, 0);
   }
 
   start() {
@@ -42,14 +42,14 @@ export default class FPCamera extends cc.ScriptComponent {
 
   tick() {
     // do nothing if no inputs or already ended
-    if (this.ended || !this.input._pointerLocked 
+    if (this.ended || !this.input._pointerLocked
       && !this.input.touchCount && !this.input.hasKeyDown) return;
     // drag player back if (accidentally) fall off
     if (this.pos.y < -25) vec3.copy(this.pos, this.spawn);
     // update utils
-    vec3.set(this.posOff, 0, 0, 0);
     scaleToXZ(vec3.transformQuat(this.forward, this.id_forward, this.rot), this.speed);
     scaleToXZ(vec3.transformQuat(this.right, this.id_right, this.rot), this.speed);
+    vec3.set(this.posOff, 0, 0, 0); vec2.set(this.rotOff, 0, 0);
     // gather inputs
     if (this.input.touchCount) this.tickTouch();
     if (this.input._pointerLocked) this.tickMouse();
@@ -60,8 +60,10 @@ export default class FPCamera extends cc.ScriptComponent {
     if (isZeroVector(this.posOff)) return;
     vec3.add(this.pos, this.pos, this.posOff);
     // play footsteps
-    if (this.counter++ % (30/this.speed) == 0 && this.footsteps.length)
+    if (this._app.totalTime - this.lastTime > 0.5 && this.footsteps.length) {
+      this.lastTime = this._app.totalTime;
       this.footsteps[Math.floor(randomRange(0, this.footsteps.length-0.5))].play();
+    }
   }
 
   tickMouse() {

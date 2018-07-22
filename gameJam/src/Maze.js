@@ -40,8 +40,9 @@ export default class Maze extends cc.ScriptComponent {
     });
     let size = vec3.zero();
     let cols = this._entity.getCompsInChildren('Collider');
-    for (let i = 0; i < cols.length; i++)
+    for (let i = 0; i < cols.length; i++) {
       cols[i].size = adjustSize(size, cols[i].size);
+    }
   }
 
   setProperty(name, prop) {
