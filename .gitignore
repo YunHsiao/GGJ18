@@ -33,8 +33,7 @@ profile
 
 # project files
 gameJam/node_modules
-gameJam/game/assets
-gameJam/game/dist
+gameJam/game
 gameJam_u3d/[Ll]ibrary/
 gameJam_u3d/[Tt]emp/
 gameJam_u3d/[Oo]bj/
