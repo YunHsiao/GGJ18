@@ -1,0 +1,44 @@
+{
+  "type": "phong",
+  "properties": {
+    "diffuseColor": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "USE_DIFFUSE_TEXTURE": true,
+    "diffuse_texture": "55df7f4861a33c1419111198566278bb",
+    "mainTiling": [
+      1.0,
+      1.0
+    ],
+    "mainOffset": [
+      0.0,
+      0.0
+    ],
+    "USE_SPECULAR": false,
+    "specularColor": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "USE_SPECULAR_TEXTURE": false,
+    "specular_texture": null,
+    "USE_EMISSIVE": false,
+    "emissiveColor": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "USE_EMISSIVE_TEXTURE": false,
+    "emissive_texture": null,
+    "glossiness": [
+      0.078125
+    ],
+    "USE_NORMAL_TEXTURE": false,
+    "normal_texture": null
+  }
+}

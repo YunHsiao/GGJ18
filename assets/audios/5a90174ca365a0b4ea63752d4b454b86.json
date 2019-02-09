@@ -1,0 +1,10 @@
+{
+  "clip": "5a90174ca365a0b4ea63752d4b454b86",
+  "ambisonic": false,
+  "channels": 2,
+  "frequency": 22050,
+  "length": 0.5027211,
+  "loadInBackground": false,
+  "preloadAudioData": true,
+  "samples": 11085
+}

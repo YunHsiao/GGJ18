@@ -1,0 +1,23 @@
+{
+  "sprites": {
+    "Untitled": {
+      "texture": "5a6d95096fa421c4fbaab8d5ee87c9ba",
+      "rotated": false,
+      "x": 0.0,
+      "y": 0.0,
+      "width": 165.0,
+      "height": 62.0,
+      "left": 0.0,
+      "right": 0.0,
+      "bottom": 0.0,
+      "top": 0.0
+    }
+  },
+  "type": "sprite",
+  "anisotropy": 1,
+  "minFilter": "linear",
+  "magFilter": "linear",
+  "mipFilter": "nearest",
+  "wrapS": "clamp",
+  "wrapT": "clamp"
+}

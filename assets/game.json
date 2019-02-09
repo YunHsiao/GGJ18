@@ -1,0 +1,394 @@
+{
+  "scenes": {
+    "main": "scenes/fcf017a154d04451ba2230231ffcac7d.json",
+    "logo": "scenes/fb752c42d571e2c4eb7b63132444d2ee.json",
+    "limbo": "scenes/c78d12ce353474a46b88e233d0dc7442.json"
+  },
+  "entry": "main",
+  "assets": {
+    "85209692362b55b45a1c1663bbb12434": {
+      "type": "gltf",
+      "urls": {
+        "gltf": "meshes/85209692362b55b45a1c1663bbb12434.gltf",
+        "bin": "meshes/85209692362b55b45a1c1663bbb12434.bin"
+      }
+    },
+    "9e4ef3869526cd841b24f5dd15fae111": {
+      "type": "gltf",
+      "urls": {
+        "gltf": "meshes/9e4ef3869526cd841b24f5dd15fae111.gltf",
+        "bin": "meshes/9e4ef3869526cd841b24f5dd15fae111.bin"
+      }
+    },
+    "afdd95c20279ac0479e160da9edc4f0e": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/afdd95c20279ac0479e160da9edc4f0e.json",
+        "image": "textures/afdd95c20279ac0479e160da9edc4f0e.jpg"
+      }
+    },
+    "ba26f8580cb0ca54a9ee8d8d2e7b540c": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/ba26f8580cb0ca54a9ee8d8d2e7b540c.json",
+        "image": "textures/ba26f8580cb0ca54a9ee8d8d2e7b540c.png"
+      }
+    },
+    "71f0011596b6e024986ceb5546205618": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/71f0011596b6e024986ceb5546205618.json",
+        "image": "textures/71f0011596b6e024986ceb5546205618.png"
+      }
+    },
+    "126222561432f6946a550b7cee4165a8": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/126222561432f6946a550b7cee4165a8.json",
+        "image": "textures/126222561432f6946a550b7cee4165a8.png"
+      }
+    },
+    "a77bd0ad34db71b46baa1bf627566174": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/a77bd0ad34db71b46baa1bf627566174.json",
+        "image": "textures/a77bd0ad34db71b46baa1bf627566174.png"
+      }
+    },
+    "4722a563199f1414fbaff1304cbdecd7": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/4722a563199f1414fbaff1304cbdecd7.json",
+        "image": "textures/4722a563199f1414fbaff1304cbdecd7.png"
+      }
+    },
+    "25f16abefc5748e41be157dd0115d891": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/25f16abefc5748e41be157dd0115d891.json",
+        "image": "textures/25f16abefc5748e41be157dd0115d891.jpg"
+      }
+    },
+    "cd61ee8ab6031a448b21826d81c68338": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/cd61ee8ab6031a448b21826d81c68338.json",
+        "image": "textures/cd61ee8ab6031a448b21826d81c68338.jpg"
+      }
+    },
+    "81bb412e749f2fc428ef3ca34350be16": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/81bb412e749f2fc428ef3ca34350be16.json",
+        "image": "textures/81bb412e749f2fc428ef3ca34350be16.jpg"
+      }
+    },
+    "8e98b1648cb396b44908b57689340609": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/8e98b1648cb396b44908b57689340609.json",
+        "image": "textures/8e98b1648cb396b44908b57689340609.jpg"
+      }
+    },
+    "55df7f4861a33c1419111198566278bb": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/55df7f4861a33c1419111198566278bb.json",
+        "image": "textures/55df7f4861a33c1419111198566278bb.jpg"
+      }
+    },
+    "f96d616231b7cab47b959236b6592afe": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/f96d616231b7cab47b959236b6592afe.json",
+        "image": "textures/f96d616231b7cab47b959236b6592afe.jpg"
+      }
+    },
+    "0f2035729ae82f9449d96128ca504e6e": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/0f2035729ae82f9449d96128ca504e6e.json",
+        "image": "textures/0f2035729ae82f9449d96128ca504e6e.jpg"
+      }
+    },
+    "f9671780bbc045942ad1db9351e6462e": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/f9671780bbc045942ad1db9351e6462e.json",
+        "image": "textures/f9671780bbc045942ad1db9351e6462e.jpg"
+      }
+    },
+    "520b59c85c712154682f50fa09f4d587": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/520b59c85c712154682f50fa09f4d587.json",
+        "image": "textures/520b59c85c712154682f50fa09f4d587.jpg"
+      }
+    },
+    "d1916ba10d127964fa8df1cd7568ca11": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/d1916ba10d127964fa8df1cd7568ca11.json",
+        "image": "textures/d1916ba10d127964fa8df1cd7568ca11.png"
+      }
+    },
+    "8b2afd7edddf5424ea23a319d29c0de4": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/8b2afd7edddf5424ea23a319d29c0de4.json",
+        "image": "textures/8b2afd7edddf5424ea23a319d29c0de4.png"
+      }
+    },
+    "01ef78109a27f464193ee24a8271e1f7": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/01ef78109a27f464193ee24a8271e1f7.json",
+        "image": "textures/01ef78109a27f464193ee24a8271e1f7.png"
+      }
+    },
+    "3168e20e861608d4ca75f38964ff3455": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/3168e20e861608d4ca75f38964ff3455.json",
+        "image": "textures/3168e20e861608d4ca75f38964ff3455.jpg"
+      }
+    },
+    "fc863940db1cf2946a87cde8323cb30f": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/fc863940db1cf2946a87cde8323cb30f.json",
+        "image": "textures/fc863940db1cf2946a87cde8323cb30f.png"
+      }
+    },
+    "243cac359c4ac3d42979dddae64410ff": {
+      "type": "texture",
+      "urls": {
+        "json": "textures/243cac359c4ac3d42979dddae64410ff.json",
+        "image": "textures/243cac359c4ac3d42979dddae64410ff.png"
+      }
+    },
+    "5a6d95096fa421c4fbaab8d5ee87c9ba": {
+      "type": "texture",
+      "urls": {
+        "json": "sprites/5a6d95096fa421c4fbaab8d5ee87c9ba.json",
+        "image": "sprites/5a6d95096fa421c4fbaab8d5ee87c9ba.png"
+      }
+    },
+    "a4a4598509184104090ac41d93ec9373": {
+      "type": "texture",
+      "urls": {
+        "json": "sprites/a4a4598509184104090ac41d93ec9373.json",
+        "image": "sprites/a4a4598509184104090ac41d93ec9373.png"
+      }
+    },
+    "9b974111381dde9438eb47893331cdcd": {
+      "type": "texture",
+      "urls": {
+        "json": "sprites/9b974111381dde9438eb47893331cdcd.json",
+        "image": "sprites/9b974111381dde9438eb47893331cdcd.png"
+      }
+    },
+    "3880cb17cd95c4233b24a24ed06b3b4d": {
+      "type": "material",
+      "urls": {
+        "json": "materials/3880cb17cd95c4233b24a24ed06b3b4d.json"
+      }
+    },
+    "e2cb8c0eb6565cb4288179e1b604e545": {
+      "type": "material",
+      "urls": {
+        "json": "materials/e2cb8c0eb6565cb4288179e1b604e545.json"
+      }
+    },
+    "a81a564fd73f48f40b7c17179a06fcea": {
+      "type": "material",
+      "urls": {
+        "json": "materials/a81a564fd73f48f40b7c17179a06fcea.json"
+      }
+    },
+    "c72f3e92415f6a047b90c0f92af16cb6": {
+      "type": "material",
+      "urls": {
+        "json": "materials/c72f3e92415f6a047b90c0f92af16cb6.json"
+      }
+    },
+    "efb7185866cd0ff429fc17acb8f600f6": {
+      "type": "material",
+      "urls": {
+        "json": "materials/efb7185866cd0ff429fc17acb8f600f6.json"
+      }
+    },
+    "cbef42d883792744991baec4febb9df1": {
+      "type": "material",
+      "urls": {
+        "json": "materials/cbef42d883792744991baec4febb9df1.json"
+      }
+    },
+    "c3567ba558e52f948bdd730990bbd446": {
+      "type": "material",
+      "urls": {
+        "json": "materials/c3567ba558e52f948bdd730990bbd446.json"
+      }
+    },
+    "1e87a095e8428b444a857ddd435c251c": {
+      "type": "material",
+      "urls": {
+        "json": "materials/1e87a095e8428b444a857ddd435c251c.json"
+      }
+    },
+    "3a897f69e45887740b3a3bde73a1b196": {
+      "type": "material",
+      "urls": {
+        "json": "materials/3a897f69e45887740b3a3bde73a1b196.json"
+      }
+    },
+    "3bb389ed1578ec742b697addd422f446": {
+      "type": "material",
+      "urls": {
+        "json": "materials/3bb389ed1578ec742b697addd422f446.json"
+      }
+    },
+    "c92ad9e2a2448bb4eabb0c59750e48e7": {
+      "type": "material",
+      "urls": {
+        "json": "materials/c92ad9e2a2448bb4eabb0c59750e48e7.json"
+      }
+    },
+    "9d58073adb684f34bbf86e7f23de6002": {
+      "type": "material",
+      "urls": {
+        "json": "materials/9d58073adb684f34bbf86e7f23de6002.json"
+      }
+    },
+    "b60f23f1cdd53774ab28779b4c7d9a0e": {
+      "type": "material",
+      "urls": {
+        "json": "materials/b60f23f1cdd53774ab28779b4c7d9a0e.json"
+      }
+    },
+    "0ab94d9e7984b2346a9f6cb93dbc8a85": {
+      "type": "material",
+      "urls": {
+        "json": "materials/0ab94d9e7984b2346a9f6cb93dbc8a85.json"
+      }
+    },
+    "95b8d9b39801d404e9c5da0f10647759": {
+      "type": "material",
+      "urls": {
+        "json": "materials/95b8d9b39801d404e9c5da0f10647759.json"
+      }
+    },
+    "c9cef5709ce276a4f83a051dbf0d1e0d": {
+      "type": "material",
+      "urls": {
+        "json": "materials/c9cef5709ce276a4f83a051dbf0d1e0d.json"
+      }
+    },
+    "bf56c0808678e004a8f86f833fee08b2": {
+      "type": "material",
+      "urls": {
+        "json": "materials/bf56c0808678e004a8f86f833fee08b2.json"
+      }
+    },
+    "cedcb2d07d36f914fb7e30b02693de51": {
+      "type": "material",
+      "urls": {
+        "json": "materials/cedcb2d07d36f914fb7e30b02693de51.json"
+      }
+    },
+    "d8e7353fe58a12e45ac1c83655f9c47c": {
+      "type": "material",
+      "urls": {
+        "json": "materials/d8e7353fe58a12e45ac1c83655f9c47c.json"
+      }
+    },
+    "a8fb88ab20bbd774ca9a55e6615a8c84": {
+      "type": "material",
+      "urls": {
+        "json": "materials/a8fb88ab20bbd774ca9a55e6615a8c84.json"
+      }
+    },
+    "3de862d49e35d53458d9c5b8a2366edb": {
+      "type": "material",
+      "urls": {
+        "json": "materials/3de862d49e35d53458d9c5b8a2366edb.json"
+      }
+    },
+    "fdd672fb060a579469e5ee38bda12c61": {
+      "type": "material",
+      "urls": {
+        "json": "materials/fdd672fb060a579469e5ee38bda12c61.json"
+      }
+    },
+    "3d25d7506c3ba1e4e9723356f045c899": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/3d25d7506c3ba1e4e9723356f045c899.json",
+        "bin": "audios/3d25d7506c3ba1e4e9723356f045c899.mp3"
+      }
+    },
+    "2513f1b0a1eb04e459761dc6c4ac98ad": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/2513f1b0a1eb04e459761dc6c4ac98ad.json",
+        "bin": "audios/2513f1b0a1eb04e459761dc6c4ac98ad.wav"
+      }
+    },
+    "6028d6513e4022c4b95427f0678c8b28": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/6028d6513e4022c4b95427f0678c8b28.json",
+        "bin": "audios/6028d6513e4022c4b95427f0678c8b28.wav"
+      }
+    },
+    "d9352b5248267c34ab9d0e297bf2a73a": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/d9352b5248267c34ab9d0e297bf2a73a.json",
+        "bin": "audios/d9352b5248267c34ab9d0e297bf2a73a.wav"
+      }
+    },
+    "bc730cb3ca41fbf4f85e80448fbc4904": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/bc730cb3ca41fbf4f85e80448fbc4904.json",
+        "bin": "audios/bc730cb3ca41fbf4f85e80448fbc4904.wav"
+      }
+    },
+    "28a37c5b58a25884a9e059fa0cc906b8": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/28a37c5b58a25884a9e059fa0cc906b8.json",
+        "bin": "audios/28a37c5b58a25884a9e059fa0cc906b8.mp3"
+      }
+    },
+    "5a90174ca365a0b4ea63752d4b454b86": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/5a90174ca365a0b4ea63752d4b454b86.json",
+        "bin": "audios/5a90174ca365a0b4ea63752d4b454b86.wav"
+      }
+    },
+    "395b29a201c89de409555bf16fd45bf9": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/395b29a201c89de409555bf16fd45bf9.json",
+        "bin": "audios/395b29a201c89de409555bf16fd45bf9.wav"
+      }
+    },
+    "b70437c424239d94a8efd72030164ef4": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/b70437c424239d94a8efd72030164ef4.json",
+        "bin": "audios/b70437c424239d94a8efd72030164ef4.wav"
+      }
+    },
+    "cd208a068cecbe8488ca4c7f099e2463": {
+      "type": "audio",
+      "urls": {
+        "json": "audios/cd208a068cecbe8488ca4c7f099e2463.json",
+        "bin": "audios/cd208a068cecbe8488ca4c7f099e2463.mp3"
+      }
+    }
+  }
+}

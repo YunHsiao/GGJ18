@@ -1,0 +1,214 @@
+{
+  "children": [
+    0,
+    1,
+    5
+  ],
+  "entities": [
+    {
+      "name": "Main Camera",
+      "translation": [
+        0.0,
+        1.0,
+        10.0
+      ],
+      "components": [
+        {
+          "type": "Camera",
+          "properties": {
+            "projection": "perspective",
+            "fov": 60.0,
+            "orthoHeight": 5.0,
+            "near": 1.0,
+            "far": 250.0,
+            "priority": -1.0,
+            "color": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "clearFlags": 3,
+            "rect": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "type": "game.FPCamera"
+        }
+      ]
+    },
+    {
+      "name": "Canvas",
+      "components": [
+        {
+          "type": "Widget",
+          "properties": {
+            "anchorLeft": 0.0,
+            "anchorRight": 0.0,
+            "anchorBottom": 0.0,
+            "anchorTop": 0.0,
+            "offsetX": 189.5,
+            "offsetY": 494.0,
+            "sizeX": 379.0,
+            "sizeY": 988.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+          }
+        },
+        {
+          "type": "ScreenScaler",
+          "properties": {
+            "scaleFactor": 1.0,
+            "adaptionMode": "none"
+          }
+        },
+        {
+          "type": "Screen",
+          "properties": {
+            "priority": 0
+          }
+        },
+        {
+          "type": "game.Logo",
+          "properties": {
+            "logo": "e2",
+            "intro1": "e3",
+            "intro2": "e4"
+          }
+        }
+      ],
+      "children": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Image",
+      "translation": [
+        -97.5,
+        -263.0,
+        0.0
+      ],
+      "components": [
+        {
+          "type": "Widget",
+          "properties": {
+            "anchorLeft": 0.0,
+            "anchorRight": 0.0,
+            "anchorBottom": 0.0,
+            "anchorTop": 0.0,
+            "offsetX": 92.0,
+            "offsetY": 231.0,
+            "sizeX": 165.0,
+            "sizeY": 62.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+          }
+        },
+        {
+          "type": "Image",
+          "properties": {
+            "type": "simple",
+            "color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "sprite": "Untitled@5a6d95096fa421c4fbaab8d5ee87c9ba"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Image (1)",
+      "translation": [
+        120.5,
+        -356.0,
+        0.0
+      ],
+      "components": [
+        {
+          "type": "Widget",
+          "properties": {
+            "anchorLeft": 0.0,
+            "anchorRight": 0.0,
+            "anchorBottom": 0.0,
+            "anchorTop": 0.0,
+            "offsetX": 310.0,
+            "offsetY": 138.0,
+            "sizeX": 591.0,
+            "sizeY": 95.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+          }
+        },
+        {
+          "type": "Image",
+          "properties": {
+            "type": "simple",
+            "color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "sprite": "Untitled2@a4a4598509184104090ac41d93ec9373"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Image (2)",
+      "translation": [
+        -64.5,
+        -449.0,
+        0.0
+      ],
+      "components": [
+        {
+          "type": "Widget",
+          "properties": {
+            "anchorLeft": 0.0,
+            "anchorRight": 0.0,
+            "anchorBottom": 0.0,
+            "anchorTop": 0.0,
+            "offsetX": 125.0,
+            "offsetY": 45.0,
+            "sizeX": 235.0,
+            "sizeY": 76.0,
+            "pivotX": 0.5,
+            "pivotY": 0.5
+          }
+        },
+        {
+          "type": "Image",
+          "properties": {
+            "type": "simple",
+            "color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "sprite": "Untitled3@9b974111381dde9438eb47893331cdcd"
+          }
+        }
+      ]
+    },
+    {
+      "name": "EventSystem"
+    }
+  ],
+  "preloads": [
+    "Untitled@5a6d95096fa421c4fbaab8d5ee87c9ba",
+    "Untitled2@a4a4598509184104090ac41d93ec9373",
+    "Untitled3@9b974111381dde9438eb47893331cdcd"
+  ]
+}
